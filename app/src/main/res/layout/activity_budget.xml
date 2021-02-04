@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".Budget">
+
+    <!-- Row #1 - FAB "Add income" and description text view -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_weight="1"
+        android:weightSum="4">
+
+        <!-- FAB "Add income" -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/budget_fab_addIncome"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_column="0"
+            android:layout_weight="1"
+            android:visibility="visible"
+            android:backgroundTint="@color/flat_plus_background"
+            app:tint="@null"
+            app:srcCompat="@mipmap/flat_plus_foreground" />
+
+        <!-- Text view - FAB description "Dodaj przychód / Add income" -->
+        <TextView
+            android:id="@+id/budget_text_addIncome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:textAllCaps="true"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/budget_text_addIncome" />
+    </TableRow>
+
+    <!-- Row #2 - FAB "Add expense" and description text view -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_weight="1"
+        android:weightSum="4">
+
+        <!-- FAB "Add expense" -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/budget_fab_addExpense"
+            android:clickable="true"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            android:backgroundTint="@color/flat_minus_background"
+            app:tint="@null"
+            app:srcCompat="@mipmap/flat_minus_foreground" />
+
+        <!-- Text view - FAB description "Dodaj wydatek / Add expense" -->
+        <TextView
+            android:id="@+id/budget_text_addExpense"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_column="1"
+            android:layout_weight="4"
+            android:textAllCaps="true"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/budget_text_addExpense" />
+    </TableRow>
+
+    <!-- Row #3 - empty row -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+    </TableRow>
+
+    <!-- Row #4 - income button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- Income button -->
+        <Button
+            android:id="@+id/budget_incomes"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickIncomeButton"
+            android:text="@string/budget_incomes" />
+    </TableRow>
+
+    <!-- Row #5 - expense button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- Expense button -->
+        <Button
+            android:id="@+id/budget_expenses"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickExpensesButton"
+            android:text="@string/budget_expenses" />
+        </TableRow>
+
+    <!-- Row #6 - summary button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- Summary button -->
+        <Button
+            android:id="@+id/budget_summary"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickSummaryButton"
+            android:text="@string/budget_summary" />
+    </TableRow>
+    </TableLayout>

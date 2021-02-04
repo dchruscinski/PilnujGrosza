@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tableLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:weightSum="5"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Shopping">
+
+    <!-- Row #1 - FAB "Add shopping" and description text view -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:layout_weight="1"
+        android:weightSum="4">
+
+        <!-- FAB - "Dodaj zakupy / Add shopping" -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/shopping_fab_addShopping"
+            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_column="0"
+            android:layout_weight="1"
+            android:visibility="visible"
+            android:backgroundTint="@color/flat_plus_background"
+            app:tint="@null"
+            app:srcCompat="@mipmap/flat_plus_foreground" />
+
+        <!-- Text view - FAB description "Dodaj zakupy / Add shopping" -->
+        <TextView
+            android:id="@+id/budget_text_addShopping"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:textAllCaps="true"
+            android:textSize="20dp"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:text="@string/shopping_text_addShopping" />
+    </TableRow>
+
+
+    <!-- Row #2 - empty row -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3" >
+
+        <!-- TextView as filler -->
+        <TextView
+            android:id="@+id/shopping_text_test"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="@string/shopping_text_test"/>
+
+    </TableRow>
+
+    <!-- Row #3 - buttons: shoppings lists, receipts list -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <!-- Shopping lists button -->
+        <Button
+            android:id="@+id/shopping_btn_shoppingLists"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickShoppingListsButton"
+            android:text="@string/shopping_btn_shoppingLists" />
+
+        <!-- Receipts button -->
+        <Button
+            android:id="@+id/shopping_btn_receipts"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:onClick="onClickReceiptsButton"
+            android:text="@string/shopping_btn_receipts" />
+    </TableRow>
+
+</TableLayout>

@@ -1,0 +1,105 @@
+<resources>
+    <!-- App name -->
+    <string name="app_name">Pilnuj Grosza</string>
+
+    <!-- Main menu part -->
+    <string name="menu_budget">Budżet</string>
+    <string name="menu_shopping">Zakupy</string>
+    <string name="menu_calendar">Kalendarz</string>
+    <string name="menu_profile">Profil</string>
+    <string name="menu_settings">Ustawienia</string>
+
+    <!-- Budget part -->
+    <string name="budget_incomes">Przychody</string>
+    <string name="budget_expenses">Wydatki</string>
+    <string name="budget_summary">Podsumowanie transakcji</string>
+    <string name="budget_text_addIncome">Dodaj przychód</string>
+    <string name="budget_text_addExpense">Dodaj wydatek</string>
+
+    <!-- Shopping part -->
+    <string name="shopping_text_addShopping">Dodaj zakupy</string>
+    <string name="shopping_btn_shoppingLists">Listy zakupów</string>
+    <string name="shopping_btn_receipts">Paragony</string>
+    <string name="shopping_text_test">Tu w przyszłości będzie lista zakupów.</string>
+
+    <!-- Calendar part -->
+    <string name="calendar_text_test">Tu w przyszłości będzie kalendarz.</string>
+
+    <!-- Profile part -->
+    <string name="profile_text_addProfile">Dodaj profil</string>
+    <string name="profile_text_test">Tu w przyszłości będzie lista profili.</string>
+
+    <!-- Settings part -->
+    <string name="settings_text_test">Tu w przyszłości będą ustawienia.</string>
+
+    <!-- Expenses part -->
+    <string name="expensesList_text_test">Tu w przyszłości będzie lista wydatków.</string>
+
+    <!-- Income part -->
+    <string name="incomeList_text_test">Tu w przyszłości będzie lista przychodów.</string>
+
+    <!-- Shopping list part -->
+    <string name="shoppingList_text_addShoppingList">Dodaj listę zakupów</string>
+    <string name="shoppingList_text_test">Tu w przyszłości będzie lista list zakupów.</string>
+
+    <!-- Receipt part -->
+    <string name="receipt_text_addReceipt">Dodaj paragon</string>
+    <string name="receipt_text_test">Tu w przyszłości będzie lista paragonów.</string>
+
+    <!-- Summary part -->
+    <string name="summary_text_test">Tu w przyszłości będzie ekran podsumowujący.</string>
+
+    <!-- Preference Titles -->
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="title_activity_budget">Budżet</string>
+    <string name="title_activity_shopping">Zakupy</string>
+    <string name="title_activity_calendar">Kalendarz</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_summary">Podsumowanie transakcji</string>
+    <string name="title_activity_expenses_list">Lista wydatków</string>
+    <string name="title_activity_income_list">Lista przychodów</string>
+    <string name="title_activity_receipt">Paragony</string>
+    <string name="title_activity_shopping_list">Listy zakupów</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+
+    <string name="prof_adapter_footer">Ostatnie logowanie:</string>
+    <string name="profile_createform_name">Nazwa profilu</string>
+    <string name="profile_createform_email">Adres e-mail</string>
+    <string name="profile_createform_pin">Kod PIN</string>
+    <string name="profile_createform_initialBalance">Saldo początkowe (domyślnie: 0)</string>
+    <string name="prof_alertDialog_addProfile">Utwórz profil</string>
+    <string name="prof_toast_createSuccessful_true">"Profil został utworzony."</string>
+    <string name="prof_toast_createSuccessful_false">Nie udało się stworzyć profilu.</string>
+    <string name="profile_editform_submit_name">Zmień nazwę profilu</string>
+    <string name="profile_editform_submit_email">Zmień adres e-mail</string>
+    <string name="profile_editform_text_oldPIN">Obecny kod PIN</string>
+    <string name="profile_editform_text_newPIN">Nowy kod PIN</string>
+    <string name="profile_editform_text_newPIN_confirm">Potwiedź nowy kod PIN</string>
+    <string name="profile_editform_submit_PIN">Zmień kod PIN</string>
+    <string name="profile_createform_submitProfile">Utwórz profil</string>
+    <string name="profile_editform_submit_deleteProfile">Usuń profil</string>
+    <string name="profile_editform_email">Nowy adres e-mail</string>
+    <string name="profile_editform_name">Nowa nazwa profilu</string>
+    <string name="profile_loginform_info_login">Tworzenie profilu</string>
+    <string name="profile_createform_text_pin_confirm">Powtórz kod PIN</string>
+    <string name="profile_editform_info_login">Edycja profilu</string>
+    <string name="profile_createform_info_login">Tworzenie profilu</string>
+    <string name="title_activity_menu">Menu główne</string>
+
+
+</resources>

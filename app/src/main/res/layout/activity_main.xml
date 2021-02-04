@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context=".MainActivity">
+
+        <!-- Row #1 - budget and shopping buttons -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <!-- Budget button -->
+            <Button
+                android:id="@+id/menu_budget"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="0"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:onClick="onClickBudgetButton"
+                android:text="@string/menu_budget"/>
+
+            <!-- Shopping button -->
+            <Button
+                android:id="@+id/menu_shopping"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:onClick="onClickShoppingButton"
+                android:text="@string/menu_shopping" />
+        </TableRow>
+
+        <!-- Row #2 - Calendar button and app icon -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <!-- Calendar button -->
+            <Button
+                android:id="@+id/menu_calendar"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:onClick="onClickCalendarButton"
+                android:text="@string/menu_calendar" />
+
+            <!-- App icon -->
+            <ImageView
+                android:id="@+id/menu_logo"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:layout_weight="1"
+                app:srcCompat="@mipmap/pilnuj_grosza_logo"
+                tools:srcCompat="@mipmap/pilnuj_grosza_logo" />
+        </TableRow>
+
+        <!-- Row #3 - profile and settings buttons -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <!-- Profile button -->
+            <Button
+                android:id="@+id/menu_profile"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="0"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="10dp"
+                android:onClick="onClickProfileButton"
+                android:text="@string/menu_profile"/>
+
+            <!-- Settings button -->
+            <Button
+                android:id="@+id/menu_settings"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_column="1"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:onClick="onClickSettingsButton"
+                android:text="@string/menu_settings" />
+        </TableRow>
+    </TableLayout>
