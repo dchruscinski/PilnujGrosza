@@ -100,6 +100,8 @@
     <string name="profile_editform_info_login">Edycja profilu</string>
     <string name="profile_createform_info_login">Tworzenie profilu</string>
     <string name="title_activity_menu">Menu główne</string>
+    <string name="profile_loginform_predelete_info">Wpisz kod PIN, aby potwierdzić operację usunięcia profilu</string>
+    <string name="profile_loginform_predelete_button_login">Usuń profil</string>
 
 
 </resources>

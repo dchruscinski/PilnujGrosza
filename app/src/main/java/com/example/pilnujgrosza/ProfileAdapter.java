@@ -91,11 +91,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         final ProfileModel profile = profilesList.get(position);
         holder.txtHeader.setText(profile.getProfName());
 
-        System.out.println("Last login date: " + profilesList.get(position).getProfLastLoginDate());
-
         String lastLoginDate = (profilesList.get(position).getProfLastLoginDate() == null) ?
-                "-" : profilesList.get(position).getProfLastLoginDate();
-        holder.txtFooter.setText(R.string.prof_adapter_footer + lastLoginDate);
+                "" : "Ostatnie logowanie: " + profilesList.get(position).getProfLastLoginDate();
+        holder.txtFooter.setText(lastLoginDate);
 
         holder.txtHeader.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,9 +105,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         holder.editProfile.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
-
-                // <-- TO DO -->
-                // showLoginBeforeEditDialog(position);
+                showLoginBeforeEditDialog(position);
             }
         });
     }
@@ -150,7 +146,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 String hashSalt = profilesList.get(position).getProfPINSalt();
-                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
+                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString(), hashSalt);
+
+                System.out.println("Z bazy: hashed PIN: " + profilesList.get(position).getProfPIN());
+                System.out.println("Z bazy: hashed PIN salt: " + profilesList.get(position).getProfPINSalt());
+
+                System.out.println("W dialogu: hashed PIN: " + hashedPIN);
+                System.out.println("W dialogu: hashed PIN salt: " + hashSalt);
 
                 if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
                     PIN.setError("Podałeś nieprawidłowy kod PIN.");
@@ -180,10 +182,61 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
     }
 
+    public void showLoginBeforeEditDialog(final int position) {
+        final TextView login, remindPIN;
+        final EditText PIN;
+        Button submitLogin;
+        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.profile_login_form);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(dialog.getWindow().getAttributes());
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.CENTER;
+
+        dialog.getWindow().setAttributes(params);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        login = (TextView) dialog.findViewById(R.id.profile_loginform_text_name);
+        PIN = (EditText) dialog.findViewById(R.id.profile_loginform_text_pin);
+        remindPIN = (TextView) dialog.findViewById(R.id.profile_loginform_link_remindPIN);
+        submitLogin = (Button) dialog.findViewById(R.id.profile_loginform_button_login);
+
+        login.setText(profilesList.get(position).getProfName());
+
+        submitLogin.setOnClickListener(new View.OnClickListener() {;
+            @Override
+            public void onClick(View v) {
+                String hashSalt = profilesList.get(position).getProfPINSalt();
+                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
+
+                if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
+                    PIN.setError("Podałeś nieprawidłowy kod PIN.");
+                } else {
+                    dialog.cancel();
+                    showEditDialog(position);
+                }
+            }
+        });
+
+        remindPIN.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // <-- TO DO -->
+                // showRemindPINDialog(position);
+            }
+        });
+
+    }
+
     public void showEditDialog(final int position) {
         final EditText name, email, newPIN, newPINConfirm;
         Button submitName, submitEmail, submitPIN, submitDeleteProfile;
-        String hashedPIN, hashedPINConfirm;
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -211,12 +264,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
 
         name.setText(profilesList.get(position).getProfName());
         email.setText(profilesList.get(position).getProfEmail());
-
-        // hashing password
-        String hashSalt = profilesList.get(position).getProfPINSalt();
-        hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(newPIN.getText().toString(), hashSalt);
-        hashedPINConfirm = org.mindrot.jbcrypt.BCrypt.hashpw(newPINConfirm.getText().toString(), hashSalt);
-        boolean passwordMatches = hashedPIN.equals(hashedPINConfirm);
 
         submitName.setOnClickListener(new View.OnClickListener() {;
             @Override
@@ -261,6 +308,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         submitPIN.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
+                // hashing password
+                String newHashSalt = org.mindrot.jbcrypt.BCrypt.gensalt();
+                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(newPIN.getText().toString(), newHashSalt);
+                String hashedPINConfirm = org.mindrot.jbcrypt.BCrypt.hashpw(newPINConfirm.getText().toString(), newHashSalt);
+                boolean passwordMatches = hashedPIN.equals(hashedPINConfirm);
+
                 if (newPIN.getText().toString().isEmpty() || newPINConfirm.getText().toString().isEmpty()) {
                     newPIN.setError("W celu zmiany kodu PIN podaj nowy kod, a następnie go potwierdź.");
                 } else if (newPIN.getText().toString().length() < 6 || newPINConfirm.getText().toString().length() < 6) {
@@ -268,9 +321,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 } else if (!passwordMatches) {
                     newPIN.setError("Podane nowe kody PIN nie są identyczne.");
                 } else {
-                    profileDatabaseHelper.updateProfilePIN(hashedPIN, org.mindrot.jbcrypt.BCrypt.gensalt(), profilesList.get(position).getProfID());
+                    profileDatabaseHelper.updateProfilePIN(hashedPIN, newHashSalt, profilesList.get(position).getProfID());
+
                     profilesList.get(position).setProfPIN(hashedPIN);
-                    profilesList.get(position).setProfPINSalt(hashSalt);
+                    profilesList.get(position).setProfPINSalt(newHashSalt);
+
                     dialog.cancel();
 
                     // notify list
@@ -282,7 +337,48 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
         submitDeleteProfile.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
-                if (chosenProfileID == profilesList.get(position).getProfID()) {
+                dialog.cancel();
+                showLoginBeforeDeleteDialog(position);
+                }
+            });
+    }
+
+    public void showLoginBeforeDeleteDialog(final int position) {
+        final TextView login;
+        final EditText PIN;
+        Button submitDelete;
+        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+
+        final Dialog dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.profile_login_predelete_form);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(dialog.getWindow().getAttributes());
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.CENTER;
+
+        dialog.getWindow().setAttributes(params);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        login = (TextView) dialog.findViewById(R.id.profile_loginform_predelete_text_name);
+        PIN = (EditText) dialog.findViewById(R.id.profile_loginform_predelete_text_pin);
+        submitDelete = (Button) dialog.findViewById(R.id.profile_loginform_predelete_button_login);
+
+        login.setText(profilesList.get(position).getProfName());
+
+        submitDelete.setOnClickListener(new View.OnClickListener() {;
+            @Override
+            public void onClick(View v) {
+                String hashSalt = profilesList.get(position).getProfPINSalt();
+                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
+
+                if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
+                    PIN.setError("Podałeś nieprawidłowy kod PIN.");
+                } else {
+                    if (chosenProfileID == profilesList.get(position).getProfID()) {
                         chosenProfileID = 0;
                     }
                     profileDatabaseHelper.deleteProfile(profilesList.get(position).getProfID());
@@ -292,6 +388,9 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                     // notify list
                     notifyDataSetChanged();
                 }
-            });
+            }
+        });
+
     }
+
 }
