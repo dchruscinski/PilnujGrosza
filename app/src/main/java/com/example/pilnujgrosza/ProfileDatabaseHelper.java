@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +33,8 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PROFILE_CREATION_DATE = "profCreationDate";
     public static final String COLUMN_PROFILE_LAST_LOGIN_DATE = "profLastLoginDate";
     public static final String COLUMN_PROFILE_LAST_LOGIN_ATTEMPT = "profLastLoginAttempt";
+    public static final String COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS = "profFailedLoginAttempts";
+    public static final int MINUTES_OF_ACCOUNT_LOCK = 1;
 
     public ProfileDatabaseHelper(@Nullable Context context) {
         super(context, "pilnujgrosza.db", null, 1);
@@ -54,9 +57,10 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PROFILE_PIN_SALT + " TEXT NOT NULL," +
                 COLUMN_PROFILE_INITIAL_BALANCE + " INTEGER DEFAULT 0," +
                 COLUMN_PROFILE_BALANCE + " INTEGER," +
-                COLUMN_PROFILE_CREATION_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP," +
+                COLUMN_PROFILE_CREATION_DATE + " DATETIME," +
                 COLUMN_PROFILE_LAST_LOGIN_DATE + " DATETIME," +
-                COLUMN_PROFILE_LAST_LOGIN_ATTEMPT + " DATETIME)";
+                COLUMN_PROFILE_LAST_LOGIN_ATTEMPT + " DATETIME," +
+                COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS + " INTEGER DEFAULT 0)";
         db.execSQL(createProfileTableStatement);
     }
 
@@ -83,17 +87,59 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         cv.putNull(COLUMN_PROFILE_CREATION_DATE);
         cv.putNull(COLUMN_PROFILE_LAST_LOGIN_DATE);
         cv.putNull(COLUMN_PROFILE_LAST_LOGIN_ATTEMPT);
+        cv.putNull(COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS);
+        db.insert(TABLE_PROFILE, null, cv);
 
-        long insert = db.insert(TABLE_PROFILE, null, cv);
         db.close();
     }
 
-    private String getDateTime() {
+    public String getCurrentDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
         Date date = new Date();
+
         return dateFormat.format(date);
+    }
+
+    public String getDateTimeForAccountLock() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MINUTE, MINUTES_OF_ACCOUNT_LOCK);
+
+        return dateFormat.format(c.getTime());
+    }
+
+    public boolean compareLoginDateTime(int profID) throws ParseException {
+        boolean compareLoginDateTime;
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String getLastLoginAttempt = "SELECT profLastLoginAttempt FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(getLastLoginAttempt, new String[] {Integer.toString(profID)});
+        cursor.moveToFirst();
+        String lastLoginAttmept = cursor.getString(cursor.getColumnIndex("profLastLoginAttempt"));
+
+        Date actualLoginDateTime = dateFormat.parse(getCurrentDateTime());
+        Date loginDateTimeFromDB;
+        if (lastLoginAttmept != null) {
+            loginDateTimeFromDB = dateFormat.parse(lastLoginAttmept);
+        } else {
+            loginDateTimeFromDB = dateFormat.parse(getCurrentDateTime());
+        }
+
+        // if actualLoginDateTime > loginDateTimeFromDB (actualLoginDateTime is AFTER loginDateTimeFromDB) then user can logim
+        if (actualLoginDateTime.compareTo(loginDateTimeFromDB) >= 0) {
+            compareLoginDateTime = true;
+        } else compareLoginDateTime = false;
+
+        return compareLoginDateTime;
     }
 
     public List<ProfileModel> getProfileList() {
@@ -112,11 +158,12 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 String profCreationDate = cursor.getString(cursor.getColumnIndex("profCreationDate"));
                 String profLastLoginDate = cursor.getString(cursor.getColumnIndex("profLastLoginDate"));
                 String profLastLoginAttempt = cursor.getString(cursor.getColumnIndex("profLastLoginAttempt"));
+                int profFailedLoginAttempts = cursor.getInt(cursor.getColumnIndex("profFailedLoginAttempts"));
                 int profInitialBalance = cursor.getInt(cursor.getColumnIndex("profInitialBalance"));
                 int profBalance = cursor.getInt(cursor.getColumnIndex("profBalance"));
 
                 ProfileModel profileModel = new ProfileModel(profID, profName, profEmail, profPIN, profPINSalt,
-                        profCreationDate, profLastLoginDate, profLastLoginAttempt, profInitialBalance, profBalance);
+                        profCreationDate, profLastLoginDate, profLastLoginAttempt, profFailedLoginAttempts, profInitialBalance, profBalance);
 
                 profilesList.add(profileModel);
 
@@ -130,41 +177,85 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
     public void deleteProfile(int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         db.delete(TABLE_PROFILE, COLUMN_PROFILE_ID + " = " + profID, null);
+
         db.close();
     }
 
     public void updateProfileName(String name, int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues cv =  new ContentValues();
         cv.put(COLUMN_PROFILE_NAME, name);
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+
         db.close();
     }
 
     public void updateProfileEmail(String email, int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues cv =  new ContentValues();
         cv.put(COLUMN_PROFILE_EMAIL, email);
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+
         db.close();
     }
 
     public void updateProfilePIN(String PIN, String hashSalt, int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues cv =  new ContentValues();
         cv.put(COLUMN_PROFILE_PIN, PIN);
         cv.put(COLUMN_PROFILE_PIN_SALT, hashSalt);
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+
         db.close();
     }
 
     public void updateLastLoginDate(int profID) {
-        System.out.println("profID: " + profID);
         SQLiteDatabase db = this.getWritableDatabase();
+
         ContentValues cv =  new ContentValues();
-        cv.put(COLUMN_PROFILE_LAST_LOGIN_DATE, getDateTime());
+        cv.put(COLUMN_PROFILE_LAST_LOGIN_DATE, getCurrentDateTime());
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+
+        db.close();
+    }
+
+    public void resetFailedLoginAttempts(int profID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv =  new ContentValues();
+        cv.put(COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS, 0);
+        db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+
+        db.close();
+    }
+
+    public void addFailedLoginAttempt(int profID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String checkDatabaseforFailedAttempts = "SELECT profFailedLoginAttempts FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(checkDatabaseforFailedAttempts, new String[] {Integer.toString(profID)});
+        cursor.moveToFirst();
+        int failedLoginAttempts = cursor.getInt(cursor.getColumnIndex("profFailedLoginAttempts"));
+
+        failedLoginAttempts++;
+        if (failedLoginAttempts >= 3) {
+            ContentValues cv =  new ContentValues();
+            cv.put(COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS, failedLoginAttempts);
+            cv.put(COLUMN_PROFILE_LAST_LOGIN_ATTEMPT, getDateTimeForAccountLock());
+            db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+        } else {
+            ContentValues cv =  new ContentValues();
+            cv.put(COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS, failedLoginAttempts);
+            cv.put(COLUMN_PROFILE_LAST_LOGIN_ATTEMPT, getCurrentDateTime());
+            db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+        }
+
+        cursor.close();
         db.close();
     }
 

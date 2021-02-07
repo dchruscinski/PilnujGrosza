@@ -1,6 +1,5 @@
 package com.example.pilnujgrosza;
 
-
 public class ProfileModel {
 
     // profile attributes
@@ -12,11 +11,13 @@ public class ProfileModel {
     private String profCreationDate;
     private String profLastLoginDate;
     private String profLastLoginAttempt;
+    private int profFailedLoginAttempts;
     private int profInitialBalance;
     private int profBalance;
 
     // profile constructors
-    public ProfileModel(int profID, String profName, String profEmail, String profPIN, String profPINSalt, String profCreationDate, String profLastLoginDate, String profLastLoginAttempt, int profInitialBalance, int profBalance) {
+    public ProfileModel(int profID, String profName, String profEmail, String profPIN, String profPINSalt, String profCreationDate, String profLastLoginDate,
+                        String profLastLoginAttempt, int profFailedLoginAttempts, int profInitialBalance, int profBalance) {
         this.profID = profID;
         this.profName = profName;
         this.profEmail = profEmail;
@@ -25,6 +26,7 @@ public class ProfileModel {
         this.profCreationDate = profCreationDate;
         this.profLastLoginDate = profLastLoginDate;
         this.profLastLoginAttempt = profLastLoginAttempt;
+        this.profFailedLoginAttempts = profFailedLoginAttempts;
         this.profInitialBalance = profInitialBalance;
         this.profBalance = profBalance;
     }
@@ -42,6 +44,7 @@ public class ProfileModel {
                 ", profCreationDate='" + profCreationDate + '\'' +
                 ", profLastLoginDate='" + profLastLoginDate + '\'' +
                 ", profLastLoginAttempt='" + profLastLoginAttempt + '\'' +
+                ", profFailedLoginAttempts=" + profFailedLoginAttempts +
                 ", profInitialBalance=" + profInitialBalance +
                 ", profBalance=" + profBalance +
                 '}';
@@ -110,6 +113,14 @@ public class ProfileModel {
 
     public void setProfLastLoginAttempt(String profLastLoginAttempt) {
         this.profLastLoginAttempt = profLastLoginAttempt;
+    }
+
+    public int getProfFailedLoginAttempts() {
+        return profFailedLoginAttempts;
+    }
+
+    public void setProfFailedLoginAttempts(int profFailedLoginAttempts) {
+        this.profFailedLoginAttempts = profFailedLoginAttempts;
     }
 
     public int getProfInitialBalance() {

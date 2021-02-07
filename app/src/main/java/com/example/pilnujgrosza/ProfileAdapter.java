@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,14 +20,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import org.w3c.dom.Text;
-
+import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
-
-import static java.sql.Types.NULL;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
 
@@ -148,26 +140,28 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 String hashSalt = profilesList.get(position).getProfPINSalt();
                 String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString(), hashSalt);
 
-                System.out.println("Z bazy: hashed PIN: " + profilesList.get(position).getProfPIN());
-                System.out.println("Z bazy: hashed PIN salt: " + profilesList.get(position).getProfPINSalt());
 
-                System.out.println("W dialogu: hashed PIN: " + hashedPIN);
-                System.out.println("W dialogu: hashed PIN salt: " + hashSalt);
+                try {
+                    if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                        Toast.makeText(context, "Podjęto zbyt dużo prób logowania. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
+                    } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
+                        PIN.setError("Podałeś nieprawidłowy kod PIN.");
+                        profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
+                    } else {
+                        chosenProfileID = position;
 
-                if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
-                    PIN.setError("Podałeś nieprawidłowy kod PIN.");
-                } else {
-                    chosenProfileID = position;
+                        profileDatabaseHelper.updateLastLoginDate(profilesList.get(position).getProfID());
+                        profileDatabaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
 
-                    profileDatabaseHelper.updateLastLoginDate(profilesList.get(position).getProfID());
-                    // profilesList.get(position).setProfLastLoginDate(profilesList.get(position).getProfLastLoginDate());
+                        dialog.cancel();
 
-                    dialog.cancel();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString("name", profilesList.get(position).getProfName());
-                    Intent intent = new Intent(context, MainActivity.class).putExtras(bundle);
-                    activity.startActivity(intent);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("name", profilesList.get(position).getProfName());
+                        Intent intent = new Intent(context, MainActivity.class).putExtras(bundle);
+                        activity.startActivity(intent);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -215,11 +209,21 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 String hashSalt = profilesList.get(position).getProfPINSalt();
                 String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
 
-                if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
-                    PIN.setError("Podałeś nieprawidłowy kod PIN.");
-                } else {
-                    dialog.cancel();
-                    showEditDialog(position);
+                try {
+                    if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                        Toast.makeText(context, "Podjęto zbyt dużo prób logowania. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
+                    } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
+                        PIN.setError("Podałeś nieprawidłowy kod PIN.");
+                        profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
+                    } else if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                        Toast.makeText(context, "Podjęto zbyt dużo prób logowania. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        profileDatabaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
+                        dialog.cancel();
+                        showEditDialog(position);
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -375,18 +379,24 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
                 String hashSalt = profilesList.get(position).getProfPINSalt();
                 String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
 
-                if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
-                    PIN.setError("Podałeś nieprawidłowy kod PIN.");
-                } else {
-                    if (chosenProfileID == profilesList.get(position).getProfID()) {
-                        chosenProfileID = 0;
-                    }
-                    profileDatabaseHelper.deleteProfile(profilesList.get(position).getProfID());
-                    profilesList.remove(position);
-                    dialog.cancel();
+                try {
+                    if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                        Toast.makeText(context, "Podjęto zbyt dużo prób logowania. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
+                    } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
+                        PIN.setError("Podałeś nieprawidłowy kod PIN.");
+                    } else {
+                        if (chosenProfileID == profilesList.get(position).getProfID()) {
+                            chosenProfileID = 0;
+                        }
+                        profileDatabaseHelper.deleteProfile(profilesList.get(position).getProfID());
+                        profilesList.remove(position);
+                        dialog.cancel();
 
-                    // notify list
-                    notifyDataSetChanged();
+                        // notify list
+                        notifyDataSetChanged();
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
             }
         });
