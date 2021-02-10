@@ -16,6 +16,11 @@
         <item name="backgroundColor">@color/background</item>
     </style>
 
+    <style name="Theme.PilnujGrosza.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+        <item name="backgroundColor">@color/background</item>
+    </style>
+
     <style name="Theme.PilnujGrosza.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

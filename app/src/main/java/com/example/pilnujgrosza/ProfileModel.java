@@ -12,12 +12,15 @@ public class ProfileModel {
     private String profLastLoginDate;
     private String profLastLoginAttempt;
     private int profFailedLoginAttempts;
+    private String profHelperQuestion;
+    private String profHelperAnswer;
+    private String profHelperSalt;
     private int profInitialBalance;
     private int profBalance;
 
     // profile constructors
     public ProfileModel(int profID, String profName, String profEmail, String profPIN, String profPINSalt, String profCreationDate, String profLastLoginDate,
-                        String profLastLoginAttempt, int profFailedLoginAttempts, int profInitialBalance, int profBalance) {
+                        String profLastLoginAttempt, int profFailedLoginAttempts, String profHelperQuestion, String profHelperAnswer, String profHelperSalt, int profInitialBalance, int profBalance) {
         this.profID = profID;
         this.profName = profName;
         this.profEmail = profEmail;
@@ -27,6 +30,9 @@ public class ProfileModel {
         this.profLastLoginDate = profLastLoginDate;
         this.profLastLoginAttempt = profLastLoginAttempt;
         this.profFailedLoginAttempts = profFailedLoginAttempts;
+        this.profHelperQuestion = profHelperQuestion;
+        this.profHelperAnswer = profHelperAnswer;
+        this.profHelperSalt = profHelperSalt;
         this.profInitialBalance = profInitialBalance;
         this.profBalance = profBalance;
     }
@@ -45,6 +51,9 @@ public class ProfileModel {
                 ", profLastLoginDate='" + profLastLoginDate + '\'' +
                 ", profLastLoginAttempt='" + profLastLoginAttempt + '\'' +
                 ", profFailedLoginAttempts=" + profFailedLoginAttempts +
+                ", profHelperQuestion='" + profHelperQuestion + '\'' +
+                ", profHelperAnswer='" + profHelperAnswer + '\'' +
+                ", profHelperSalt='" + profHelperSalt + '\'' +
                 ", profInitialBalance=" + profInitialBalance +
                 ", profBalance=" + profBalance +
                 '}';
@@ -121,6 +130,30 @@ public class ProfileModel {
 
     public void setProfFailedLoginAttempts(int profFailedLoginAttempts) {
         this.profFailedLoginAttempts = profFailedLoginAttempts;
+    }
+
+    public String getProfHelperQuestion() {
+        return profHelperQuestion;
+    }
+
+    public void setProfHelperQuestion(String profHelperQuestion) {
+        this.profHelperQuestion = profHelperQuestion;
+    }
+
+    public String getProfHelperAnswer() {
+        return profHelperAnswer;
+    }
+
+    public void setProfHelperAnswer(String profHelperAnswer) {
+        this.profHelperAnswer = profHelperAnswer;
+    }
+
+    public String getProfHelperSalt() {
+        return profHelperSalt;
+    }
+
+    public void setProfHelperSalt(String profHelperSalt) {
+        this.profHelperSalt = profHelperSalt;
     }
 
     public int getProfInitialBalance() {

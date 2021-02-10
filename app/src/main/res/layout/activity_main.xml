@@ -7,7 +7,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".MainActivity">
+        tools:context=".MainMenu">
 
         <!-- Row #1 - budget and shopping buttons -->
         <TableRow

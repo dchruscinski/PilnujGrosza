@@ -11,7 +11,7 @@
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
         <ImageView
-            android:id="@+id/profile_loginform_predelete_logo"
+            android:id="@+id/profile_remindPIN_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -19,74 +19,71 @@
             android:src="@mipmap/pilnuj_grosza_logo_foreground"
             android:scaleType="center"
             android:scaleX="3"
-            android:scaleY="3">
+            android:scaleY="3" >
         </ImageView>
 
         <TextView
-            android:id="@+id/profile_loginform_predelete_info_delete"
+            android:id="@+id/profile_remindPIN_info_helperquestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="40dp"
             android:layout_centerInParent="true"
             android:textAlignment="center"
-            android:layout_below="@+id/profile_loginform_predelete_logo"
+            android:layout_below="@+id/profile_remindPIN_logo"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:text="Usuwanie profilu"
-            android:singleLine="true" >
+            android:text="@string/profile_remindPIN_info_helperquestion" >
         </TextView>
 
         <TextView
-            android:id="@+id/profile_loginform_predelete_info"
+            android:id="@+id/profile_remindPIN_info_helperquestion_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:layout_centerInParent="true"
             android:textAlignment="center"
-            android:layout_below="@+id/profile_loginform_predelete_info_delete"
+            android:layout_below="@+id/profile_remindPIN_info_helperquestion"
             android:textSize="18sp"
-            android:text="Wpisz kod PIN, aby potwierdzić \noperację usunięcia profilu." >
+            android:text="Odpowiedz na pytanie pomocnicze\n w celu uzyskania hasła tymczasowego" >
         </TextView>
 
         <TextView
-            android:id="@+id/profile_loginform_predelete_text_name"
+            android:id="@+id/profile_remindPIN_text_helperquestion_question"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
+            android:layout_marginTop="20dp"
             android:layout_marginHorizontal="24dp"
-            android:layout_below="@+id/profile_loginform_predelete_info"
-            android:drawableStart="@drawable/baseline_account_box_black_24dp"
+            android:layout_below="@+id/profile_remindPIN_info_helperquestion_desc"
+            android:drawableStart="@drawable/baseline_help_black_18dp"
             android:drawablePadding="10dp"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:singleLine="true" >
+            android:textSize="20sp" >
         </TextView>
 
         <EditText
-            android:id="@+id/profile_loginform_predelete_text_pin"
+            android:id="@+id/profile_remindPIN_text_helperquestion_answer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/profile_loginform_predelete_text_name"
+            android:layout_below="@+id/profile_remindPIN_text_helperquestion_question"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="20dp"
-            android:inputType="numberPassword"
-            android:maxLength="6"
-            android:drawableStart="@drawable/baseline_pin_black_24dp"
+            android:maxLength="128"
+            android:drawableStart="@drawable/baseline_qa_black_18dp"
             android:drawablePadding="10dp"
-            android:hint="@string/profile_createform_pin"
+            android:hint="@string/profile_createform_text_helperquestion_answer"
             android:singleLine="true" />
 
         <Button
-            android:id="@+id/profile_loginform_predelete_button_login"
+            android:id="@+id/profile_remindPIN_submitRemind"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_below="@+id/profile_loginform_predelete_text_pin"
+            android:layout_below="@+id/profile_remindPIN_text_helperquestion_answer"
             android:layout_margin="10dp"
-            android:text="@string/profile_loginform_predelete_button_login" />
+            android:text="@string/profile_remindPIN_submitRemind" />
 
-    </RelativeLayout>
+</RelativeLayout>
 </ScrollView>

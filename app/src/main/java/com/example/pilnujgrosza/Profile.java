@@ -20,11 +20,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,6 +39,7 @@ public class Profile extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
@@ -64,9 +67,7 @@ public class Profile extends AppCompatActivity {
 
     public void showCreateDialog() {
         final EditText name, email, PIN, PINConfirm, initialBalance;
-        Button submitProfile;
-
-        ProfileModel profileModel = new ProfileModel();
+        Button nextStageButton;
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -87,9 +88,9 @@ public class Profile extends AppCompatActivity {
         PIN = (EditText) dialog.findViewById(R.id.profile_createform_text_pin);
         PINConfirm = (EditText) dialog.findViewById(R.id.profile_createform_text_pin_confirm);
         initialBalance = (EditText) dialog.findViewById(R.id.profile_createform_text_initialBalance);
-        submitProfile = (Button) dialog.findViewById(R.id.profile_createform_submitProfile);
+        nextStageButton = (Button) dialog.findViewById(R.id.profile_createform_button_nextstage);
 
-        submitProfile.setOnClickListener(new View.OnClickListener() {;
+        nextStageButton.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
                 // hashing password
@@ -98,19 +99,13 @@ public class Profile extends AppCompatActivity {
                 String hashedPINConfirm = org.mindrot.jbcrypt.BCrypt.hashpw(PINConfirm.getText().toString(), hashSalt);
                 boolean passwordMatches = hashedPIN.equals(hashedPINConfirm);
 
-                // model creation process
-                if (passwordMatches) {
-                    profileModel.setProfName(name.getText().toString().trim());
-                    profileModel.setProfEmail(email.getText().toString().trim());
-                    profileModel.setProfPIN(hashedPIN);
-                    profileModel.setProfPINSalt(hashSalt);
-                    if (initialBalance.getText().toString().isEmpty()) {
-                        profileModel.setProfInitialBalance(0);
-                        profileModel.setProfBalance(0);
-                    } else {
-                        profileModel.setProfInitialBalance(Integer.parseInt(initialBalance.getText().toString().trim()));
-                        profileModel.setProfBalance(Integer.parseInt(initialBalance.getText().toString().trim()));
-                    }
+                String profName = name.getText().toString().trim();
+                String profEmail = email.getText().toString().trim();
+                int profInitialBalance = 0;
+                int profBalance = 0;
+                if (!initialBalance.getText().toString().isEmpty()) {
+                    profInitialBalance = Integer.parseInt(initialBalance.getText().toString().trim());
+                    profBalance = Integer.parseInt(initialBalance.getText().toString().trim());
                 }
 
                 if (!passwordMatches) {
@@ -132,7 +127,65 @@ public class Profile extends AppCompatActivity {
                 } else if (profileDatabaseHelper.checkExistingEmail(email.getText().toString())) {
                     email.setError("Istnieje już profil z podanym adresem e-mail.");
                 } else {
+                    dialog.cancel();
+                    displayProfilesList();
+                    showHelperQuestionAndAnswerDialog(profName, profEmail, hashedPIN, hashSalt, profInitialBalance, profBalance);
+                }
+            }
+        });
+
+    }
+
+    public void showHelperQuestionAndAnswerDialog(String profName, String profEmail, String hashedPIN, String hashSalt, int profInitialBalance, int profBalance) {
+        final EditText question, answer;
+        Button submitCreate;
+        profileDatabaseHelper = new ProfileDatabaseHelper(this);
+
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.profile_create_form_remind_password);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(dialog.getWindow().getAttributes());
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.CENTER;
+
+        dialog.getWindow().setAttributes(params);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        question = (EditText) dialog.findViewById(R.id.profile_createform_text_helperquestion_question);
+        answer = (EditText) dialog.findViewById(R.id.profile_createform_text_helperquestion_answer);
+        submitCreate = (Button) dialog.findViewById(R.id.profile_createform_submitProfile);
+
+        submitCreate.setOnClickListener(new View.OnClickListener() {;
+            @Override
+            public void onClick(View v) {
+                ProfileModel profileModel = new ProfileModel();
+
+                String helperHashSalt = org.mindrot.jbcrypt.BCrypt.gensalt();
+                String helperQuestion = question.getText().toString().trim();
+                String helperHashedAnswer = org.mindrot.jbcrypt.BCrypt.hashpw(answer.getText().toString().trim(), helperHashSalt);
+
+                if (question.getText().toString().trim().isEmpty()) {
+                    question.setError("Podaj pytanie pomocnicze.");
+                } else if (answer.getText().toString().trim().isEmpty()) {
+                    answer.setError("Podaj odpowiedź na pytanie pomocnicze.");
+                } else if (!question.getText().toString().matches("[\\sa-zA-Z0-9_.,-]{2,128}[?]")) {
+                    question.setError("Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.");
+                } else {
+                    profileModel.setProfName(profName);
+                    profileModel.setProfEmail(profEmail);
+                    profileModel.setProfPIN(hashedPIN);
+                    profileModel.setProfPINSalt(hashSalt);
+                    profileModel.setProfInitialBalance(profInitialBalance);
+                    profileModel.setProfBalance(profBalance);
+                    profileModel.setProfHelperQuestion(helperQuestion);
+                    profileModel.setProfHelperAnswer(helperHashedAnswer);
+                    profileModel.setProfHelperSalt(helperHashSalt);
                     profileDatabaseHelper.addProfile(profileModel);
+
                     dialog.cancel();
                     displayProfilesList();
                 }
@@ -140,6 +193,7 @@ public class Profile extends AppCompatActivity {
         });
 
     }
+
 }
 
 

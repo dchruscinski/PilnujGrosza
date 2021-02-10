@@ -34,6 +34,9 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PROFILE_LAST_LOGIN_DATE = "profLastLoginDate";
     public static final String COLUMN_PROFILE_LAST_LOGIN_ATTEMPT = "profLastLoginAttempt";
     public static final String COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS = "profFailedLoginAttempts";
+    public static final String COLUMN_PROFILE_HELPER_QUESTION = "profHelperQuestion";
+    public static final String COLUMN_PROFILE_HELPER_ANSWER = "profHelperAnswer";
+    public static final String COLUMN_PROFILE_HELPER_SALT = "profHelperSalt";
     public static final int MINUTES_OF_ACCOUNT_LOCK = 1;
 
     public ProfileDatabaseHelper(@Nullable Context context) {
@@ -55,6 +58,9 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PROFILE_EMAIL + " TEXT UNIQUE," +
                 COLUMN_PROFILE_PIN + " TEXT NOT NULL," +
                 COLUMN_PROFILE_PIN_SALT + " TEXT NOT NULL," +
+                COLUMN_PROFILE_HELPER_QUESTION + " TEXT," +
+                COLUMN_PROFILE_HELPER_ANSWER + " TEXT," +
+                COLUMN_PROFILE_HELPER_SALT + " TEXT," +
                 COLUMN_PROFILE_INITIAL_BALANCE + " INTEGER DEFAULT 0," +
                 COLUMN_PROFILE_BALANCE + " INTEGER," +
                 COLUMN_PROFILE_CREATION_DATE + " DATETIME," +
@@ -74,7 +80,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void addProfile(ProfileModel profileModel) {
-
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -84,10 +89,13 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PROFILE_PIN_SALT, profileModel.getProfPINSalt());
         cv.put(COLUMN_PROFILE_INITIAL_BALANCE, profileModel.getProfInitialBalance());
         cv.put(COLUMN_PROFILE_BALANCE, profileModel.getProfBalance());
-        cv.putNull(COLUMN_PROFILE_CREATION_DATE);
+        cv.put(COLUMN_PROFILE_CREATION_DATE, getCurrentDateTime());
         cv.putNull(COLUMN_PROFILE_LAST_LOGIN_DATE);
         cv.putNull(COLUMN_PROFILE_LAST_LOGIN_ATTEMPT);
         cv.putNull(COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS);
+        cv.put(COLUMN_PROFILE_HELPER_QUESTION, profileModel.getProfHelperQuestion());
+        cv.put(COLUMN_PROFILE_HELPER_ANSWER, profileModel.getProfHelperAnswer());
+        cv.put(COLUMN_PROFILE_HELPER_SALT, profileModel.getProfHelperSalt());
         db.insert(TABLE_PROFILE, null, cv);
 
         db.close();
@@ -159,11 +167,14 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 String profLastLoginDate = cursor.getString(cursor.getColumnIndex("profLastLoginDate"));
                 String profLastLoginAttempt = cursor.getString(cursor.getColumnIndex("profLastLoginAttempt"));
                 int profFailedLoginAttempts = cursor.getInt(cursor.getColumnIndex("profFailedLoginAttempts"));
+                String profHelperQuestion = cursor.getString(cursor.getColumnIndex("profHelperQuestion"));
+                String profHelperAnswer = cursor.getString(cursor.getColumnIndex("profHelperAnswer"));
+                String profHelperSalt = cursor.getString(cursor.getColumnIndex("profHelperSalt"));
                 int profInitialBalance = cursor.getInt(cursor.getColumnIndex("profInitialBalance"));
                 int profBalance = cursor.getInt(cursor.getColumnIndex("profBalance"));
 
                 ProfileModel profileModel = new ProfileModel(profID, profName, profEmail, profPIN, profPINSalt,
-                        profCreationDate, profLastLoginDate, profLastLoginAttempt, profFailedLoginAttempts, profInitialBalance, profBalance);
+                        profCreationDate, profLastLoginDate, profLastLoginAttempt, profFailedLoginAttempts, profHelperQuestion, profHelperAnswer, profHelperSalt, profInitialBalance, profBalance);
 
                 profilesList.add(profileModel);
 
@@ -219,6 +230,18 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv =  new ContentValues();
         cv.put(COLUMN_PROFILE_LAST_LOGIN_DATE, getCurrentDateTime());
+        db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+
+        db.close();
+    }
+
+    public void updateHelperQuestionAndAnswer(String question, String answer, String salt, int profID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv =  new ContentValues();
+        cv.put(COLUMN_PROFILE_HELPER_QUESTION, question);
+        cv.put(COLUMN_PROFILE_HELPER_ANSWER, answer);
+        cv.put(COLUMN_PROFILE_HELPER_SALT, salt);
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
 
         db.close();

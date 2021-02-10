@@ -111,13 +111,13 @@
         android:singleLine="true" />
 
     <Button
-        android:id="@+id/profile_createform_submitProfile"
+        android:id="@+id/profile_createform_button_nextstage"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_below="@+id/profile_createform_text_initialBalance"
         android:layout_margin="10dp"
-        android:text="@string/profile_createform_submitProfile" />
+        android:text="@string/profile_createform_button_nextstage" />
 
 </RelativeLayout>
 </ScrollView>
