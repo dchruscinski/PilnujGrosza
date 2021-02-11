@@ -72,4 +72,7 @@
     <string name="profile_showPIN_info_helperquestion">Przypomnienie PIN</string>
     <string name="profile_remindPIN_info_helperquestion">Przypomnienie kodu PIN</string>
     <string name="profile_showPIN_submitRemind">Zakończ</string>
+    <string name="lcee_profile_empty_text">Jak widzisz, nie ma tutaj żadnego profilu, stwórz go!</string>
+    <string name="lcee_profile_error_text">Coś poszło nie tak, wybacz!</string>
+    <string name="lcee_profile_error_button_retry">Odśwież</string>
 </resources>

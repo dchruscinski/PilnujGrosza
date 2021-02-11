@@ -110,6 +110,7 @@
     <string name="profile_showPIN_info_helperquestion">Przypomnienie kodu PIN</string>
     <string name="profile_remindPIN_info_helperquestion">Przypomnienie kodu PIN</string>
     <string name="profile_showPIN_submitRemind">Zakończ</string>
+    <string name="profile_empty_text">Jak widzisz, nie ma tutaj żadnego profilu, stwórz go!</string>
 
 
 </resources>

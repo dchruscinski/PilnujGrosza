@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,16 +21,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.w3c.dom.Text;
+
 import java.text.ParseException;
 import java.util.ArrayList;
 
-public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
+public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<ProfileModel> profilesList;
     private Context context;
     private Activity activity;
     private ProfileDatabaseHelper profileDatabaseHelper;
     static int chosenProfileID;
+
+    private static final int VIEW_TYPE_EMPTY_LIST = 0;
+    private static final int VIEW_TYPE_OBJECT_VIEW = 1;
 
     public ProfileAdapter(Context context, Activity activity, ArrayList<ProfileModel> profilesList) {
         this.context = context;
@@ -40,71 +46,108 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolderEmpty extends RecyclerView.ViewHolder {
 
-        public TextView txtHeader, txtFooter;
-        public ImageView editProfile, delete;
+        public TextView emptyText;
+        public ImageView emptyIcon;
         public View layout;
 
-        public ViewHolder(View v) {
+        public ViewHolderEmpty(View v) {
+            super(v);
+            layout = v;
+            emptyText = (TextView) v.findViewById(R.id.profile_empty_text);
+            emptyIcon = (ImageView) v.findViewById(R.id.profile_empty_logo);
+        }
+    }
+
+    public class ViewHolderProfile extends RecyclerView.ViewHolder {
+
+        public TextView txtHeader, txtFooter;
+        public ImageView editProfile;
+        public View layout;
+
+        public ViewHolderProfile(View v) {
             super(v);
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.prof_rc_firstLine);
             txtFooter = (TextView) v.findViewById(R.id.prof_rc_secondLine);
             editProfile = (ImageView) v.findViewById(R.id.prof_rc_editicon);
+        }
+    }
 
-            /*
-            delete = (ImageView) v.findViewById(R.id.prof_rc_deleteIcon);
-            */
+    @Override
+    public int getItemCount() {
+        return profilesList.size() > 0 ? profilesList.size() : 1;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (profilesList.isEmpty()) {
+            return VIEW_TYPE_EMPTY_LIST;
+        } else {
+            return VIEW_TYPE_OBJECT_VIEW;
         }
     }
 
     // Create new views (invoked by the layout manager)
     @NonNull
     @Override
-    public ProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // create a new view
-        LayoutInflater inflater = LayoutInflater.from(
-                parent.getContext());
-        View v =
-                inflater.inflate(R.layout.profile_rc_row, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-        ViewHolder vh = new ViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View v;
+        RecyclerView.ViewHolder vh;
+
+        if (viewType == VIEW_TYPE_OBJECT_VIEW) {
+            // create a new view
+            v = inflater.inflate(R.layout.profile_rc_row, parent, false);
+            // set the view's size, margins, paddings and layout parameters
+            vh = new ViewHolderProfile(v);
+        } else {
+            // create a new view
+            v = inflater.inflate(R.layout.profile_empty_view, parent, false);
+            // set the view's size, margins, paddings and layout parameters
+            vh = new ViewHolderEmpty(v);
+        }
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(@NonNull ProfileAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         /*
             - get element from your dataset at this position
             - replace the contents of the view with that element
          */
-        final ProfileModel profile = profilesList.get(position);
-        holder.txtHeader.setText(profile.getProfName());
+        int viewType = getItemViewType(position);
 
-        String lastLoginDate = (profilesList.get(position).getProfLastLoginDate() == null) ?
-                "" : "Ostatnie logowanie: " + profilesList.get(position).getProfLastLoginDate();
-        holder.txtFooter.setText(lastLoginDate);
+        if (viewType == VIEW_TYPE_OBJECT_VIEW) {
+            final ProfileModel profile = profilesList.get(position);
+            ViewHolderProfile profileHolder = (ViewHolderProfile) holder;
 
-        holder.txtHeader.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLoginDialog(position);
-            }
-        });
+            profileHolder.txtHeader.setText(profile.getProfName());
 
-        holder.editProfile.setOnClickListener(new View.OnClickListener() {;
-            @Override
-            public void onClick(View v) {
-                showLoginBeforeEditDialog(position);
-            }
-        });
-    }
+            String lastLoginDate = (profilesList.get(position).getProfLastLoginDate() == null) ?
+                    "" : "Ostatnie logowanie: " + profilesList.get(position).getProfLastLoginDate();
+            profileHolder.txtFooter.setText(lastLoginDate);
 
-    @Override
-    public int getItemCount() {
-        return profilesList.size();
+            profileHolder.txtHeader.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showLoginDialog(position);
+                }
+            });
+
+            profileHolder.editProfile.setOnClickListener(new View.OnClickListener() {
+                ;
+
+                @Override
+                public void onClick(View v) {
+                    showLoginBeforeEditDialog(position);
+                }
+            });
+        } else {
+            ViewHolderEmpty emptyHolder = (ViewHolderEmpty) holder;
+        }
     }
 
     public void showLoginDialog(final int position) {

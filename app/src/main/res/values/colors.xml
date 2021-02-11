@@ -9,4 +9,5 @@
   <color name="primaryTextColor">#000000</color>
   <color name="secondaryTextColor">#ffffff</color>
   <color name="background">#C8BEBE</color>
+  <color name="whiteBackground">#ffffff</color>
 </resources>
