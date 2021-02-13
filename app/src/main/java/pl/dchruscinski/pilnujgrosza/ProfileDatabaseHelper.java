@@ -1,4 +1,4 @@
-package com.example.pilnujgrosza;
+package pl.dchruscinski.pilnujgrosza;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,7 +25,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_PROFILE = "profile";
     public static final String COLUMN_PROFILE_ID = "profID";
     public static final String COLUMN_PROFILE_NAME = "profName";
-    public static final String COLUMN_PROFILE_EMAIL = "profEmail";
     public static final String COLUMN_PROFILE_PIN = "profPIN";
     public static final String COLUMN_PROFILE_PIN_SALT = "profPINSalt";
     public static final String COLUMN_PROFILE_INITIAL_BALANCE = "profInitialBalance";
@@ -55,7 +54,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 "CREATE TABLE " + TABLE_PROFILE + " (" +
                 COLUMN_PROFILE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_PROFILE_NAME + " TEXT UNIQUE," +
-                COLUMN_PROFILE_EMAIL + " TEXT UNIQUE," +
                 COLUMN_PROFILE_PIN + " TEXT NOT NULL," +
                 COLUMN_PROFILE_PIN_SALT + " TEXT NOT NULL," +
                 COLUMN_PROFILE_HELPER_QUESTION + " TEXT," +
@@ -84,7 +82,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_PROFILE_NAME, profileModel.getProfName());
-        cv.put(COLUMN_PROFILE_EMAIL, profileModel.getProfEmail());
         cv.put(COLUMN_PROFILE_PIN, profileModel.getProfPIN());
         cv.put(COLUMN_PROFILE_PIN_SALT, profileModel.getProfPINSalt());
         cv.put(COLUMN_PROFILE_INITIAL_BALANCE, profileModel.getProfInitialBalance());
@@ -160,7 +157,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
             do {
                 int profID = cursor.getInt(cursor.getColumnIndex("profID"));
                 String profName = cursor.getString(cursor.getColumnIndex("profName"));
-                String profEmail = cursor.getString(cursor.getColumnIndex("profEmail"));
                 String profPIN = cursor.getString(cursor.getColumnIndex("profPIN"));
                 String profPINSalt = cursor.getString(cursor.getColumnIndex("profPINSalt"));
                 String profCreationDate = cursor.getString(cursor.getColumnIndex("profCreationDate"));
@@ -173,7 +169,7 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 int profInitialBalance = cursor.getInt(cursor.getColumnIndex("profInitialBalance"));
                 int profBalance = cursor.getInt(cursor.getColumnIndex("profBalance"));
 
-                ProfileModel profileModel = new ProfileModel(profID, profName, profEmail, profPIN, profPINSalt,
+                ProfileModel profileModel = new ProfileModel(profID, profName, profPIN, profPINSalt,
                         profCreationDate, profLastLoginDate, profLastLoginAttempt, profFailedLoginAttempts, profHelperQuestion, profHelperAnswer, profHelperSalt, profInitialBalance, profBalance);
 
                 profilesList.add(profileModel);
@@ -199,16 +195,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues cv =  new ContentValues();
         cv.put(COLUMN_PROFILE_NAME, name);
-        db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
-
-        db.close();
-    }
-
-    public void updateProfileEmail(String email, int profID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues cv =  new ContentValues();
-        cv.put(COLUMN_PROFILE_EMAIL, email);
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
 
         db.close();
@@ -295,21 +281,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return doesNameExistInDatabase;
-    }
-
-    public boolean checkExistingEmail(String mail) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_EMAIL + " = ?";
-
-        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {mail});
-        cursor.moveToFirst();
-
-        int emailOccurrencesCounter = cursor.getCount();
-        boolean doesEmailExistInDatabase = (emailOccurrencesCounter > 0) ? TRUE : FALSE;
-
-        cursor.close();
-        db.close();
-        return doesEmailExistInDatabase;
     }
 
 }

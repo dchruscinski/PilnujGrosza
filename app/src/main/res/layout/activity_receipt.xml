@@ -9,7 +9,7 @@
     android:weightSum="5"
     android:background="@color/whiteBackground"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Receipt">
+    tools:context="pl.dchruscinski.pilnujgrosza.Receipt">
 
     <!-- Row #1 - FAB "Add receipt" and description text view -->
     <TableRow

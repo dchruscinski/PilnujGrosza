@@ -9,7 +9,7 @@
     android:background="@color/whiteBackground"
     android:weightSum="5"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ShoppingList">
+    tools:context="pl.dchruscinski.pilnujgrosza.ShoppingList">
 
     <!-- Row #1 - FAB "Add shopping list" and description text view -->
     <TableRow

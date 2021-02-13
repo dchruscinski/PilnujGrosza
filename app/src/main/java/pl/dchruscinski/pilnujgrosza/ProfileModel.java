@@ -1,11 +1,10 @@
-package com.example.pilnujgrosza;
+package pl.dchruscinski.pilnujgrosza;
 
 public class ProfileModel {
 
     // profile attributes
     private int profID;
     private String profName;
-    private String profEmail;
     private String profPIN;
     private String profPINSalt;
     private String profCreationDate;
@@ -19,11 +18,10 @@ public class ProfileModel {
     private int profBalance;
 
     // profile constructors
-    public ProfileModel(int profID, String profName, String profEmail, String profPIN, String profPINSalt, String profCreationDate, String profLastLoginDate,
+    public ProfileModel(int profID, String profName, String profPIN, String profPINSalt, String profCreationDate, String profLastLoginDate,
                         String profLastLoginAttempt, int profFailedLoginAttempts, String profHelperQuestion, String profHelperAnswer, String profHelperSalt, int profInitialBalance, int profBalance) {
         this.profID = profID;
         this.profName = profName;
-        this.profEmail = profEmail;
         this.profPIN = profPIN;
         this.profPINSalt = profPINSalt;
         this.profCreationDate = profCreationDate;
@@ -45,7 +43,6 @@ public class ProfileModel {
         return "ProfileModel{" +
                 "profID=" + profID +
                 ", profName='" + profName + '\'' +
-                ", profEmail='" + profEmail + '\'' +
                 ", profPIN=" + profPIN + '\'' +
                 ", profCreationDate='" + profCreationDate + '\'' +
                 ", profLastLoginDate='" + profLastLoginDate + '\'' +
@@ -74,14 +71,6 @@ public class ProfileModel {
 
     public void setProfName(String profName) {
         this.profName = profName;
-    }
-
-    public String getProfEmail() {
-        return profEmail;
-    }
-
-    public void setProfEmail(String profEmail) {
-        this.profEmail = profEmail;
     }
 
     public String  getProfPIN() {

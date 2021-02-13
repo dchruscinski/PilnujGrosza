@@ -1,4 +1,4 @@
-package com.example.pilnujgrosza;
+package pl.dchruscinski.pilnujgrosza;
 
 import android.content.Context;
 

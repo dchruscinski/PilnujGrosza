@@ -1,10 +1,9 @@
-package com.example.pilnujgrosza;
+package pl.dchruscinski.pilnujgrosza;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Context context;
     private Activity activity;
     private ProfileDatabaseHelper profileDatabaseHelper;
-    static int chosenProfileID;
+    static int chosenProfileID = 0;
 
     private static final int VIEW_TYPE_EMPTY_LIST = 0;
     private static final int VIEW_TYPE_OBJECT_VIEW = 1;
@@ -181,12 +179,11 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View v) {
                 String hashSalt = profilesList.get(position).getProfPINSalt();
-                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString(), hashSalt);
-
+                String hashedPIN = BCrypt.hashpw(PIN.getText().toString(), hashSalt);
 
                 try {
                     if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
-                        Toast.makeText(context, "Podjęto zbyt dużo prób logowania. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Podjęto zbyt dużo prób logowania lub odzyskania hasła. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
                     } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
                         PIN.setError("Podałeś nieprawidłowy kod PIN.");
                         profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
@@ -250,7 +247,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View v) {
                 String hashSalt = profilesList.get(position).getProfPINSalt();
-                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
+                String hashedPIN = BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
 
                 try {
                     if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
@@ -280,8 +277,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void showEditDialog(final int position) {
-        final EditText name, email, newPIN, newPINConfirm;
-        Button submitName, submitEmail, submitPIN, submitDeleteProfile;
+        final EditText name, newPIN, newPINConfirm, newQuestion, newAnswer;
+        Button submitName, submitPIN, submitQandA, submitDeleteProfile;
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -298,17 +295,18 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         dialog.show();
 
         name = (EditText) dialog.findViewById(R.id.profile_editform_text_name);
-        email = (EditText) dialog.findViewById(R.id.profile_editform_text_email);
         newPIN = (EditText) dialog.findViewById(R.id.profile_editform_text_newPIN);
         newPINConfirm = (EditText) dialog.findViewById(R.id.profile_editform_text_newPIN_confirm);
+        newQuestion = (EditText) dialog.findViewById(R.id.profile_editform_text_newHelperQuestion);
+        newAnswer = (EditText) dialog.findViewById(R.id.profile_editform_text_newHelperAnswer);
 
         submitName = (Button) dialog.findViewById(R.id.profile_editform_submit_name);
-        submitEmail = (Button) dialog.findViewById(R.id.profile_editform_submit_email);
         submitPIN = (Button) dialog.findViewById(R.id.profile_editform_submit_PIN);
+        submitQandA = (Button) dialog.findViewById(R.id.profile_editform_submit_QandA);
         submitDeleteProfile = (Button) dialog.findViewById(R.id.profile_editform_submit_deleteProfile);
 
         name.setText(profilesList.get(position).getProfName());
-        email.setText(profilesList.get(position).getProfEmail());
+        newQuestion.setText(profilesList.get(position).getProfHelperQuestion());
 
         submitName.setOnClickListener(new View.OnClickListener() {;
             @Override
@@ -330,33 +328,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             }
         });
 
-        submitEmail.setOnClickListener(new View.OnClickListener() {;
-            @Override
-            public void onClick(View v) {
-                if (email.getText().toString().trim().isEmpty()) {
-                    email.setError("Podaj adres e-mail.");
-                } else if (!email.getText().toString().matches("(?:(?:\\r\\n)?[ \\t])*(?:(?:(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*))*@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*|(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)*\\<(?:(?:\\r\\n)?[ \\t])*(?:@(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*(?:,@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*)*:(?:(?:\\r\\n)?[ \\t])*)?(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*))*@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*\\>(?:(?:\\r\\n)?[ \\t])*)|(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)*:(?:(?:\\r\\n)?[ \\t])*(?:(?:(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*))*@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*|(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)*\\<(?:(?:\\r\\n)?[ \\t])*(?:@(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*(?:,@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*)*:(?:(?:\\r\\n)?[ \\t])*)?(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*))*@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*\\>(?:(?:\\r\\n)?[ \\t])*)(?:,\\s*(?:(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*))*@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*|(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)*\\<(?:(?:\\r\\n)?[ \\t])*(?:@(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*(?:,@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*)*:(?:(?:\\r\\n)?[ \\t])*)?(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\"(?:[^\\\"\\r\\\\]|\\\\.|(?:(?:\\r\\n)?[ \\t]))*\"(?:(?:\\r\\n)?[ \\t])*))*@(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*)(?:\\.(?:(?:\\r\\n)?[ \\t])*(?:[^()<>@,;:\\\\\".\\[\\] \\000-\\031]+(?:(?:(?:\\r\\n)?[ \\t])+|\\Z|(?=[\\[\"()<>@,;:\\\\\".\\[\\]]))|\\[([^\\[\\]\\r\\\\]|\\\\.)*\\](?:(?:\\r\\n)?[ \\t])*))*\\>(?:(?:\\r\\n)?[ \\t])*))*)?;\\s*)")) {
-                    email.setError("Nieprawidłowy format adresu e-mail.");
-                } else if (profileDatabaseHelper.checkExistingEmail(email.getText().toString())) {
-                    email.setError("Istnieje już profil z podanym adresem e-mail.");
-                } else {
-                    profileDatabaseHelper.updateProfileEmail(email.getText().toString(), profilesList.get(position).getProfID());
-                    profilesList.get(position).setProfEmail(email.getText().toString());
-                    dialog.cancel();
-
-                    // notify list
-                    notifyDataSetChanged();
-                }
-            }
-        });
-
         submitPIN.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
                 // hashing password
-                String newHashSalt = org.mindrot.jbcrypt.BCrypt.gensalt();
-                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(newPIN.getText().toString(), newHashSalt);
-                String hashedPINConfirm = org.mindrot.jbcrypt.BCrypt.hashpw(newPINConfirm.getText().toString(), newHashSalt);
+                String newHashSalt = BCrypt.gensalt();
+                String hashedPIN = BCrypt.hashpw(newPIN.getText().toString(), newHashSalt);
+                String hashedPINConfirm = BCrypt.hashpw(newPINConfirm.getText().toString(), newHashSalt);
                 boolean passwordMatches = hashedPIN.equals(hashedPINConfirm);
 
                 if (newPIN.getText().toString().isEmpty() || newPINConfirm.getText().toString().isEmpty()) {
@@ -371,6 +349,33 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     profilesList.get(position).setProfPIN(hashedPIN);
                     profilesList.get(position).setProfPINSalt(newHashSalt);
 
+                    dialog.cancel();
+
+                    // notify list
+                    notifyDataSetChanged();
+                }
+            }
+        });
+
+        submitQandA.setOnClickListener(new View.OnClickListener() {;
+            @Override
+            public void onClick(View v) {
+                String helperHashSalt = BCrypt.gensalt();
+                String helperQuestion = newQuestion.getText().toString().trim();
+                String helperHashedAnswer = BCrypt.hashpw(newAnswer.getText().toString().trim(), helperHashSalt);
+
+                if (newQuestion.getText().toString().trim().isEmpty()) {
+                    newQuestion.setError("Podaj pytanie pomocnicze.");
+                } else if (newAnswer.getText().toString().trim().isEmpty()) {
+                    newAnswer.setError("Podaj odpowiedź na pytanie pomocnicze.");
+                } else if (!newQuestion.getText().toString().matches("[\\sa-zA-Z0-9_.,-]{2,128}[?]")) {
+                    newQuestion.setError("Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.");
+                } else {
+                    profileDatabaseHelper.updateHelperQuestionAndAnswer(helperQuestion, helperHashedAnswer, helperHashSalt, profilesList.get(position).getProfID());
+
+                    profilesList.get(position).setProfHelperQuestion(helperQuestion);
+                    profilesList.get(position).setProfHelperAnswer(helperHashedAnswer);
+                    profilesList.get(position).setProfHelperSalt(helperHashSalt);
                     dialog.cancel();
 
                     // notify list
@@ -418,13 +423,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View v) {
                 String hashHelperSalt = profilesList.get(position).getProfHelperSalt();
-                String newHashPINSalt = org.mindrot.jbcrypt.BCrypt.gensalt();
-                String hashedHelperAnswer = org.mindrot.jbcrypt.BCrypt.hashpw(helperAnswer.getText().toString().trim(), hashHelperSalt);
+                String newHashPINSalt = BCrypt.gensalt();
+                String hashedHelperAnswer = BCrypt.hashpw(helperAnswer.getText().toString().trim(), hashHelperSalt);
                 PasswordGenerator pwdGen = new PasswordGenerator.PasswordGeneratorBuilder()
                         .useDigits(true)
                         .build();
                 String newPIN = pwdGen.generate(6);
-                String newHashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(newPIN, newHashPINSalt);
+                String newHashedPIN = BCrypt.hashpw(newPIN, newHashPINSalt);
 
                     try {
                         if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
@@ -521,7 +526,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             @Override
             public void onClick(View v) {
                 String hashSalt = profilesList.get(position).getProfPINSalt();
-                String hashedPIN = org.mindrot.jbcrypt.BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
+                String hashedPIN = BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
 
                 try {
                     if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {

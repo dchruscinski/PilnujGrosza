@@ -6,59 +6,114 @@
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:background="@color/whiteBackground"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".MainMenu">
+        tools:context="pl.dchruscinski.pilnujgrosza.MainMenu">
 
-        <!-- Row #1 - budget and shopping buttons -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25" >
+
+            <TextView
+                android:id="@+id/mainmenu_profile_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:text="Saldo dla profilu:"
+                android:singleLine="true" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/mainmenu_profile_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_weight="3"
+                android:singleLine="true" >
+            </TextView>
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/mainmenu_background"
+            android:layout_weight="1.5" >
+
+            <TextView
+                android:id="@+id/mainmenu_balance_amount_text"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textSize="60sp"
+                android:textStyle="bold"
+                android:layout_weight="2"
+                android:singleLine="true" >
+            </TextView>
+
+            <TextView
+                android:id="@+id/mainmenu_balance_currency_text"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_weight="0.75"
+                android:text="PLN"
+                android:singleLine="true" >
+            </TextView>
+
+        </TableRow>
+
+        <!-- Row #3 - budget section -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
+
+            <!-- Add income button -->
+            <Button
+                android:id="@+id/mainmenu_addIncome_button"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/mainmenu_addIncome_button"/>
+
+            <!-- Add expense button -->
+            <Button
+                android:id="@+id/mainmenu_addExpense_button"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="5dp"
+                android:text="@string/mainmenu_addExpense_button" />
+        </TableRow>
+
+        <!-- Row #4 - budget section -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="20dp">
 
             <!-- Budget button -->
             <Button
-                android:id="@+id/menu_budget"
-                android:layout_width="0dip"
+                android:id="@+id/mainmenu_budget_button"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_column="0"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:onClick="onClickBudgetButton"
-                android:text="@string/menu_budget"/>
+                android:text="@string/mainmenu_budget_button" />
 
-            <!-- Shopping button -->
-            <Button
-                android:id="@+id/menu_shopping"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_column="1"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="10dp"
-                android:onClick="onClickShoppingButton"
-                android:text="@string/menu_shopping" />
-        </TableRow>
-
-        <!-- Row #2 - Calendar button and app icon -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" >
-
-            <!-- Calendar button -->
-            <Button
-                android:id="@+id/menu_calendar"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:onClick="onClickCalendarButton"
-                android:text="@string/menu_calendar" />
-
-            <!-- App icon -->
+            <!-- App icon
             <ImageView
                 android:id="@+id/menu_logo"
                 android:layout_width="0dip"
@@ -67,37 +122,92 @@
                 android:layout_marginEnd="20dp"
                 android:layout_weight="1"
                 app:srcCompat="@mipmap/pilnuj_grosza_logo"
-                tools:srcCompat="@mipmap/pilnuj_grosza_logo" />
+                tools:srcCompat="@mipmap/pilnuj_grosza_logo" /> -->
         </TableRow>
 
-        <!-- Row #3 - profile and settings buttons -->
+        <!-- Row #5 - receipt section -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginTop="20dp" >
+
+            <!-- Add receipt button -->
+            <Button
+                android:id="@+id/mainmenu_addReceipt_button"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/mainmenu_addReceipt_button"/>
+
+            <!-- receipts list button -->
+            <Button
+                android:id="@+id/mainmenu_receiptsList_button"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/mainmenu_receiptsList_button"/>
+        </TableRow>
+
+        <!-- Row #6 - shopping lists section -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" >
 
-            <!-- Profile button -->
+            <!-- Add receipt button -->
             <Button
-                android:id="@+id/menu_profile"
+                android:id="@+id/mainmenu_shoppingLists_button"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_column="0"
+                android:layout_weight="0.6"
                 android:layout_marginStart="20dp"
-                android:layout_marginEnd="10dp"
-                android:onClick="onClickProfileButton"
-                android:text="@string/menu_profile"/>
+                android:layout_marginEnd="5dp"
+                android:text="@string/mainmenu_shoppingLists_button" />
+
+            <!-- receipts list button -->
+            <Button
+                android:id="@+id/mainmenu_addShoppingList_button"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="20dp"
+                android:text="@string/mainmenu_addShoppingList_button" />
+        </TableRow>
+
+        <!-- Row #7 - settings and logout section -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp">
 
             <!-- Settings button -->
             <Button
-                android:id="@+id/menu_settings"
+                android:id="@+id/mainmenu_settings_button"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_column="1"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/mainmenu_settings_button" />
+
+            <!-- Logout button -->
+            <Button
+                android:id="@+id/mainmenu_logout_button"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
                 android:layout_marginEnd="20dp"
-                android:layout_marginStart="10dp"
-                android:onClick="onClickSettingsButton"
-                android:text="@string/menu_settings" />
+                android:layout_marginStart="5dp"
+                android:text="@string/mainmenu_profiles_button"/>
+
         </TableRow>
+
     </TableLayout>

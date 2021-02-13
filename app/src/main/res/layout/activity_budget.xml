@@ -8,7 +8,7 @@
         android:layout_marginBottom="20dp"
         android:background="@color/whiteBackground"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:context=".Budget">
+        tools:context="pl.dchruscinski.pilnujgrosza.Budget">
 
     <!-- Row #1 - FAB "Add income" and description text view -->
     <TableRow

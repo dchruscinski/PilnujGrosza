@@ -1,8 +1,9 @@
-package com.example.pilnujgrosza;
+package pl.dchruscinski.pilnujgrosza;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
 
 public class ShoppingList extends AppCompatActivity {
 

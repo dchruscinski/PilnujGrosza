@@ -111,6 +111,19 @@
     <string name="profile_remindPIN_info_helperquestion">Przypomnienie kodu PIN</string>
     <string name="profile_showPIN_submitRemind">Zakończ</string>
     <string name="profile_empty_text">Jak widzisz, nie ma tutaj żadnego profilu, stwórz go!</string>
+    <string name="profile_editform_text_newHelperQuestion">Nowe pytanie pomocnicze</string>
+    <string name="profile_editform_text_newHelperAnswer">Odpowiedź na nowe pytanie pomocnicze</string>
+    <string name="profile_editform_submit_QandA">Zmień pytanie i odpowiedź pomocniczą</string>
+    <string name="profile_fab_tooltip_addProfile">Utwórz profil</string>
+    <string name="mainmenu_addIncome_button">Dodaj przychód</string>
+    <string name="mainmenu_addExpense_button">Dodaj wydatek</string>
+    <string name="mainmenu_budget_button">Budżet</string>
+    <string name="mainmenu_addReceipt_button">Dodaj paragon</string>
+    <string name="mainmenu_addShoppingList_button">Dodaj listę zakupów</string>
+    <string name="mainmenu_shoppingLists_button">Listy zakupów</string>
+    <string name="mainmenu_profiles_button">Wyloguj się</string>
+    <string name="mainmenu_settings_button">Ustawienia</string>
+    <string name="mainmenu_receiptsList_button">Lista paragonów</string>
 
 
 </resources>

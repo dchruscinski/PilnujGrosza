@@ -75,4 +75,17 @@
     <string name="lcee_profile_empty_text">Jak widzisz, nie ma tutaj żadnego profilu, stwórz go!</string>
     <string name="lcee_profile_error_text">Coś poszło nie tak, wybacz!</string>
     <string name="lcee_profile_error_button_retry">Odśwież</string>
+    <string name="profile_editform_text_newHelperQuestion">Nowe pytanie pomocnicze</string>
+    <string name="profile_editform_text_newHelperAnswer">Odpowiedź na nowe pytanie pomocnicze</string>
+    <string name="profile_editform_submit_QandA">Zmień pytanie i odpowiedź pomocniczą</string>
+    <string name="profile_fab_tooltip_addProfile">Utwórz profil</string>
+    <string name="menu_addIncome_button">Dodaj przychód</string>
+    <string name="menu_addExpense_button">Dodaj wydatek</string>
+    <string name="menu_budget_button">Budżet</string>
+    <string name="menu_addReceipt_button">Dodaj paragon</string>
+    <string name="menu_addShoppingList_button">Dodaj listę zakupów</string>
+    <string name="menu_shoppingLists_button">Listy zakupów</string>
+    <string name="menu_profiles_button">Wyloguj się</string>
+    <string name="menu_settings_button">Ustawienia</string>
+    <string name="mainmenu_receiptsList_button">Lista paragonów</string>
 </resources>

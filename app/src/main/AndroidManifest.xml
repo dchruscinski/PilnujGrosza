@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.pilnujgrosza">
+    package="pl.dchruscinski.pilnujgrosza">
 
     <application
         android:allowBackup="true"
@@ -9,29 +9,27 @@
         android:roundIcon="@mipmap/pilnuj_grosza_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PilnujGrosza.Launcher">
-        <!-- android:theme="@style/Theme.PilnujGrosza"> -->
         <activity
-            android:name=".Summary"
+            android:name="pl.dchruscinski.pilnujgrosza.Summary"
             android:label="@string/title_activity_summary" />
         <activity
-            android:name=".ExpensesList"
+            android:name="pl.dchruscinski.pilnujgrosza.ExpensesList"
             android:label="@string/title_activity_expenses_list" />
         <activity
-            android:name=".IncomeList"
+            android:name="pl.dchruscinski.pilnujgrosza.IncomeList"
             android:label="@string/title_activity_income_list" />
         <activity
-            android:name=".Receipt"
+            android:name="pl.dchruscinski.pilnujgrosza.Receipt"
             android:label="@string/title_activity_receipt" />
         <activity
-            android:name=".ShoppingList"
+            android:name="pl.dchruscinski.pilnujgrosza.ShoppingList"
             android:label="@string/title_activity_shopping_list" />
         <activity
-            android:name=".Settings"
+            android:name="pl.dchruscinski.pilnujgrosza.Settings"
             android:label="@string/title_activity_settings" />
 
         <activity
-            android:name=".Profile" >
-            <!--android:label="@string/title_activity_profile" > -->
+            android:name="pl.dchruscinski.pilnujgrosza.Profile" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,17 +37,17 @@
         </activity>
 
         <activity
-            android:name=".Calendar"
+            android:name="pl.dchruscinski.pilnujgrosza.Calendar"
             android:label="@string/title_activity_calendar" />
         <activity
-            android:name=".Shopping"
+            android:name="pl.dchruscinski.pilnujgrosza.Shopping"
             android:label="@string/title_activity_shopping" />
         <activity
-            android:name=".Budget"
+            android:name="pl.dchruscinski.pilnujgrosza.Budget"
             android:label="@string/title_activity_budget" />
 
         <activity
-            android:name=".MainMenu"
+            android:name="pl.dchruscinski.pilnujgrosza.MainMenu"
             android:label="@string/title_activity_menu" />
 
     </application>

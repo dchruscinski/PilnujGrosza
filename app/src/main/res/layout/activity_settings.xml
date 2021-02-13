@@ -8,7 +8,7 @@
     android:layout_marginBottom="20dp"
     android:background="@color/whiteBackground"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".Settings">
+    tools:context="pl.dchruscinski.pilnujgrosza.Settings">
 
     <!-- Row #3 - settings list -->
     <TableRow
