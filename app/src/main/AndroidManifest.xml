@@ -13,11 +13,8 @@
             android:name="pl.dchruscinski.pilnujgrosza.Summary"
             android:label="@string/title_activity_summary" />
         <activity
-            android:name="pl.dchruscinski.pilnujgrosza.ExpensesList"
+            android:name="pl.dchruscinski.pilnujgrosza.Transaction"
             android:label="@string/title_activity_expenses_list" />
-        <activity
-            android:name="pl.dchruscinski.pilnujgrosza.IncomeList"
-            android:label="@string/title_activity_income_list" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Receipt"
             android:label="@string/title_activity_receipt" />
@@ -27,6 +24,9 @@
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Settings"
             android:label="@string/title_activity_settings" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.ExpenseCategory"
+            android:label="@string/title_activity_expense_category" />
 
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Profile" >

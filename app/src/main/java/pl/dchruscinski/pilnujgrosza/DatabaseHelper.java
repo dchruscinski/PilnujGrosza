@@ -20,7 +20,7 @@ import java.util.TimeZone;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
-public class ProfileDatabaseHelper extends SQLiteOpenHelper {
+public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_PROFILE = "profile";
     public static final String COLUMN_PROFILE_ID = "profID";
@@ -38,17 +38,17 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PROFILE_HELPER_SALT = "profHelperSalt";
     public static final int MINUTES_OF_ACCOUNT_LOCK = 1;
 
-    public ProfileDatabaseHelper(@Nullable Context context) {
+    public static final String TABLE_EXPENSE_CATEGORY = "expensecategory";
+    public static final String COLUMN_EXPENSE_CATEGORY_ID = "expcatID";
+    public static final String COLUMN_EXPENSE_CATEGORY_NAME = "expcatName";
+
+    public DatabaseHelper(@Nullable Context context) {
         super(context, "pilnujgrosza.db", null, 1);
     }
 
     // generating new database
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        // for testing reasons
-        String upgradeProfileTableStatement = "DROP TABLE IF EXISTS " + TABLE_PROFILE;
-        db.execSQL(upgradeProfileTableStatement);
 
         String createProfileTableStatement =
                 "CREATE TABLE " + TABLE_PROFILE + " (" +
@@ -65,7 +65,15 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
                 COLUMN_PROFILE_LAST_LOGIN_DATE + " DATETIME," +
                 COLUMN_PROFILE_LAST_LOGIN_ATTEMPT + " DATETIME," +
                 COLUMN_PROFILE_FAILED_LOGIN_ATTEMPTS + " INTEGER DEFAULT 0)";
+
+        String createExpenseCategoryTableStatement =
+                "CREATE TABLE " + TABLE_EXPENSE_CATEGORY + " (" +
+                        COLUMN_EXPENSE_CATEGORY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_EXPENSE_CATEGORY_NAME + " TEXT UNIQUE)";
+
         db.execSQL(createProfileTableStatement);
+        db.execSQL(createExpenseCategoryTableStatement);
+        addDefaultExpenseCategory(db);
     }
 
     // making changes to existing table
@@ -73,6 +81,7 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
         String upgradeProfileTableStatement = "DROP TABLE IF EXISTS " + TABLE_PROFILE;
+        String upgradeExpenseCategoryTableStatement = "DROP TABLE IF EXISTS " + TABLE_EXPENSE_CATEGORY;
         db.execSQL(upgradeProfileTableStatement);
         onCreate(db);
     }
@@ -96,55 +105,6 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         db.insert(TABLE_PROFILE, null, cv);
 
         db.close();
-    }
-
-    public String getCurrentDateTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
-        Date date = new Date();
-
-        return dateFormat.format(date);
-    }
-
-    public String getDateTimeForAccountLock() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
-
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.MINUTE, MINUTES_OF_ACCOUNT_LOCK);
-
-        return dateFormat.format(c.getTime());
-    }
-
-    public boolean compareLoginDateTime(int profID) throws ParseException {
-        boolean compareLoginDateTime;
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        String getLastLoginAttempt = "SELECT profLastLoginAttempt FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_ID + " = ?";
-
-        Cursor cursor = db.rawQuery(getLastLoginAttempt, new String[] {Integer.toString(profID)});
-        cursor.moveToFirst();
-        String lastLoginAttmept = cursor.getString(cursor.getColumnIndex("profLastLoginAttempt"));
-
-        Date actualLoginDateTime = dateFormat.parse(getCurrentDateTime());
-        Date loginDateTimeFromDB;
-        if (lastLoginAttmept != null) {
-            loginDateTimeFromDB = dateFormat.parse(lastLoginAttmept);
-        } else {
-            loginDateTimeFromDB = dateFormat.parse(getCurrentDateTime());
-        }
-
-        // if actualLoginDateTime > loginDateTimeFromDB (actualLoginDateTime is AFTER loginDateTimeFromDB) then user can logim
-        if (actualLoginDateTime.compareTo(loginDateTimeFromDB) >= 0) {
-            compareLoginDateTime = true;
-        } else compareLoginDateTime = false;
-
-        return compareLoginDateTime;
     }
 
     public List<ProfileModel> getProfileList() {
@@ -233,6 +193,55 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public String getCurrentDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        Date date = new Date();
+
+        return dateFormat.format(date);
+    }
+
+    public String getDateTimeForAccountLock() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MINUTE, MINUTES_OF_ACCOUNT_LOCK);
+
+        return dateFormat.format(c.getTime());
+    }
+
+    public boolean compareLoginDateTime(int profID) throws ParseException {
+        boolean compareLoginDateTime;
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String getLastLoginAttempt = "SELECT profLastLoginAttempt FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(getLastLoginAttempt, new String[] {Integer.toString(profID)});
+        cursor.moveToFirst();
+        String lastLoginAttmept = cursor.getString(cursor.getColumnIndex("profLastLoginAttempt"));
+
+        Date actualLoginDateTime = dateFormat.parse(getCurrentDateTime());
+        Date loginDateTimeFromDB;
+        if (lastLoginAttmept != null) {
+            loginDateTimeFromDB = dateFormat.parse(lastLoginAttmept);
+        } else {
+            loginDateTimeFromDB = dateFormat.parse(getCurrentDateTime());
+        }
+
+        // if actualLoginDateTime > loginDateTimeFromDB (actualLoginDateTime is AFTER loginDateTimeFromDB) then user can logim
+        if (actualLoginDateTime.compareTo(loginDateTimeFromDB) >= 0) {
+            compareLoginDateTime = true;
+        } else compareLoginDateTime = false;
+
+        return compareLoginDateTime;
+    }
+
     public void resetFailedLoginAttempts(int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -268,7 +277,7 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public boolean checkExistingName(String name) {
+    public boolean checkExistingProfileName(String name) {
         SQLiteDatabase db = this.getReadableDatabase();
         String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_NAME + " = ?";
 
@@ -281,6 +290,122 @@ public class ProfileDatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return doesNameExistInDatabase;
+    }
+
+    public void addExpenseCategory(ExpenseCategoryModel expenseCategoryModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, expenseCategoryModel.getExpcatName());
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+
+        db.close();
+    }
+
+    public List<ExpenseCategoryModel> getExpenseCategoryList() {
+        List<ExpenseCategoryModel> expenseCategoriesList = new ArrayList<ExpenseCategoryModel>();
+        String getExpenseCategoriesListStatement = "SELECT * FROM " + TABLE_EXPENSE_CATEGORY + " ORDER BY " + COLUMN_EXPENSE_CATEGORY_NAME;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getExpenseCategoriesListStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int expcatID = cursor.getInt(cursor.getColumnIndex("expcatID"));
+                String expcatName = cursor.getString(cursor.getColumnIndex("expcatName"));
+
+                ExpenseCategoryModel expenseCategoryModel = new ExpenseCategoryModel(expcatID, expcatName);
+
+                expenseCategoriesList.add(expenseCategoryModel);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return expenseCategoriesList;
+    }
+
+    public void deleteExpenseCategory(int expcatID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_EXPENSE_CATEGORY, COLUMN_EXPENSE_CATEGORY_ID + " = " + expcatID, null);
+
+        db.close();
+    }
+
+    public void updateExpenseCategoryName(String name, int expcatID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv =  new ContentValues();
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, name);
+        db.update(TABLE_EXPENSE_CATEGORY, cv, COLUMN_EXPENSE_CATEGORY_ID + " = " + expcatID, null);
+
+        db.close();
+    }
+
+    public boolean checkExistingExpenseCategoryName(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_EXPENSE_CATEGORY + " WHERE " + COLUMN_EXPENSE_CATEGORY_NAME + " = ?";
+
+        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name});
+        cursor.moveToFirst();
+
+        int nameOccurrencesCounter = cursor.getCount();
+        boolean doesNameExistInDatabase = (nameOccurrencesCounter > 0) ? TRUE : FALSE;
+
+        cursor.close();
+        db.close();
+        return doesNameExistInDatabase;
+    }
+
+    public void addDefaultExpenseCategory(SQLiteDatabase db) {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Brak kategorii");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Dom, mieszkanie");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Podróże");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Prezenty");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Środki higieniczne");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Samochód");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Rachunki");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Żywność");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Rozrywka");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Ubrania");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Zwierzęta");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_EXPENSE_CATEGORY_NAME, "Zdrowie");
+        db.insert(TABLE_EXPENSE_CATEGORY, null, cv);
     }
 
 }

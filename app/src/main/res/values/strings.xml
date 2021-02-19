@@ -124,6 +124,28 @@
     <string name="mainmenu_profiles_button">Wyloguj się</string>
     <string name="mainmenu_settings_button">Ustawienia</string>
     <string name="mainmenu_receiptsList_button">Lista paragonów</string>
+    <string name="prof_rc_secondLine">Description</string>
+    <string name="prof_rc_firstLine">Example</string>
+    <string name="expcat_rc_name">Example</string>
+    <string name="expcat_empty_text">Jak widzisz, nie ma tutaj żadnej kategorii, stwórz ją!</string>
+    <string name="expcat_editform_info_edit">Edycja kategorii wydatków</string>
+    <string name="expcat_editform_text_name">Nowa nazwa kategorii wydatków</string>
+    <string name="expcat_editform_submit">Zmień nazwę kategorii wydatków</string>
+    <string name="expcat_create_info_login">Tworzenie kategorii wydatków</string>
+    <string name="expcat_createform_text_name">Nazwa kategorii wydatków</string>
+    <string name="expcat_createform_submit">Utwórz kategorię wydatków</string>
+    <string name="expcat_deleteform_info_delete">Usuwanie kategorii wydatków</string>
+    <string name="expcat_deleteform_delete">Czy chcesz usunąć tę kategorię wydatków?</string>
+    <string name="expcat_deleteform_submit">Usuń kategorię wydatków</string>
+    <string name="expcat_fab_addExpense">Utwórz wydatek</string>
+    <string name="expense_expcatList_button">Lista kategorii wydatków</string>
+    <string name="expense_fab_addExpense">Utwórz wydatkek</string>
+    <string name="title_activity_expense_category">Kategorie wydatków</string>
+    <string name="trans_empty_text">Jak widzisz, nie ma tutaj żadnej transakcji, dodaj ją!</string>
+    <string name="exp_rc_firstLine">Example</string>
+    <string name="exp_rc_secondLine">Description</string>
+    <string name="inc_rc_secondLine">Description</string>
+    <string name="inc_rc_firstLine">Example</string>
 
 
 </resources>

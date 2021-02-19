@@ -5,7 +5,7 @@
     android:background="@color/whiteBackground" >
 
     <ImageView
-        android:id="@+id/prof_rc_icon"
+        android:id="@+id/exp_rc_icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
@@ -14,37 +14,28 @@
         android:src="@mipmap/pilnuj_grosza_logo_round" />
 
     <TextView
-        android:id="@+id/prof_rc_secondLine"
+        android:id="@+id/exp_rc_secondLine"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@id/prof_rc_icon"
+        android:layout_toEndOf="@id/exp_rc_icon"
         android:ellipsize="marquee"
-        android:text="@string/prof_rc_secondLine"
+        android:text="@string/exp_rc_secondLine"
         android:textSize="12sp"
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/prof_rc_firstLine"
+        android:id="@+id/exp_rc_firstLine"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/prof_rc_secondLine"
+        android:layout_above="@id/exp_rc_secondLine"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toEndOf="@id/prof_rc_icon"
+        android:layout_toEndOf="@id/exp_rc_icon"
         android:gravity="center_vertical"
-        android:text="@string/prof_rc_firstLine"
+        android:text="@string/exp_rc_firstLine"
         android:textSize="16sp" />
-
-    <ImageView
-        android:id="@+id/prof_rc_editicon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="6dip"
-        android:layout_centerVertical="true"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_edit_black_24dp"/>
 
 </RelativeLayout>

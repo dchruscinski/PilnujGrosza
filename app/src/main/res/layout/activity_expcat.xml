@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteBackground"
+
+    tools:context="pl.dchruscinski.pilnujgrosza.ExpenseCategory">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/expcat_list_rc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- FAB - "Dodaj kategorię wydatków / Add expense category" -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/expcat_fab_addExpCat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/flat_plus_background"
+        app:tint="@null"
+        android:tooltipText="Utwórz kategorię wydatków"
+        app:srcCompat="@mipmap/flat_plus_foreground" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

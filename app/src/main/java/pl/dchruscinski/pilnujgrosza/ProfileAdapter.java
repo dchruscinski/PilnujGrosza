@@ -29,7 +29,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private ArrayList<ProfileModel> profilesList;
     private Context context;
     private Activity activity;
-    private ProfileDatabaseHelper profileDatabaseHelper;
+    private DatabaseHelper databaseHelper;
     static int chosenProfileID = 0;
 
     private static final int VIEW_TYPE_EMPTY_LIST = 0;
@@ -152,7 +152,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final TextView login, remindPIN;
         final EditText PIN;
         Button submitLogin;
-        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(context);
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -160,7 +160,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -182,16 +182,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 String hashedPIN = BCrypt.hashpw(PIN.getText().toString(), hashSalt);
 
                 try {
-                    if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                    if (!databaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
                         Toast.makeText(context, "Podjęto zbyt dużo prób logowania lub odzyskania hasła. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
                     } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
                         PIN.setError("Podałeś nieprawidłowy kod PIN.");
-                        profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
+                        databaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
                     } else {
                         chosenProfileID = position;
 
-                        profileDatabaseHelper.updateLastLoginDate(profilesList.get(position).getProfID());
-                        profileDatabaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
+                        databaseHelper.updateLastLoginDate(profilesList.get(position).getProfID());
+                        databaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
 
                         dialog.cancel();
 
@@ -220,7 +220,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final TextView login, remindPIN;
         final EditText PIN;
         Button submitLogin;
-        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(context);
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -228,7 +228,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -250,13 +250,13 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 String hashedPIN = BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
 
                 try {
-                    if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                    if (!databaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
                         Toast.makeText(context, "Podjęto zbyt dużo prób logowania lub odzyskania hasła. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
                     } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
                         PIN.setError("Podałeś nieprawidłowy kod PIN.");
-                        profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
+                        databaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
                     } else {
-                        profileDatabaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
+                        databaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
                         dialog.cancel();
                         showEditDialog(position);
                     }
@@ -315,10 +315,10 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     name.setError("Podaj nową nazwę profilu.");
                 } else if (!name.getText().toString().matches("[a-zA-Z]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
-                } else if (profileDatabaseHelper.checkExistingName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingProfileName(name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
                 } else {
-                    profileDatabaseHelper.updateProfileName(name.getText().toString(), profilesList.get(position).getProfID());
+                    databaseHelper.updateProfileName(name.getText().toString(), profilesList.get(position).getProfID());
                     profilesList.get(position).setProfName(name.getText().toString());
                     dialog.cancel();
 
@@ -344,7 +344,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 } else if (!passwordMatches) {
                     newPIN.setError("Podane nowe kody PIN nie są identyczne.");
                 } else {
-                    profileDatabaseHelper.updateProfilePIN(hashedPIN, newHashSalt, profilesList.get(position).getProfID());
+                    databaseHelper.updateProfilePIN(hashedPIN, newHashSalt, profilesList.get(position).getProfID());
 
                     profilesList.get(position).setProfPIN(hashedPIN);
                     profilesList.get(position).setProfPINSalt(newHashSalt);
@@ -371,7 +371,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 } else if (!newQuestion.getText().toString().matches("[\\sa-zA-Z0-9_.,-]{2,128}[?]")) {
                     newQuestion.setError("Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.");
                 } else {
-                    profileDatabaseHelper.updateHelperQuestionAndAnswer(helperQuestion, helperHashedAnswer, helperHashSalt, profilesList.get(position).getProfID());
+                    databaseHelper.updateHelperQuestionAndAnswer(helperQuestion, helperHashedAnswer, helperHashSalt, profilesList.get(position).getProfID());
 
                     profilesList.get(position).setProfHelperQuestion(helperQuestion);
                     profilesList.get(position).setProfHelperAnswer(helperHashedAnswer);
@@ -397,7 +397,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final TextView helperQuestion;
         final EditText helperAnswer;
         Button sumbitRemind;
-        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(context);
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -405,7 +405,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -432,16 +432,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 String newHashedPIN = BCrypt.hashpw(newPIN, newHashPINSalt);
 
                     try {
-                        if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                        if (!databaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
                             Toast.makeText(context, "Podjęto zbyt dużo prób logowania lub odzyskania hasła. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
                         } else if (helperAnswer.getText().toString().isEmpty()) {
                                 helperAnswer.setError("W celu ozyskania hasła podaj odpowiedź na pytanie pomocnicze.");
                         } else if (!hashedHelperAnswer.equals(profilesList.get(position).getProfHelperAnswer())) {
                             helperAnswer.setError("Podano nieprawidłową odpowiedź na pytanie pomocnicze.");
-                            profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
+                            databaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
                         } else {
-                            profileDatabaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
-                            profileDatabaseHelper.updateProfilePIN(newHashedPIN, newHashPINSalt, profilesList.get(position).getProfID());
+                            databaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());
+                            databaseHelper.updateProfilePIN(newHashedPIN, newHashPINSalt, profilesList.get(position).getProfID());
 
                             profilesList.get(position).setProfPIN(newHashedPIN);
                             profilesList.get(position).setProfPINSalt(newHashPINSalt);
@@ -464,7 +464,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public void showResetPINDialog(String newPIN, final int position) {
         final TextView name, PIN;
         Button backToTheProfiles;
-        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(context);
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -472,7 +472,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -500,7 +500,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         final TextView login;
         final EditText PIN;
         Button submitDelete;
-        profileDatabaseHelper = new ProfileDatabaseHelper(context);
+        databaseHelper = new DatabaseHelper(context);
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -508,7 +508,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -529,16 +529,16 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 String hashedPIN = BCrypt.hashpw(PIN.getText().toString().trim(), hashSalt);
 
                 try {
-                    if (!profileDatabaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
+                    if (!databaseHelper.compareLoginDateTime(profilesList.get(position).getProfID())) {
                         Toast.makeText(context, "Podjęto zbyt dużo prób logowania lub odzyskania hasła. Spróbuj ponownie za jakiś czas.", Toast.LENGTH_SHORT).show();
                     } else if (!hashedPIN.equals(profilesList.get(position).getProfPIN())) {
                         PIN.setError("Podałeś nieprawidłowy kod PIN.");
-                        profileDatabaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
+                        databaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
                     } else {
                         if (chosenProfileID == profilesList.get(position).getProfID()) {
                             chosenProfileID = 0;
                         }
-                        profileDatabaseHelper.deleteProfile(profilesList.get(position).getProfID());
+                        databaseHelper.deleteProfile(profilesList.get(position).getProfID());
                         profilesList.remove(position);
                         dialog.cancel();
 

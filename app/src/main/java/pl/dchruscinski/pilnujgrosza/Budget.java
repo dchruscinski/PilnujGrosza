@@ -20,7 +20,7 @@ public class Budget extends AppCompatActivity {
     }
 
     public void onClickExpensesButton(View view) {
-        startActivity(new Intent(this, ExpensesList.class));
+        startActivity(new Intent(this, Transaction.class));
     }
 
     public void onClickSummaryButton(View view) {

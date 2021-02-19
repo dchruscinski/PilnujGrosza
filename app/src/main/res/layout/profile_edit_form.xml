@@ -15,6 +15,7 @@
             android:id="@+id/profile_editform_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:src="@mipmap/pilnuj_grosza_logo_foreground"
@@ -139,7 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_below="@+id/profile_editform_submit_QandA"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:text="@string/profile_editform_submit_deleteProfile" />
 
 </RelativeLayout>

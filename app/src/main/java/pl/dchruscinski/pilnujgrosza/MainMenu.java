@@ -21,7 +21,7 @@ public class MainMenu extends AppCompatActivity {
             addShoppingListButton, shoppingListsButton, settingsButton, logoutButton;
     TextView profileName, balance, currency;
     ArrayList<ProfileModel> profilesList;
-    ProfileDatabaseHelper profileDatabaseHelper;
+    DatabaseHelper databaseHelper;
     BigDecimal balanceAmount;
 
     @Override
@@ -33,8 +33,8 @@ public class MainMenu extends AppCompatActivity {
         Toast.makeText(this, "Zalogowano jako " +
                 getIntent().getExtras().getString("name") + ".", Toast.LENGTH_SHORT).show();
 
-        profileDatabaseHelper = new ProfileDatabaseHelper(this);
-        profilesList = new ArrayList<>(profileDatabaseHelper.getProfileList());
+        databaseHelper = new DatabaseHelper(this);
+        profilesList = new ArrayList<>(databaseHelper.getProfileList());
 
         profileName = (TextView) findViewById(R.id.mainmenu_profile_text);
         balance = (TextView) findViewById(R.id.mainmenu_balance_amount_text);
@@ -74,7 +74,8 @@ public class MainMenu extends AppCompatActivity {
         budgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), Budget.class));
+                // startActivity(new Intent(v.getContext(), Budget.class));
+                startActivity(new Intent(v.getContext(), ExpenseCategory.class));
             }
         });
 

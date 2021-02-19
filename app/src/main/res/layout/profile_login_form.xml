@@ -15,6 +15,7 @@
         android:id="@+id/profile_loginform_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
         android:src="@mipmap/pilnuj_grosza_logo_foreground"
@@ -74,7 +75,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginHorizontal="30dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:clickable="true"
         android:layout_below="@+id/profile_loginform_text_pin"
         android:text="Przypomnij hasło"
@@ -87,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_below="@+id/profile_loginform_link_remindPIN"
-        android:layout_margin="10dp"
+        android:layout_margin="20dp"
         android:text="Zaloguj" />
 
 </RelativeLayout>

@@ -23,7 +23,7 @@ public class Profile extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ArrayList<ProfileModel> profilesList;
     FloatingActionButton addProfileFAB;
-    ProfileDatabaseHelper profileDatabaseHelper;
+    DatabaseHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +33,7 @@ public class Profile extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.profile_list_rc);
         addProfileFAB = (FloatingActionButton) findViewById(R.id.profile_fab_addProfile);
-        profileDatabaseHelper = new ProfileDatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(this);
         displayProfilesList();
 
         addProfileFAB.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +46,7 @@ public class Profile extends AppCompatActivity {
 
     //display notes list
     public void displayProfilesList() {
-        profilesList = new ArrayList<>(profileDatabaseHelper.getProfileList());
+        profilesList = new ArrayList<>(databaseHelper.getProfileList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         ProfileAdapter adapter = new ProfileAdapter(getApplicationContext(), this, profilesList);
@@ -63,7 +63,7 @@ public class Profile extends AppCompatActivity {
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -106,7 +106,7 @@ public class Profile extends AppCompatActivity {
                     name.setError("Podaj nazwę profilu.");
                 } else if (!name.getText().toString().matches("[a-zA-Z]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
-                } else if (profileDatabaseHelper.checkExistingName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingProfileName(name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
                 } else {
                     dialog.cancel();
@@ -121,7 +121,7 @@ public class Profile extends AppCompatActivity {
     public void showHelperQuestionAndAnswerDialog(String profName, String hashedPIN, String hashSalt, int profInitialBalance, int profBalance) {
         final EditText question, answer;
         Button submitCreate;
-        profileDatabaseHelper = new ProfileDatabaseHelper(this);
+        databaseHelper = new DatabaseHelper(this);
 
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -129,7 +129,7 @@ public class Profile extends AppCompatActivity {
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.gravity = Gravity.CENTER;
 
@@ -165,7 +165,7 @@ public class Profile extends AppCompatActivity {
                     profileModel.setProfHelperQuestion(helperQuestion);
                     profileModel.setProfHelperAnswer(helperHashedAnswer);
                     profileModel.setProfHelperSalt(helperHashSalt);
-                    profileDatabaseHelper.addProfile(profileModel);
+                    databaseHelper.addProfile(profileModel);
 
                     dialog.cancel();
                     displayProfilesList();
