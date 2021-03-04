@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 
-public class Calendar extends AppCompatActivity {
+public class TransactionCalendar extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

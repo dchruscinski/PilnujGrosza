@@ -4,11 +4,13 @@ public class ExpenseCategoryModel {
 
     // expense category attributes
     private int expcatID;
+    private int expcatProfID;
     private String expcatName;
 
     // expense category constructors
-    public ExpenseCategoryModel(int expcatID, String expcatName) {
+    public ExpenseCategoryModel(int expcatID, int expcatProfID, String expcatName) {
         this.expcatID = expcatID;
+        this.expcatProfID = expcatProfID;
         this.expcatName = expcatName;
     }
 
@@ -19,6 +21,7 @@ public class ExpenseCategoryModel {
     public String toString() {
         return "ExpenseCategoryModel{" +
                 "expcatID=" + expcatID +
+                "expcatProfID=" + expcatProfID +
                 ", expcatName='" + expcatName + '\'' +
                 '}';
     }
@@ -30,6 +33,14 @@ public class ExpenseCategoryModel {
 
     public void setExpcatID(int expcatID) {
         this.expcatID = expcatID;
+    }
+
+    public int getExpcatProfID() {
+        return expcatProfID;
+    }
+
+    public void setExpcatProfID(int expcatProfID) {
+        this.expcatProfID = expcatProfID;
     }
 
     public String getExpcatName() {

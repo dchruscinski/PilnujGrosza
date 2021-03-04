@@ -3,9 +3,6 @@ package pl.dchruscinski.pilnujgrosza;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,18 +13,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.text.ParseException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private ArrayList transactionsList;
+    private ArrayList<TransactionModel> transactionsList;
     private Context context;
     private Activity activity;
     private DatabaseHelper databaseHelper;
@@ -61,8 +57,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class ViewHolderExpense extends RecyclerView.ViewHolder {
 
-        public TextView txtHeader, txtFooter;
-        public ImageView editExpense;
+        public TextView txtHeader, txtFooter, transactionDate, categoryName;
         public View layout;
 
         public ViewHolderExpense(View v) {
@@ -70,13 +65,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.exp_rc_firstLine);
             txtFooter = (TextView) v.findViewById(R.id.exp_rc_secondLine);
+            transactionDate = (TextView) v.findViewById(R.id.exp_rc_transDate);
+            categoryName = (TextView) v.findViewById(R.id.exp_rc_category);
         }
     }
 
     public class ViewHolderIncome extends RecyclerView.ViewHolder {
 
-        public TextView txtHeader, txtFooter;
-        public ImageView editIncome;
+        public TextView txtHeader, txtFooter, transactionDate, categoryName;
         public View layout;
 
         public ViewHolderIncome(View v) {
@@ -84,6 +80,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.inc_rc_firstLine);
             txtFooter = (TextView) v.findViewById(R.id.inc_rc_secondLine);
+            transactionDate = (TextView) v.findViewById(R.id.inc_rc_transDate);
+            categoryName = (TextView) v.findViewById(R.id.inc_rc_category);
         }
     }
 
@@ -97,8 +95,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (transactionsList.isEmpty()) {
             return VIEW_TYPE_EMPTY_LIST;
         } else {
-            Object transaction = transactionsList.get(position);
-            if (transaction instanceof ExpenseModel) {
+            if (transactionsList.get(position).getTransType().equals("expense")) {
                 return VIEW_TYPE_EXPENSE_VIEW;
             } else {
                 return VIEW_TYPE_INCOME_VIEW;
@@ -136,46 +133,56 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             - replace the contents of the view with that element
          */
         int viewType = getItemViewType(position);
+        databaseHelper = new DatabaseHelper(context);
+        BigDecimal transactionValue;
 
         if (viewType == VIEW_TYPE_EXPENSE_VIEW) {
-            final ExpenseModel expense = (ExpenseModel) transactionsList.get(position);
+            final TransactionModel expense = transactionsList.get(position);
             ViewHolderExpense expenseHolder = (ViewHolderExpense) holder;
 
-            expenseHolder.txtHeader.setText(expense.getExpValue());
-            expenseHolder.txtFooter.setText(expense.getExpDescription());
+            transactionValue = BigDecimal.valueOf(transactionsList.get(position).getTransValue()).divide(BigDecimal.valueOf(100));
+
+            expenseHolder.txtHeader.setText(transactionValue.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(transactionValue) : new DecimalFormat("0.00").format(transactionValue));
+            expenseHolder.txtFooter.setText(expense.getTransDescription());
+            expenseHolder.transactionDate.setText(expense.getTransDate());
+            expenseHolder.categoryName.setText(databaseHelper.getExpenseCategory(expense.getTransCatID()).getExpcatName());
 
             expenseHolder.txtHeader.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showExpenseEditDialog(position);
+                    // showExpenseEditDialog(position);
                 }
             });
 
             expenseHolder.txtFooter.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    showExpenseEditDialog(position);
+                    // showExpenseEditDialog(position);
                 }
             });
 
         } else if (viewType == VIEW_TYPE_INCOME_VIEW) {
-            final IncomeModel income = (IncomeModel) transactionsList.get(position);
-            ViewHolderExpense incomeHolder = (ViewHolderExpense) holder;
+            final TransactionModel income = transactionsList.get(position);
+            ViewHolderIncome incomeHolder = (ViewHolderIncome) holder;
 
-            incomeHolder.txtHeader.setText(income.getIncValue());
-            incomeHolder.txtFooter.setText(income.getIncDescription());
+            transactionValue = BigDecimal.valueOf(transactionsList.get(position).getTransValue()).divide(BigDecimal.valueOf(100));
+
+            incomeHolder.txtHeader.setText(transactionValue.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(transactionValue) : new DecimalFormat("0.00").format(transactionValue));
+            incomeHolder.txtFooter.setText(income.getTransDescription());
+            incomeHolder.transactionDate.setText(income.getTransDate());
+            incomeHolder.categoryName.setText(databaseHelper.getIncomeCategory(income.getTransCatID()).getInccatName());
 
             incomeHolder.txtHeader.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showIncomeEditDialog(position);
+                    // showIncomeEditDialog(position);
                 }
             });
 
             incomeHolder.txtFooter.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    showIncomeEditDialog(position);
+                    // showIncomeEditDialog(position);
                 }
             });
 
@@ -184,10 +191,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
     }
 
+    /*
     public void showExpenseEditDialog(final int position) {
-        final EditText description, value, budget, category, isRecurring, payDate;
+        final EditText description, value, budget, category;
         Button submitEdit;
-        transactionsList = ArrayList<ExpenseModel>;
 
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -207,19 +214,15 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         value = (EditText) dialog.findViewById(R.id.profile_editform_text_newPIN);
         budget = (EditText) dialog.findViewById(R.id.profile_editform_text_newPIN_confirm);
         category = (EditText) dialog.findViewById(R.id.profile_editform_text_newHelperQuestion);
-        isRecurring = (EditText) dialog.findViewById(R.id.profile_editform_text_newHelperAnswer);
-        payDate = (EditText) dialog.findViewById(R.id.profile_editform_text_newHelperAnswer);
 
         submitEdit = (Button) dialog.findViewById(R.id.profile_editform_submit_name);
 
-        description.setText((ExpenseModel) transactionsList.get(position).getExpDescription());
-        value.setText(transactionsList.get(position).getProfHelperQuestion());
-        budget.setText(transactionsList.get(position).getProfName());
-        category.setText(transactionsList.get(position).getProfHelperQuestion());
-        isRecurring.setText(transactionsList.get(position).getProfName());
-        payDate.setText(transactionsList.get(position).getProfHelperQuestion());
+        description.setText(((TransactionModel) transactionsList.get(position)).getExpDescription());
+        value.setText(((TransactionModel) transactionsList.get(position)).getExpValue());
+        budget.setText(((TransactionModel) transactionsList.get(position)).getExpBudID());
+        category.setText(((TransactionModel) transactionsList.get(position)).getExpExpcatID());
 
-        submitName.setOnClickListener(new View.OnClickListener() {;
+        submitEdit.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
                 if (name.getText().toString().trim().isEmpty()) {
@@ -303,5 +306,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         });
     }
+
+     */
 
 }

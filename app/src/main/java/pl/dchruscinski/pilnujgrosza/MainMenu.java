@@ -15,9 +15,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfileID;
+import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfilePosition;
 
 public class MainMenu extends AppCompatActivity {
-    Button addIncomeButton, addExpenseButton, budgetButton, addReceiptButton, receiptsListButton,
+    Button addIncomeButton, addExpenseButton, financeManagementButton, addReceiptButton, receiptsListButton,
             addShoppingListButton, shoppingListsButton, settingsButton, logoutButton;
     TextView profileName, balance, currency;
     ArrayList<ProfileModel> profilesList;
@@ -42,7 +43,7 @@ public class MainMenu extends AppCompatActivity {
 
         addIncomeButton = (Button) findViewById(R.id.mainmenu_addIncome_button);
         addExpenseButton = (Button) findViewById(R.id.mainmenu_addExpense_button);
-        budgetButton = (Button) findViewById(R.id.mainmenu_budget_button);
+        financeManagementButton = (Button) findViewById(R.id.mainmenu_finMgmt_button);
         addReceiptButton = (Button) findViewById(R.id.mainmenu_addReceipt_button);
         receiptsListButton = (Button) findViewById(R.id.mainmenu_receiptsList_button);
         addShoppingListButton = (Button) findViewById(R.id.mainmenu_addShoppingList_button);
@@ -50,9 +51,9 @@ public class MainMenu extends AppCompatActivity {
         settingsButton = (Button) findViewById(R.id.mainmenu_settings_button);
         logoutButton = (Button) findViewById(R.id.mainmenu_logout_button);
 
-        profileName.setText(profilesList.get(chosenProfileID).getProfName());
+        profileName.setText(profilesList.get(chosenProfilePosition).getProfName());
 
-        balanceAmount = BigDecimal.valueOf(profilesList.get(chosenProfileID).getProfBalance()).divide(BigDecimal.valueOf(100));
+        balanceAmount = BigDecimal.valueOf(profilesList.get(chosenProfilePosition).getProfBalance()).divide(BigDecimal.valueOf(100));
         balance.setText(balanceAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(balanceAmount) : new DecimalFormat("0.00").format(balanceAmount));
 
         addIncomeButton.setOnClickListener(new View.OnClickListener() {
@@ -71,11 +72,10 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        budgetButton.setOnClickListener(new View.OnClickListener() {
+        financeManagementButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // startActivity(new Intent(v.getContext(), Budget.class));
-                startActivity(new Intent(v.getContext(), ExpenseCategory.class));
+                startActivity(new Intent(v.getContext(), FinanceManagement.class));
             }
         });
 

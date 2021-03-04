@@ -5,7 +5,7 @@
     android:background="@color/whiteBackground" >
 
     <ImageView
-        android:id="@+id/expcat_rc_icon"
+        android:id="@+id/inccat_rc_icon"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
@@ -14,28 +14,28 @@
         android:src="@mipmap/pilnuj_grosza_logo_round" />
 
     <TextView
-        android:id="@+id/expcat_rc_name"
+        android:id="@+id/inccat_rc_name"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toEndOf="@id/expcat_rc_icon"
+        android:layout_toEndOf="@id/inccat_rc_icon"
         android:gravity="center_vertical"
-        android:text="@string/expcat_rc_name"
+        android:text="@string/inccat_rc_name"
         android:textSize="16sp" />
 
     <ImageView
-        android:id="@+id/expcat_rc_editicon"
+        android:id="@+id/inccat_rc_editicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="30dip"
-        android:layout_toStartOf="@+id/expcat_rc_deleteicon"
+        android:layout_toStartOf="@+id/inccat_rc_deleteicon"
         android:layout_centerVertical="true"
         android:src="@drawable/ic_edit_black_24dp"/>
 
     <ImageView
-        android:id="@+id/expcat_rc_deleteicon"
+        android:id="@+id/inccat_rc_deleteicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="6dip"

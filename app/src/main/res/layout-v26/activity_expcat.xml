@@ -23,7 +23,7 @@
         android:layout_margin="@dimen/fab_margin"
         android:backgroundTint="@color/flat_plus_background"
         app:tint="@null"
-        android:tooltipText="Utwórz kategorię wydatków"
+        android:tooltipText="@string/expcat_fab_addExpCat"
         app:srcCompat="@mipmap/flat_plus_foreground" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -31,6 +31,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private Activity activity;
     private DatabaseHelper databaseHelper;
     static int chosenProfileID = 0;
+    static int chosenProfilePosition = 0;
 
     private static final int VIEW_TYPE_EMPTY_LIST = 0;
     private static final int VIEW_TYPE_OBJECT_VIEW = 1;
@@ -188,7 +189,8 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         PIN.setError("Podałeś nieprawidłowy kod PIN.");
                         databaseHelper.addFailedLoginAttempt(profilesList.get(position).getProfID());
                     } else {
-                        chosenProfileID = position;
+                        chosenProfileID = profilesList.get(position).getProfID();
+                        chosenProfilePosition = position;
 
                         databaseHelper.updateLastLoginDate(profilesList.get(position).getProfID());
                         databaseHelper.resetFailedLoginAttempts(profilesList.get(position).getProfID());

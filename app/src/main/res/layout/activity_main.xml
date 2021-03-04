@@ -51,7 +51,7 @@
                 android:layout_height="match_parent"
                 android:textAlignment="center"
                 android:gravity="center"
-                android:textSize="60sp"
+                android:textSize="50sp"
                 android:textStyle="bold"
                 android:layout_weight="2"
                 android:singleLine="true" >
@@ -98,20 +98,20 @@
                 android:text="@string/mainmenu_addExpense_button" />
         </TableRow>
 
-        <!-- Row #4 - budget section -->
+        <!-- Row #4 - finance management section -->
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginHorizontal="20dp">
 
-            <!-- Budget button -->
+            <!-- finance management button -->
             <Button
-                android:id="@+id/mainmenu_budget_button"
+                android:id="@+id/mainmenu_finMgmt_button"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="@string/mainmenu_budget_button" />
+                android:text="@string/mainmenu_finMgmt_button" />
 
             <!-- App icon
             <ImageView

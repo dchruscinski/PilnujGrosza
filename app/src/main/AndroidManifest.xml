@@ -10,11 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PilnujGrosza.Launcher">
         <activity
-            android:name="pl.dchruscinski.pilnujgrosza.Summary"
+            android:name="pl.dchruscinski.pilnujgrosza.Statistics"
             android:label="@string/title_activity_summary" />
-        <activity
-            android:name="pl.dchruscinski.pilnujgrosza.Transaction"
-            android:label="@string/title_activity_expenses_list" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Receipt"
             android:label="@string/title_activity_receipt" />
@@ -27,6 +24,15 @@
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.ExpenseCategory"
             android:label="@string/title_activity_expense_category" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.IncomeCategory"
+            android:label="@string/title_activity_income_category" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.FinanceManagement"
+            android:label="@string/title_activity_financeManagement" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.Transaction"
+            android:label="@string/title_activity_transaction" />
 
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Profile" >
@@ -37,7 +43,7 @@
         </activity>
 
         <activity
-            android:name="pl.dchruscinski.pilnujgrosza.Calendar"
+            android:name="pl.dchruscinski.pilnujgrosza.TransactionCalendar"
             android:label="@string/title_activity_calendar" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Shopping"

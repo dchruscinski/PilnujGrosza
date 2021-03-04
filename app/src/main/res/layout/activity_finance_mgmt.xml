@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tableLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:background="@color/whiteBackground"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pl.dchruscinski.pilnujgrosza.FinanceManagement">
+
+    <!-- Row #1 - actual budget - info -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <TextView
+            android:id="@+id/finmgmt_actualBudget_info_text"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:text="@string/finmgmt_actualBudget_info_text" />
+
+    </TableRow>
+
+    <!-- Row #2 - actual budget -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2">
+
+        <TextView
+            android:id="@+id/finmgmt_actualBudget_info"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </TableRow>
+
+    <!-- Row #3 - budget menu -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp">
+
+        <!-- budget menu button -->
+        <Button
+            android:id="@+id/finmgmt_budgetmenu_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_budgetmenu_button" />
+    </TableRow>
+
+    <!-- Row #4 - transactions list button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- transactions list button -->
+        <Button
+            android:id="@+id/finmgmt_transactionsList_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_transactionsList_button" />
+        </TableRow>
+
+    <!-- Row #5 - income categories button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- income categories button -->
+        <Button
+            android:id="@+id/finmgmt_inccat_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_inccat_button" />
+    </TableRow>
+
+    <!-- Row #6 - expense categories button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp">
+
+        <!-- expense categories button -->
+        <Button
+            android:id="@+id/finmgmt_expcat_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_expcat_button" />
+    </TableRow>
+
+    <!-- Row #7 - calendar button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <!-- calendar button -->
+        <Button
+            android:id="@+id/finmgmt_calendar_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_calendar_button" />
+    </TableRow>
+
+    <!-- Row #8 - fee schedule button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp" >
+
+        <!-- calendar button -->
+        <Button
+            android:id="@+id/finmgmt_feeSchedule_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_feeSchedule_button" />
+    </TableRow>
+
+    <!-- Row #9 - summary button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+        <!-- summary button -->
+        <Button
+            android:id="@+id/finmgmt_statistics_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_statistics_button" />
+    </TableRow>
+
+    </TableLayout>

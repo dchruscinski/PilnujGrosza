@@ -17,6 +17,8 @@ import android.widget.EditText;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 
 public class Profile extends AppCompatActivity {
@@ -85,15 +87,31 @@ public class Profile extends AppCompatActivity {
                 String hashedPIN = BCrypt.hashpw(PIN.getText().toString(), hashSalt);
                 String hashedPINConfirm = BCrypt.hashpw(PINConfirm.getText().toString(), hashSalt);
                 boolean passwordMatches = hashedPIN.equals(hashedPINConfirm);
+                boolean isInitialBalanceValid = false;
 
                 String profName = name.getText().toString().trim();
                 int profInitialBalance = 0;
                 int profBalance = 0;
-                if (!initialBalance.getText().toString().isEmpty()) {
+
+                if (!initialBalance.getText().toString().trim().isEmpty()) {
                     String stringInitialBalance = initialBalance.getText().toString().trim();
-                    BigDecimal bigDecimalInitialBalance = new BigDecimal(stringInitialBalance.replaceAll(",", "."));
-                    profInitialBalance = (bigDecimalInitialBalance.multiply(BigDecimal.valueOf(100))).intValueExact();
-                    profBalance = profInitialBalance;
+                    if (stringInitialBalance.contains(".")) {
+                        if (stringInitialBalance.substring(stringInitialBalance.indexOf(".") + 1).length() > 2) {
+                            isInitialBalanceValid = false;
+                        } else {
+                            isInitialBalanceValid = true;
+                            BigDecimal bigDecimalInitialBalance = new BigDecimal(stringInitialBalance.replaceAll(",", ".")); //.setScale(2, BigDecimal.ROUND_HALF_UP);
+                            profInitialBalance = (bigDecimalInitialBalance.multiply(BigDecimal.valueOf(100))).intValueExact();
+                            profBalance = profInitialBalance;
+                        }
+                    } else {
+                        isInitialBalanceValid = true;
+                        BigDecimal bigDecimalInitialBalance = new BigDecimal(stringInitialBalance.replaceAll(",", ".")); //.setScale(2, BigDecimal.ROUND_HALF_UP);
+                        profInitialBalance = (bigDecimalInitialBalance.multiply(BigDecimal.valueOf(100))).intValueExact();
+                        profBalance = profInitialBalance;
+                    }
+                } else {
+                    isInitialBalanceValid = true;
                 }
 
                 if (!passwordMatches) {
@@ -108,6 +126,8 @@ public class Profile extends AppCompatActivity {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
                 } else if (databaseHelper.checkExistingProfileName(name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
+                } else if (!isInitialBalanceValid) {
+                    initialBalance.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                 } else {
                     dialog.cancel();
                     displayProfilesList();
