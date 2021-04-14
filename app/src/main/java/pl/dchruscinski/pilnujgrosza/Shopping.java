@@ -13,6 +13,7 @@ public class Shopping extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     public void onClickShoppingListsButton(View view) {

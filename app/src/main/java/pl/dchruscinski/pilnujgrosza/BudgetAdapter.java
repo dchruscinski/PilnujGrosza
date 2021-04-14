@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +66,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public class ViewHolderBudget extends RecyclerView.ViewHolder {
-        public TextView budgetStartDate, budgetEndDate, amount, initialAmount;
+        public TextView budgetStartDate, budgetEndDate, description, amount, initialAmount, currency;
         public View layout;
 
         public ViewHolderBudget(View v) {
@@ -72,8 +74,10 @@ public class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             layout = v;
             budgetStartDate = (TextView) v.findViewById(R.id.budget_rc_startDate);
             budgetEndDate = (TextView) v.findViewById(R.id.budget_rc_endDate);
+            description = (TextView) v.findViewById(R.id.budget_rc_desc);
             amount = (TextView) v.findViewById(R.id.budget_rc_amount);
             initialAmount = (TextView) v.findViewById(R.id.budget_rc_initialAmount);
+            currency = (TextView) v.findViewById(R.id.budget_rc_currency);
         }
     }
 
@@ -124,6 +128,7 @@ public class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         BigDecimal budgetsAmount, budgetsInitialAmount;
 
         if (viewType == VIEW_TYPE_OBJECT_VIEW) {
+            databaseHelper = new DatabaseHelper(context);
             final BudgetModel budget = budgetsList.get(position);
             ViewHolderBudget budgetHolder = (ViewHolderBudget) holder;
 
@@ -133,241 +138,69 @@ public class BudgetAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             budgetsAmount = BigDecimal.valueOf(budgetsList.get(position).getBudAmount()).divide(BigDecimal.valueOf(100));
             budgetsInitialAmount = BigDecimal.valueOf(budgetsList.get(position).getBudInitialAmount()).divide(BigDecimal.valueOf(100));
 
-            budgetHolder.amount.setText(budgetsAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsAmount) : new DecimalFormat("0.00").format(budgetsAmount));
-            budgetHolder.initialAmount.setText(budgetsInitialAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsInitialAmount) : new DecimalFormat("0.00").format(budgetsInitialAmount));
+            budgetHolder.description.setText(budget.getBudDescription());
+            budgetHolder.amount.setText(budgetsAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsAmount) : new DecimalFormat("#.##").format(budgetsAmount));
+            budgetHolder.initialAmount.setText(budgetsInitialAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsInitialAmount) : new DecimalFormat("#.##").format(budgetsInitialAmount));
+            budgetHolder.currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
             budgetHolder.budgetStartDate.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    showEditDialog(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("budID", budgetsList.get(position).getBudID());
+                    bundle.putInt("position", position);
+                    Intent intent = new Intent(context, BudgetTransaction.class).putExtras(bundle);
+                    activity.startActivity(intent);
                 }
             });
 
             budgetHolder.budgetEndDate.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    showEditDialog(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("budID", budgetsList.get(position).getBudID());
+                    bundle.putInt("position", position);
+                    Intent intent = new Intent(context, BudgetTransaction.class).putExtras(bundle);
+                    activity.startActivity(intent);
+                }
+            });
+
+            budgetHolder.description.setOnClickListener(new View.OnClickListener() {;
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("budID", budgetsList.get(position).getBudID());
+                    bundle.putInt("position", position);
+                    Intent intent = new Intent(context, BudgetTransaction.class).putExtras(bundle);
+                    activity.startActivity(intent);
                 }
             });
 
             budgetHolder.amount.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    showEditDialog(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("budID", budgetsList.get(position).getBudID());
+                    bundle.putInt("position", position);
+                    Intent intent = new Intent(context, BudgetTransaction.class).putExtras(bundle);
+                    activity.startActivity(intent);
                 }
             });
 
             budgetHolder.initialAmount.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    showEditDialog(position);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("budID", budgetsList.get(position).getBudID());
+                    bundle.putInt("position", position);
+                    Intent intent = new Intent(context, BudgetTransaction.class).putExtras(bundle);
+                    activity.startActivity(intent);
                 }
             });
 
         } else {
             ViewHolderEmpty emptyHolder = (ViewHolderEmpty) holder;
         }
-    }
-
-    public void showEditDialog(final int position) {
-        final EditText initialAmount, description;
-        final TextView startDateTextView, endDateTextView;
-        Button submitEdit, submitDelete;
-
-        BigDecimal budgetsInitialAmount;
-        budgetsInitialAmount = BigDecimal.valueOf(budgetsList.get(position).getBudInitialAmount()).divide(BigDecimal.valueOf(100));
-
-        final Calendar startDateCalendar = Calendar.getInstance();
-        final Calendar endDateCalendar = Calendar.getInstance();
-        endDateCalendar.add(Calendar.MONTH, 1);
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-
-        final Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.budget_edit_form);
-
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.gravity = Gravity.CENTER;
-
-        dialog.getWindow().setAttributes(params);
-        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-
-        startDateTextView = (TextView) dialog.findViewById(R.id.budget_editform_text_startDate);
-        endDateTextView = (TextView) dialog.findViewById(R.id.budget_editform_text_endDate);
-        initialAmount = (EditText) dialog.findViewById(R.id.budget_editform_text_initialAmount);
-        description = (EditText) dialog.findViewById(R.id.budget_editform_text_desc);
-        submitEdit = (Button) dialog.findViewById(R.id.budget_editform_submit);
-        submitDelete = (Button) dialog.findViewById(R.id.budget_editform_delete);
-
-        startDateTextView.setText(budgetsList.get(position).getBudStartDate());
-        endDateTextView.setText(budgetsList.get(position).getBudEndDate());
-        initialAmount.setText(budgetsInitialAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsInitialAmount) : new DecimalFormat("0.00").format(budgetsInitialAmount));
-        description.setText(budgetsList.get(position).getBudDescription());
-
-        DatePickerDialog.OnDateSetListener startDate = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                startDateCalendar.set(Calendar.YEAR, year);
-                startDateCalendar.set(Calendar.MONTH, month);
-                startDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                startDateTextView.setText(dateFormat.format(startDateCalendar.getTime()));
-            }
-        };
-
-        DatePickerDialog.OnDateSetListener endDate = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                endDateCalendar.set(Calendar.YEAR, year);
-                endDateCalendar.set(Calendar.MONTH, month);
-                endDateCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                endDateTextView.setText(dateFormat.format(endDateCalendar.getTime()));
-            }
-        };
-
-        startDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(v.getRootView().getContext(), startDate,
-                        startDateCalendar.get(Calendar.YEAR),
-                        startDateCalendar.get(Calendar.MONTH),
-                        startDateCalendar.get(Calendar.DAY_OF_MONTH))
-                        .show();
-            }
-        });
-
-        endDateTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new DatePickerDialog(v.getRootView().getContext(), endDate,
-                        endDateCalendar.get(Calendar.YEAR),
-                        endDateCalendar.get(Calendar.MONTH),
-                        endDateCalendar.get(Calendar.DAY_OF_MONTH))
-                        .show();
-            }
-        });
-
-        submitEdit.setOnClickListener(new View.OnClickListener() {;
-            @Override
-            public void onClick(View v) {
-                databaseHelper = new DatabaseHelper(context);
-                BudgetModel budgetModel = new BudgetModel();
-                int intAmount = 0;
-                boolean isAmountValid = false;
-
-                if (!initialAmount.getText().toString().trim().isEmpty()) {
-                    String stringAmount = initialAmount.getText().toString().trim();
-                    if (stringAmount.contains(".")) {
-                        if (stringAmount.substring(stringAmount.indexOf(".") + 1).length() > 2) {
-                            isAmountValid = false;
-                        } else {
-                            isAmountValid = true;
-                            BigDecimal bigDecimalAmount = new BigDecimal(stringAmount.replaceAll(",", ".")); //.setScale(2, BigDecimal.ROUND_HALF_UP);
-                            intAmount = (bigDecimalAmount.multiply(BigDecimal.valueOf(100))).intValueExact();
-                        }
-                    } else {
-                        isAmountValid = true;
-                        BigDecimal bigDecimalAmount = new BigDecimal(stringAmount.replaceAll(",", ".")); //.setScale(2, BigDecimal.ROUND_HALF_UP);
-                        intAmount = (bigDecimalAmount.multiply(BigDecimal.valueOf(100))).intValueExact();
-                    }
-                } else {
-                    isAmountValid = true;
-                }
-
-                if (initialAmount.getText().toString().trim().isEmpty()) {
-                    initialAmount.setError("Podaj nową wysokość budżetu.");
-                } else {
-                    try {
-                        if (!databaseHelper.checkStartAndEndDateInDialog(startDateTextView.getText().toString(), endDateTextView.getText().toString())) {
-                            startDateTextView.setError("Data rozpoczęcia okresu rozliczeniowego nie może być późniejsza niż jego zakończenie.");
-                        } else if (!databaseHelper.checkStartDateInEditDialog(chosenProfileID, budgetsList.get(position).getBudID(), startDateTextView.getText().toString())) {
-                            startDateTextView.setError("Okres rozliczeniowy nie może rozpoczynać się przed zakończeniem innego okresu rozliczeniowego.");
-                        } else if (!databaseHelper.checkEndDateInEditDialog(chosenProfileID, budgetsList.get(position).getBudID(), endDateTextView.getText().toString())) {
-                            endDateTextView.setError("Okres rozliczeniowy nie może zakończyć się w trakcie innego okresu rozliczeniowego.");
-                        } else if (!databaseHelper.checkDatesBetweenStartAndEndDatesInEditDialog(chosenProfileID, budgetsList.get(position).getBudID(), startDateTextView.getText().toString(), endDateTextView.getText().toString())) {
-                            endDateTextView.setError("Istnieje już okres rozliczeniowy pomiędzy podaną datą rozpoczęcia i zakończenia okresu rozliczeniowego.");
-                        } else if (!isAmountValid) {
-                            initialAmount.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
-                        } else {
-                            budgetModel.setBudInitialAmount(intAmount);
-                            budgetModel.setBudDescription(description.getText().toString());
-                            budgetModel.setBudStartDate(startDateTextView.getText().toString());
-                            budgetModel.setBudEndDate(endDateTextView.getText().toString());
-                            databaseHelper.updateBudget(budgetModel, budgetsList.get(position).getBudID());
-
-                            budgetsList.get(position).setBudInitialAmount(intAmount);
-                            budgetsList.get(position).setBudDescription(description.getText().toString());
-                            budgetsList.get(position).setBudStartDate(startDateTextView.getText().toString());
-                            budgetsList.get(position).setBudEndDate(endDateTextView.getText().toString());
-
-                            dialog.cancel();
-                            notifyDataSetChanged();
-                        }
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        submitDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-                showDeleteDialog(position);
-            }
-        });
-    }
-
-    public void showDeleteDialog(final int position) {
-        final TextView startDateTextView, endDateTextView, initialAmount, description;
-        Button submitDelete;
-        databaseHelper = new DatabaseHelper(context);
-
-        BigDecimal budgetsInitialAmount;
-        budgetsInitialAmount = BigDecimal.valueOf(budgetsList.get(position).getBudInitialAmount()).divide(BigDecimal.valueOf(100));
-
-        final Dialog dialog = new Dialog(activity);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.budget_delete_form);
-
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
-        params.copyFrom(dialog.getWindow().getAttributes());
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.gravity = Gravity.CENTER;
-
-        dialog.getWindow().setAttributes(params);
-        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-
-        startDateTextView = (TextView) dialog.findViewById(R.id.budget_delete_text_startDate);
-        endDateTextView = (TextView) dialog.findViewById(R.id.budget_delete_text_endDate);
-        initialAmount = (TextView) dialog.findViewById(R.id.budget_delete_text_initialAmount);
-        description = (TextView) dialog.findViewById(R.id.budget_delete_text_desc);
-        submitDelete = (Button) dialog.findViewById(R.id.budget_delete_submit);
-
-        startDateTextView.setText(budgetsList.get(position).getBudStartDate());
-        endDateTextView.setText(budgetsList.get(position).getBudEndDate());
-        initialAmount.setText(budgetsInitialAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsInitialAmount) : new DecimalFormat("0.00").format(budgetsInitialAmount));
-        description.setText(budgetsList.get(position).getBudDescription());
-
-        submitDelete.setOnClickListener(new View.OnClickListener() {;
-            @Override
-            public void onClick(View v) {
-                databaseHelper.deleteBudget(budgetsList.get(position).getBudID());
-                budgetsList.remove(position);
-                dialog.cancel();
-
-                // notify list
-                notifyDataSetChanged();
-            }
-        });
-
     }
 
 }

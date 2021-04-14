@@ -29,6 +29,7 @@ public class IncomeCategory extends AppCompatActivity {
         setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_inccat);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.inccat_list_rc);
         addIncCatFAB = (FloatingActionButton) findViewById(R.id.inccat_fab_addIncCat);

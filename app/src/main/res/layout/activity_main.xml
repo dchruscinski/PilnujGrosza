@@ -65,7 +65,6 @@
                 android:textSize="30sp"
                 android:textStyle="bold"
                 android:layout_weight="0.75"
-                android:text="PLN"
                 android:singleLine="true" >
             </TextView>
 

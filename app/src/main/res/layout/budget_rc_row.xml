@@ -1,13 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="96dp"
     android:padding="6dip"
     android:background="@color/whiteBackground" >
 
     <ImageView
         android:id="@+id/budget_rc_icon"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="12dip"
@@ -17,7 +17,7 @@
         android:id="@+id/budget_rc_fromDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/budget_rc_amount"
+        android:layout_above="@id/budget_rc_desc"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toEndOf="@id/budget_rc_icon"
@@ -29,7 +29,7 @@
         android:id="@+id/budget_rc_startDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/budget_rc_amount"
+        android:layout_above="@id/budget_rc_desc"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toEndOf="@id/budget_rc_fromDate"
@@ -43,7 +43,7 @@
         android:id="@+id/budget_rc_toDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/budget_rc_amount"
+        android:layout_above="@id/budget_rc_desc"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toStartOf="@id/budget_rc_endDate"
@@ -56,7 +56,7 @@
         android:id="@+id/budget_rc_endDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/budget_rc_amount"
+        android:layout_above="@id/budget_rc_desc"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
@@ -64,6 +64,17 @@
         android:gravity="center_vertical"
         android:text="@string/budget_rc_endDate"
         android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/budget_rc_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_above="@id/budget_rc_amount"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/budget_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/budget_rc_desc"
         android:textSize="16sp" />
 
     <TextView
@@ -95,7 +106,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toEndOf="@id/budget_rc_amount"
-        android:layout_marginHorizontal="6dip"
+        android:layout_marginHorizontal="3dip"
         android:gravity="center_vertical"
         android:text="@string/budget_rc_amountSlider"
         android:textSize="16sp" />
@@ -109,7 +120,18 @@
         android:layout_toEndOf="@id/budget_rc_amountSlider"
         android:gravity="center_vertical"
         android:text="@string/prof_rc_firstLine"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:textSize="16sp"  />
+
+    <TextView
+        android:id="@+id/budget_rc_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/budget_rc_initialAmount"
+        android:layout_marginStart="5dp"
+        android:gravity="center_vertical"
+        android:text="@string/budget_rc_currency"
+        android:textSize="16sp"  />
 
 </RelativeLayout>

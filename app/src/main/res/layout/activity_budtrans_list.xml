@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteBackground"
+    tools:context="pl.dchruscinski.pilnujgrosza.BudgetTransaction">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="6dip"
+        android:background="@color/whiteBackground" >
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/budtrans_bud_info"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_marginBottom="20dp"
+        android:padding="6dip"
+        android:background="@color/whiteBackground" >
+
+        <ImageView
+            android:id="@+id/budtrans_rc_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dip"
+            android:src="@mipmap/pilnuj_grosza_logo_round" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_fromDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/budtrans_rc_amount"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_icon"
+            android:gravity="center_vertical"
+            android:text="@string/budtrans_rc_fromDate"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/budtrans_rc_amount"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_fromDate"
+            android:layout_marginStart="12dip"
+            android:gravity="center_vertical"
+            android:text="@string/budtrans_rc_startDate"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_toDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/budtrans_rc_amount"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toStartOf="@id/budtrans_rc_endDate"
+            android:layout_marginEnd="12dip"
+            android:gravity="center_vertical"
+            android:text="@string/budtrans_rc_toDate"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_endDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/budtrans_rc_amount"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginEnd="24dip"
+            android:gravity="center_vertical"
+            android:text="@string/budtrans_rc_endDate"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_amount_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_icon"
+            android:text="@string/budtrans_rc_amount_info"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_amount_info"
+            android:gravity="center_vertical"
+            android:layout_marginStart="24dip"
+            android:text="@string/prof_rc_firstLine"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_amountSlider"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_amount"
+            android:layout_marginHorizontal="3dip"
+            android:gravity="center_vertical"
+            android:text="@string/budtrans_rc_amountSlider"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/budtrans_rc_initialAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_amountSlider"
+            android:gravity="center_vertical"
+            android:text="@string/prof_rc_firstLine"
+            android:textSize="16sp"  />
+
+        <TextView
+            android:id="@+id/budtrans_rc_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/budtrans_rc_initialAmount"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/budtrans_rc_currency"
+            android:textSize="16sp"  />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/budtrans_button_edit"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/budtrans_bud_info"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:text="@string/budtrans_button_edit"/>
+
+    <Button
+        android:id="@+id/budtrans_button_delete"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/budtrans_bud_info"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:text="@string/budtrans_button_delete"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/budtrans_list_rc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/budtrans_button_edit"
+        android:layout_marginTop="20dp"
+        />
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -29,6 +29,7 @@ public class ExpenseCategory extends AppCompatActivity {
         setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_expcat);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.expcat_list_rc);
         addExpCatFAB = (FloatingActionButton) findViewById(R.id.expcat_fab_addExpCat);

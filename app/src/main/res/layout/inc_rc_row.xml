@@ -11,7 +11,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="6dip"
-        android:src="@mipmap/pilnuj_grosza_logo_round" />
+        android:src="@mipmap/flat_plus" />
 
     <TextView
         android:id="@+id/inc_rc_secondLine"
@@ -29,26 +29,39 @@
         android:id="@+id/inc_rc_category"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_toEndOf="@id/inc_rc_icon"
         android:ellipsize="marquee"
+        android:singleLine="true"
         android:text="@string/inc_rc_category"
-        android:textSize="12sp"
         android:textAlignment="textEnd"
-        android:singleLine="true" />
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/inc_rc_firstLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/inc_rc_secondLine"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/inc_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/inc_rc_firstLine"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/inc_rc_currency"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/inc_rc_secondLine"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
-        android:layout_toEndOf="@id/inc_rc_icon"
+        android:layout_toEndOf="@id/inc_rc_firstLine"
+        android:layout_marginStart="5dp"
         android:gravity="center_vertical"
-        android:text="@string/inc_rc_firstLine"
+        android:text="@string/exp_rc_currency"
         android:textSize="16sp" />
 
     <TextView

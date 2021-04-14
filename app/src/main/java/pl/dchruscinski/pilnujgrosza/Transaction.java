@@ -7,15 +7,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
@@ -31,6 +32,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static android.view.View.VISIBLE;
+import static java.sql.Types.NULL;
+import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfileID;
+
 
 public class Transaction extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -39,18 +44,29 @@ public class Transaction extends AppCompatActivity {
     FloatingActionButton addIncomeFAB;
     FloatingActionButton addExpenseFAB;
     DatabaseHelper databaseHelper;
+    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_list);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.expense_list_rc);
         addIncomeFAB = (FloatingActionButton) findViewById(R.id.trans_fab_addIncome);
         addExpenseFAB = (FloatingActionButton) findViewById(R.id.trans_fab_addExpense);
         databaseHelper = new DatabaseHelper(this);
-        displayTransactionsList();
+
+        if (getIntent().getExtras() != null && getIntent().getStringExtra("action").equals("incomeButton")) {
+            displayTransactionsList();
+            showCreateIncomeDialog();
+        } else if (getIntent().getExtras() != null && getIntent().getStringExtra("action").equals("expenseButton")) {
+            displayTransactionsList();
+            showCreateExpenseDialog();
+        } else {
+            displayTransactionsList();
+        }
 
         addIncomeFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,12 +139,13 @@ public class Transaction extends AppCompatActivity {
     public void showCreateIncomeDialog() {
         final EditText description, value;
         final Spinner category, budget;
-        final TextView dateTextView;
+        final TextView dateTextView, budgetText, currency;
+        final CheckBox countToBudget, changeBudgetInitialAmount;
         final Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Button submitCreate;
-        int selectedBudgetID, selectedCategoryID;
 
+        context = getApplicationContext();
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.income_create_form);
@@ -145,10 +162,16 @@ public class Transaction extends AppCompatActivity {
 
         dateTextView = (TextView) dialog.findViewById(R.id.income_createform_text_date);
         value = (EditText) dialog.findViewById(R.id.income_createform_text_value);
+        currency = (TextView) dialog.findViewById(R.id.income_createform_text_currency);
         description = (EditText) dialog.findViewById(R.id.income_createform_text_desc);
         category = (Spinner) dialog.findViewById(R.id.income_createform_spin_cat);
+        countToBudget = (CheckBox) dialog.findViewById(R.id.income_createform_checkbox_budget);
+        changeBudgetInitialAmount = (CheckBox) dialog.findViewById(R.id.income_createform_checkbox_budgetInitialAmount);
         budget = (Spinner) dialog.findViewById(R.id.income_createform_spin_budget);
+        budgetText = (TextView) dialog.findViewById(R.id.income_createform_spin_budget_info);
         submitCreate = (Button) dialog.findViewById(R.id.income_createform_submit);
+
+        currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
         dateTextView.setText(databaseHelper.getCurrentDate());
         displayIncomeCategoriesSpinnerData(category);
@@ -174,6 +197,21 @@ public class Transaction extends AppCompatActivity {
                                                     .show();
                                         }
                                     });
+
+        countToBudget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(countToBudget.isChecked()) {
+                    budget.setVisibility(VISIBLE);
+                    budgetText.setVisibility(VISIBLE);
+                    changeBudgetInitialAmount.setVisibility(VISIBLE);
+                } else {
+                    budget.setVisibility(View.GONE);
+                    budgetText.setVisibility(View.GONE);
+                    changeBudgetInitialAmount.setVisibility(View.GONE);
+                }
+            }
+        });
 
         submitCreate.setOnClickListener(new View.OnClickListener() {;
             @Override
@@ -206,12 +244,20 @@ public class Transaction extends AppCompatActivity {
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                 } else {
-                    transactionModel.setTransBudID((int) budget.getSelectedItemId());
+                    if (countToBudget.isChecked()) {
+                        transactionModel.setTransBudID((int) budget.getSelectedItemId());
+                    } else {
+                        transactionModel.setTransBudID(NULL);
+                    }
                     transactionModel.setTransCatID((int) category.getSelectedItemId());
                     transactionModel.setTransValue(intValue);
                     transactionModel.setTransDescription(description.getText().toString());
                     transactionModel.setTransDate(dateTextView.getText().toString());
-                    databaseHelper.addIncome(transactionModel);
+                    if(changeBudgetInitialAmount.isChecked()) {
+                        databaseHelper.addIncome(transactionModel, true);
+                    } else {
+                        databaseHelper.addIncome(transactionModel, false);
+                    }
 
                     dialog.cancel();
                     displayTransactionsList();
@@ -224,7 +270,8 @@ public class Transaction extends AppCompatActivity {
     public void showCreateExpenseDialog() {
         final EditText description, value;
         final Spinner category, budget;
-        final TextView dateTextView;
+        final TextView dateTextView, budgetText, currency;
+        final CheckBox countToBudget;
         final Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         Button submitCreate;
@@ -245,10 +292,15 @@ public class Transaction extends AppCompatActivity {
 
         dateTextView = (TextView) dialog.findViewById(R.id.expense_createform_text_date);
         value = (EditText) dialog.findViewById(R.id.expense_createform_text_value);
+        currency = (TextView) dialog.findViewById(R.id.expense_createform_text_currency);
         description = (EditText) dialog.findViewById(R.id.expense_createform_text_desc);
         category = (Spinner) dialog.findViewById(R.id.expense_createform_spin_cat);
+        countToBudget = (CheckBox) dialog.findViewById(R.id.expense_createform_checkbox_budget);
         budget = (Spinner) dialog.findViewById(R.id.expense_createform_spin_budget);
+        budgetText = (TextView) dialog.findViewById(R.id.expense_createform_spin_budget_info);
         submitCreate = (Button) dialog.findViewById(R.id.expense_createform_submit);
+
+        currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
         dateTextView.setText(databaseHelper.getCurrentDate());
         displayExpenseCategoriesSpinnerData(category);
@@ -273,6 +325,19 @@ public class Transaction extends AppCompatActivity {
                         calendar.get(Calendar.DAY_OF_MONTH))
                         .show();
             }
+        });
+
+        countToBudget.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(countToBudget.isChecked()) {
+                    budget.setVisibility(VISIBLE);
+                    budgetText.setVisibility(VISIBLE);
+                } else {
+                    budget.setVisibility(View.GONE);
+                    budgetText.setVisibility(View.GONE);
+                }
+        }
         });
 
         submitCreate.setOnClickListener(new View.OnClickListener() {;
@@ -306,7 +371,11 @@ public class Transaction extends AppCompatActivity {
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                 } else {
-                    transactionModel.setTransBudID((int) budget.getSelectedItemId());
+                    if (countToBudget.isChecked()) {
+                        transactionModel.setTransBudID((int) budget.getSelectedItemId());
+                    } else {
+                        transactionModel.setTransBudID(NULL);
+                    }
                     transactionModel.setTransCatID((int) category.getSelectedItemId());
                     transactionModel.setTransValue(intValue);
                     transactionModel.setTransDescription(description.getText().toString());

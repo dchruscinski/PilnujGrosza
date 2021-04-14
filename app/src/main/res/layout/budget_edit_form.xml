@@ -103,7 +103,7 @@
 
         <EditText
             android:id="@+id/budget_editform_text_initialAmount"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/budget_editform_text_startDate"
@@ -111,12 +111,26 @@
             android:layout_marginTop="25dp"
             android:drawableStart="@drawable/baseline_paid_black_36dp"
             android:drawablePadding="20dp"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:inputType="numberDecimal"
             android:hint="@string/budget_editform_text_initialAmount"
             android:singleLine="true" >
         </EditText>
+
+        <TextView
+            android:id="@+id/budget_editform_text_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/budget_editform_text_startDate"
+            android:layout_toEndOf="@id/budget_editform_text_initialAmount"
+            android:layout_marginTop="35dp"
+            android:gravity="start"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:singleLine="true" >
+        </TextView>
 
         <EditText
             android:id="@+id/budget_editform_text_desc"
@@ -139,16 +153,6 @@
             android:layout_below="@+id/budget_editform_text_desc"
             android:layout_margin="30dp"
             android:text="@string/budget_editform_submit" />
-
-        <Button
-            android:id="@+id/budget_editform_delete"
-            android:layout_marginTop="30dp"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/budget_editform_submit"
-            android:layout_margin="20dp"
-            android:text="@string/budget_editform_delete" />
 
     </RelativeLayout>
 </ScrollView>

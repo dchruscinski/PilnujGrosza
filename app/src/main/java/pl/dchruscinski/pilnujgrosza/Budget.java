@@ -40,6 +40,7 @@ public class Budget extends AppCompatActivity {
         setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         recyclerView = (RecyclerView) findViewById(R.id.budget_list_rc);
         addBudgetFAB = (FloatingActionButton) findViewById(R.id.budget_fab_addBudget);

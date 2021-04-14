@@ -12,7 +12,7 @@
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
         <ImageView
-            android:id="@+id/income_createform_logo"
+            android:id="@+id/income_deleteform_cont_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
@@ -25,27 +25,27 @@
         </ImageView>
 
         <TextView
-            android:id="@+id/income_createform_info_create"
+            android:id="@+id/income_deleteform_cont_info_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:layout_centerInParent="true"
             android:textAlignment="center"
-            android:layout_below="@+id/income_createform_logo"
+            android:layout_below="@+id/income_deleteform_cont_logo"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:text="@string/income_create_info_login"
+            android:text="@string/income_delete_info_login"
             android:singleLine="true" >
         </TextView>
 
         <TextView
-            android:id="@+id/income_createform_text_date"
+            android:id="@+id/income_deleteform_cont_text_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginHorizontal="24dp"
-            android:layout_below="@+id/income_createform_info_create"
+            android:layout_below="@+id/income_deleteform_cont_info_create"
             android:drawableStart="@drawable/baseline_today_black_24dp"
             android:drawablePadding="10dp"
             android:textSize="20sp"
@@ -54,130 +54,131 @@
             android:singleLine="true" >
         </TextView>
 
-        <EditText
-            android:id="@+id/income_createform_text_value"
+        <TextView
+            android:id="@+id/income_deleteform_cont_text_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/income_createform_text_date"
+            android:layout_below="@+id/income_deleteform_cont_text_date"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="25dp"
             android:drawableStart="@drawable/baseline_paid_black_36dp"
             android:drawablePadding="20dp"
-            android:textSize="20sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:inputType="numberDecimal"
-            android:hint="@string/income_createform_text_value"
             android:singleLine="true" >
-        </EditText>
+        </TextView>
 
         <TextView
-            android:id="@+id/income_createform_text_currency"
+            android:id="@+id/income_deleteform_cont_text_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_below="@+id/income_createform_text_date"
-            android:layout_toEndOf="@id/income_createform_text_value"
-            android:layout_marginTop="35dp"
+            android:layout_below="@+id/income_deleteform_cont_text_date"
+            android:layout_toEndOf="@id/income_deleteform_cont_text_value"
+            android:layout_marginTop="25dp"
             android:gravity="start"
             android:textSize="24sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>
 
-        <EditText
-            android:id="@+id/income_createform_text_desc"
+        <TextView
+            android:id="@+id/income_deleteform_cont_text_desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/income_createform_text_value"
+            android:layout_below="@+id/income_deleteform_cont_text_value"
+            android:layout_marginTop="20dp"
             android:layout_marginHorizontal="20dp"
             android:drawableStart="@drawable/baseline_article_black_24dp"
             android:drawablePadding="10dp"
-            android:hint="@string/income_createform_text_desc"
             android:singleLine="true" >
-        </EditText>
+        </TextView>
 
         <TextView
-            android:id="@+id/income_createform_spin_cat_info"
+            android:id="@+id/income_deleteform_cont_spin_cat_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginTop="25dp"
             android:layout_marginStart="24dp"
-            android:layout_below="@+id/income_createform_text_desc"
-            android:text="@string/income_createform_spin_cat_info"
+            android:layout_below="@+id/income_deleteform_cont_text_desc"
+            android:text="@string/income_deleteform_spin_cat_info"
             android:textSize="16sp"
             android:singleLine="true" >
         </TextView>
 
-        <Spinner
-            android:id="@+id/income_createform_spin_cat"
+        <TextView
+            android:id="@+id/income_deleteform_cont_spin_cat_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/income_createform_text_desc"
-            android:layout_toEndOf="@id/income_createform_spin_cat_info"
+            android:layout_below="@+id/income_deleteform_cont_text_desc"
+            android:layout_toEndOf="@id/income_deleteform_cont_spin_cat_info"
             android:layout_marginEnd="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="25dp"
+            android:textSize="16sp"
             android:textAlignment="textEnd"
             android:layout_centerHorizontal="true" >
-        </Spinner>
-
-        <CheckBox
-            android:id="@+id/income_createform_checkbox_budget"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/income_createform_spin_cat"
-            android:layout_marginTop="20dp"
-            android:layout_marginStart="18dp"
-            android:text="@string/income_createform_checkbox_budget" >
-        </CheckBox>
+        </TextView>
 
         <TextView
-            android:id="@+id/income_createform_spin_budget_info"
+            android:id="@+id/income_deleteform_cont_spin_budget_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="25dp"
             android:layout_marginStart="24dp"
-            android:layout_below="@+id/income_createform_checkbox_budget"
-            android:text="@string/income_createform_spin_budget_info"
+            android:layout_below="@+id/income_deleteform_cont_spin_cat_info"
+            android:text="@string/income_deleteform_cont_spin_budget_info"
             android:textSize="16sp"
-            android:visibility="gone"
             android:singleLine="true" >
         </TextView>
 
-        <Spinner
-            android:id="@+id/income_createform_spin_budget"
+        <TextView
+            android:id="@+id/income_deleteform_cont_spin_budget_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/income_createform_checkbox_budget"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="20dp"
-            android:visibility="gone"
+            android:layout_below="@+id/income_deleteform_cont_spin_cat_text"
+            android:layout_toEndOf="@id/income_deleteform_cont_spin_budget_info"
+            android:layout_marginTop="25dp"
+            android:layout_marginEnd="20dp"
+            android:textSize="16sp"
             android:textAlignment="textEnd"
             android:layout_centerHorizontal="true" >
-        </Spinner>
+        </TextView>
 
-        <CheckBox
-            android:id="@+id/income_createform_checkbox_budgetInitialAmount"
+        <TextView
+            android:id="@+id/income_deleteform_cont_confirmation_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/income_createform_spin_budget"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="18dp"
-            android:visibility="gone"
-            android:text="@string/income_createform_checkbox_budgetInitialAmount" >
-        </CheckBox>
+            android:layout_below="@+id/income_deleteform_cont_spin_budget_text"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/income_deleteform_cont_confirmation_info"
+            android:textSize="20sp"
+            android:textAlignment="center"
+            android:layout_centerHorizontal="true" >
+        </TextView>
 
         <Button
-            android:id="@+id/income_createform_submit"
-            android:layout_width="300dp"
+            android:id="@+id/income_deleteform_cont_submitDontChange"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_below="@+id/income_createform_checkbox_budgetInitialAmount"
+            android:layout_below="@+id/income_deleteform_cont_confirmation_info"
+            android:layout_alignParentStart="true"
             android:layout_margin="20dp"
-            android:text="@string/income_createform_submit" />
+            android:text="@string/income_deleteform_cont_submitDontChange" />
+
+        <Button
+            android:id="@+id/income_deleteform_cont_submitChange"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/income_deleteform_cont_confirmation_info"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="20dp"
+            android:text="@string/income_deleteform_cont_submitChange" />
 
     </RelativeLayout>
 </ScrollView>

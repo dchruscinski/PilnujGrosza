@@ -21,8 +21,7 @@ public class FinanceManagement extends AppCompatActivity {
         setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finance_mgmt);
-
-        actualBudget = (TextView) findViewById(R.id.finmgmt_actualBudget_info);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         budgetButton = (Button) findViewById(R.id.finmgmt_budgetmenu_button);
         transactionsListButton = (Button) findViewById(R.id.finmgmt_transactionsList_button);

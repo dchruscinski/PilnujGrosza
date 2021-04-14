@@ -56,7 +56,7 @@
 
         <EditText
             android:id="@+id/expense_createform_text_value"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/expense_createform_text_date"
@@ -64,12 +64,26 @@
             android:layout_marginTop="25dp"
             android:drawableStart="@drawable/baseline_paid_black_36dp"
             android:drawablePadding="20dp"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:inputType="numberDecimal"
             android:hint="@string/expense_createform_text_value"
             android:singleLine="true" >
         </EditText>
+
+        <TextView
+            android:id="@+id/expense_createform_text_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/expense_createform_text_date"
+            android:layout_toEndOf="@id/expense_createform_text_value"
+            android:layout_marginTop="35dp"
+            android:gravity="start"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:singleLine="true" >
+        </TextView>
 
         <EditText
             android:id="@+id/expense_createform_text_desc"
@@ -109,16 +123,27 @@
             android:layout_centerHorizontal="true" >
         </Spinner>
 
+        <CheckBox
+            android:id="@+id/expense_createform_checkbox_budget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/expense_createform_spin_cat"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="18dp"
+            android:text="@string/expense_createform_checkbox_budget" >
+        </CheckBox>
+
         <TextView
             android:id="@+id/expense_createform_spin_budget_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="24dp"
-            android:layout_below="@+id/expense_createform_spin_cat"
+            android:layout_below="@+id/expense_createform_checkbox_budget"
             android:text="@string/expense_createform_spin_budget_info"
             android:textSize="16sp"
+            android:visibility="gone"
             android:singleLine="true" >
         </TextView>
 
@@ -126,10 +151,11 @@
             android:id="@+id/expense_createform_spin_budget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/expense_createform_spin_cat"
-            android:layout_marginTop="20dp"
+            android:layout_below="@+id/expense_createform_checkbox_budget"
+            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="20dp"
             android:textAlignment="textEnd"
+            android:visibility="gone"
             android:layout_centerHorizontal="true" >
         </Spinner>
 

@@ -22,6 +22,7 @@ public class MainMenu extends AppCompatActivity {
             addShoppingListButton, shoppingListsButton, settingsButton, logoutButton;
     TextView profileName, balance, currency;
     ArrayList<ProfileModel> profilesList;
+    ArrayList<SettingsModel> settingsList;
     DatabaseHelper databaseHelper;
     BigDecimal balanceAmount;
 
@@ -31,11 +32,14 @@ public class MainMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(this, "Zalogowano jako " +
-                getIntent().getExtras().getString("name") + ".", Toast.LENGTH_SHORT).show();
+        if (getIntent().getExtras() != null) {
+            Toast.makeText(this, "Zalogowano jako " +
+                    getIntent().getExtras().getString("name") + ".", Toast.LENGTH_SHORT).show();
+        }
 
         databaseHelper = new DatabaseHelper(this);
         profilesList = new ArrayList<>(databaseHelper.getProfileList());
+        settingsList = new ArrayList<>(databaseHelper.getSettingsList());
 
         profileName = (TextView) findViewById(R.id.mainmenu_profile_text);
         balance = (TextView) findViewById(R.id.mainmenu_balance_amount_text);
@@ -54,21 +58,23 @@ public class MainMenu extends AppCompatActivity {
         profileName.setText(profilesList.get(chosenProfilePosition).getProfName());
 
         balanceAmount = BigDecimal.valueOf(profilesList.get(chosenProfilePosition).getProfBalance()).divide(BigDecimal.valueOf(100));
-        balance.setText(balanceAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(balanceAmount) : new DecimalFormat("0.00").format(balanceAmount));
+        balance.setText(balanceAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(balanceAmount) : new DecimalFormat("#.##").format(balanceAmount));
+
+        currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
         addIncomeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TO DO
-                // showAddIncomeDialog();
+                Intent intent = new Intent(v.getContext(), Transaction.class).putExtra("action","incomeButton");
+                startActivity(intent);
             }
         });
 
         addExpenseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TO DO
-                // showAddExpenseDialog();
+                Intent intent = new Intent(v.getContext(), Transaction.class).putExtra("action","expenseButton");
+                startActivity(intent);
             }
         });
 

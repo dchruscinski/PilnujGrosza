@@ -11,29 +11,55 @@
         android:theme="@style/Theme.PilnujGrosza.Launcher">
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Statistics"
+            android:parentActivityName=".FinanceManagement"
             android:label="@string/title_activity_summary" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Receipt"
+            android:parentActivityName=".MainMenu"
             android:label="@string/title_activity_receipt" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.ShoppingList"
+            android:parentActivityName=".MainMenu"
             android:label="@string/title_activity_shopping_list" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Settings"
+            android:parentActivityName=".MainMenu"
             android:label="@string/title_activity_settings" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.ExpenseCategory"
+            android:parentActivityName=".FinanceManagement"
             android:label="@string/title_activity_expense_category" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.IncomeCategory"
+            android:parentActivityName=".FinanceManagement"
             android:label="@string/title_activity_income_category" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.FinanceManagement"
+            android:parentActivityName=".MainMenu"
             android:label="@string/title_activity_financeManagement" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Transaction"
+            android:parentActivityName=".FinanceManagement"
             android:label="@string/title_activity_transaction" />
-
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.BudgetTransaction"
+            android:parentActivityName=".Budget"
+            android:label="@string/title_activity_budgettransaction" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.TransactionCalendar"
+            android:parentActivityName=".FinanceManagement"
+            android:label="@string/title_activity_calendar" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.Shopping"
+            android:parentActivityName=".MainMenu"
+            android:label="@string/title_activity_shopping" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.Budget"
+            android:parentActivityName=".FinanceManagement"
+            android:label="@string/title_activity_budget" />
+        <activity
+            android:name="pl.dchruscinski.pilnujgrosza.MainMenu"
+            android:label="@string/title_activity_menu" />
         <activity
             android:name="pl.dchruscinski.pilnujgrosza.Profile" >
             <intent-filter>
@@ -41,20 +67,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name="pl.dchruscinski.pilnujgrosza.TransactionCalendar"
-            android:label="@string/title_activity_calendar" />
-        <activity
-            android:name="pl.dchruscinski.pilnujgrosza.Shopping"
-            android:label="@string/title_activity_shopping" />
-        <activity
-            android:name="pl.dchruscinski.pilnujgrosza.Budget"
-            android:label="@string/title_activity_budget" />
-
-        <activity
-            android:name="pl.dchruscinski.pilnujgrosza.MainMenu"
-            android:label="@string/title_activity_menu" />
 
     </application>
 
