@@ -5,16 +5,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.net.Uri;
 
 import androidx.annotation.Nullable;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import static java.lang.Boolean.FALSE;
@@ -59,6 +66,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TRANSACTION_DESCRIPTION = "transDescription";
     public static final String COLUMN_TRANSACTION_VALUE = "transValue";
     public static final String COLUMN_TRANSACTION_DATE = "transDate";
+    public static final String COLUMN_TRANSACTION_CHANGE_INITIAL_BUDGET = "transChangeInitialBudget";
+
+    public static final String TABLE_SCHEDULED_PAYMENT = "schpay";
+    public static final String COLUMN_SCHEDULED_PAYMENT_ID = "schpayID";
+    public static final String COLUMN_SCHEDULED_PAYMENT_PROFILE_ID = "schpayProfID";
+    public static final String COLUMN_SCHEDULED_PAYMENT_BUDGET_ID = "schpayBudID";
+    public static final String COLUMN_SCHEDULED_PAYMENT_CATEGORY_ID = "schpayCatID";
+    public static final String COLUMN_SCHEDULED_PAYMENT_DESCRIPTION = "schpayDescription";
+    public static final String COLUMN_SCHEDULED_PAYMENT_VALUE = "schpayValue";
+    public static final String COLUMN_SCHEDULED_PAYMENT_DATE = "schpayDate";
 
     public static final String TABLE_BUDGET = "budget";
     public static final String COLUMN_BUDGET_ID = "budID";
@@ -74,6 +91,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SETTINGS_PROFILE_ID = "setProfID";
     public static final String COLUMN_SETTINGS_NAME = "setName";
     public static final String COLUMN_SETTINGS_VALUE = "setValue";
+
+    public static final String TIMEZONE = "Europe/Warsaw";
+    static final int callbackId = 42;
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, "pilnujgrosza.db", null, 1);
@@ -120,7 +140,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_TRANSACTION_TYPE + " TEXT NOT NULL," +
                         COLUMN_TRANSACTION_DATE + " DATE," +
                         COLUMN_TRANSACTION_VALUE + " INTEGER," +
+                        COLUMN_TRANSACTION_CHANGE_INITIAL_BUDGET + " INTEGER," +
                         COLUMN_TRANSACTION_DESCRIPTION + " TEXT)";
+
+        String createScheduledPaymentTableStatement =
+                "CREATE TABLE " + TABLE_SCHEDULED_PAYMENT + " (" +
+                        COLUMN_SCHEDULED_PAYMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_SCHEDULED_PAYMENT_PROFILE_ID + " INTEGER NOT NULL," +
+                        COLUMN_SCHEDULED_PAYMENT_BUDGET_ID + " INTEGER," +
+                        COLUMN_SCHEDULED_PAYMENT_CATEGORY_ID + " INTEGER NOT NULL," +
+                        COLUMN_SCHEDULED_PAYMENT_DATE + " DATE," +
+                        COLUMN_SCHEDULED_PAYMENT_VALUE + " INTEGER," +
+                        COLUMN_SCHEDULED_PAYMENT_DESCRIPTION + " TEXT)";
 
         String createBudgetTableStatement =
                 "CREATE TABLE " + TABLE_BUDGET + " (" +
@@ -143,6 +174,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createExpenseCategoryTableStatement);
         db.execSQL(createIncomeCategoryTableStatement);
         db.execSQL(createTransactionTableStatement);
+        db.execSQL(createScheduledPaymentTableStatement);
         db.execSQL(createBudgetTableStatement);
         db.execSQL(createSettingsTableStatement);
     }
@@ -155,6 +187,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String upgradeExpenseCategoryTableStatement = "DROP TABLE IF EXISTS " + TABLE_EXPENSE_CATEGORY;
         String upgradeIncomeCategoryTableStatement = "DROP TABLE IF EXISTS " + TABLE_INCOME_CATEGORY;
         String upgradeTransactionTableStatement = "DROP TABLE IF EXISTS " + TABLE_TRANSACTION;
+        String upgradeScheduledPaymentTableStatement = "DROP TABLE IF EXISTS " + TABLE_SCHEDULED_PAYMENT;
         String upgradeBudgetTableStatement = "DROP TABLE IF EXISTS " + TABLE_BUDGET;
         String upgradeSettingsTableStatement = "DROP TABLE IF EXISTS " + TABLE_SETTINGS;
 
@@ -162,6 +195,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(upgradeExpenseCategoryTableStatement);
         db.execSQL(upgradeIncomeCategoryTableStatement);
         db.execSQL(upgradeTransactionTableStatement);
+        db.execSQL(upgradeScheduledPaymentTableStatement);
         db.execSQL(upgradeBudgetTableStatement);
         db.execSQL(upgradeSettingsTableStatement);
         onCreate(db);
@@ -326,7 +360,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getCurrentDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
+        Date date = new Date();
+
+        return dateFormat.format(date);
+    }
+
+    public String getCurrentMonthYearDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
         Date date = new Date();
 
         return dateFormat.format(date);
@@ -336,7 +379,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         /*
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
         Date today = new Date();
         Date tomorrow = new Date(today.getTime() + (1000 * 60 * 60 * 24));
 
@@ -345,7 +388,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DAY_OF_MONTH, 1);
@@ -357,7 +400,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getNextMonthDate() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
 
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, 1);
@@ -368,7 +411,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getCurrentDateTime() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
         Date date = new Date();
 
         return dateFormat.format(date);
@@ -377,7 +420,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public String getDateTimeForAccountLock() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
 
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MINUTE, MINUTES_OF_ACCOUNT_LOCK);
@@ -389,7 +432,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean compareLoginDateTime;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getLastLoginAttempt = "SELECT profLastLoginAttempt FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_ID + " = ?";
@@ -412,6 +455,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } else compareLoginDateTime = false;
 
         return compareLoginDateTime;
+    }
+
+    public int getNumberOfMonthsBetweenDates(Date d1, Date d2){
+        if (d1 == null || d2 == null) {
+            return -1;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(d1);
+        int nMonth1 = 12 * calendar.get(Calendar.YEAR) + calendar.get(Calendar.MONTH);
+
+        calendar.setTime(d2);
+        int nMonth2 = 12 * calendar.get(Calendar.YEAR) + calendar.get(Calendar.MONTH);
+
+        return java.lang.Math.abs(nMonth2 - nMonth1) + 1;
     }
 
     public void resetFailedLoginAttempts(int profID) {
@@ -745,10 +804,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TRANSACTION_DESCRIPTION, transactionModel.getTransDescription());
         cv.put(COLUMN_TRANSACTION_VALUE, transactionModel.getTransValue());
         cv.put(COLUMN_TRANSACTION_DATE, transactionModel.getTransDate());
+        cv.put(COLUMN_TRANSACTION_CHANGE_INITIAL_BUDGET, transactionModel.getTransChangeInitialBudget());
         db.insert(TABLE_TRANSACTION, null, cv);
 
         updateProfileBalance(chosenProfileID, transactionModel.getTransValue(), "income", "add");
-        if (changeBudgetInitialAmount) {
+        if (changeBudgetInitialAmount && transactionModel.getTransBudID() != 0) {
             updateBudgetInitialAmount(transactionModel.getTransBudID(), transactionModel.getTransValue(), "add");
         }
     }
@@ -773,6 +833,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TRANSACTION_CATEGORY_ID, transactionModel.getTransCatID());
         cv.put(COLUMN_TRANSACTION_BUDGET_ID, transactionModel.getTransBudID());
         cv.put(COLUMN_TRANSACTION_VALUE, transNewValue);
+        cv.put(COLUMN_TRANSACTION_CHANGE_INITIAL_BUDGET, transactionModel.getTransChangeInitialBudget());
         db.update(TABLE_TRANSACTION, cv, COLUMN_TRANSACTION_ID + " = " + transID, null);
 
         if (transNewValue > transOldValue) {
@@ -805,7 +866,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         updateProfileBalance(chosenProfileID, transValue, "income", "subtract");
 
-        // potrzebne mi są dwa różne okna przy usuwaniu - jedno dodatkowe w przypadku usuwania przychodu z budżetem, które pyta czy ma się zmienić limit budżetu
         if (changeBudgetInitialAmount) {
             updateBudgetInitialAmount(transBudID, transValue, "subtract");
         }
@@ -824,6 +884,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TRANSACTION_DESCRIPTION, transactionModel.getTransDescription());
         cv.put(COLUMN_TRANSACTION_VALUE, transactionModel.getTransValue());
         cv.put(COLUMN_TRANSACTION_DATE, transactionModel.getTransDate());
+        cv.putNull(COLUMN_TRANSACTION_CHANGE_INITIAL_BUDGET);
         db.insert(TABLE_TRANSACTION, null, cv);
 
         updateProfileBalance(chosenProfileID, transactionModel.getTransValue(), "expense", "add");
@@ -850,6 +911,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_TRANSACTION_CATEGORY_ID, transactionModel.getTransCatID());
         cv.put(COLUMN_TRANSACTION_BUDGET_ID, transactionModel.getTransBudID());
         cv.put(COLUMN_TRANSACTION_VALUE, transNewValue);
+        cv.putNull(COLUMN_TRANSACTION_CHANGE_INITIAL_BUDGET);
         db.update(TABLE_TRANSACTION, cv, COLUMN_TRANSACTION_ID + " = " + transID, null);
 
         if (transNewValue > transOldValue) {
@@ -901,8 +963,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String transDescription = cursor.getString(cursor.getColumnIndex("transDescription"));
                 int transValue = cursor.getInt(cursor.getColumnIndex("transValue"));
                 String transDate = cursor.getString(cursor.getColumnIndex("transDate"));
+                int transChangeInitialBudget = cursor.getInt(cursor.getColumnIndex("transChangeInitialBudget"));
 
-                TransactionModel transactionModel = new TransactionModel(transID, transType, transDescription, transValue, transDate, transProfID, transBudID, transCatID);
+                TransactionModel transactionModel = new TransactionModel(transID, transType, transDescription, transValue, transDate, transProfID, transBudID, transCatID, transChangeInitialBudget);
 
                 transactionsList.add(transactionModel);
 
@@ -929,8 +992,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String transDescription = cursor.getString(cursor.getColumnIndex("transDescription"));
                 int transValue = cursor.getInt(cursor.getColumnIndex("transValue"));
                 String transDate = cursor.getString(cursor.getColumnIndex("transDate"));
+                int transChangeInitialBudget = cursor.getInt(cursor.getColumnIndex("transChangeInitialBudget"));
 
-                TransactionModel transactionModel = new TransactionModel(transID, transType, transDescription, transValue, transDate, transProfID, transBudID, transCatID);
+                TransactionModel transactionModel = new TransactionModel(transID, transType, transDescription, transValue, transDate, transProfID, transBudID, transCatID, transChangeInitialBudget);
 
                 transactionsList.add(transactionModel);
 
@@ -940,7 +1004,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
         return transactionsList;
     }
-
 
     public void unlinkTransactions(int budID) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -980,12 +1043,105 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    public void addScheduledPayment(ScheduledPaymentModel scheduledPaymentModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SCHEDULED_PAYMENT_PROFILE_ID, chosenProfileID);
+        cv.put(COLUMN_SCHEDULED_PAYMENT_BUDGET_ID, scheduledPaymentModel.getSchpayBudID());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_CATEGORY_ID, scheduledPaymentModel.getSchpayCatID());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_DESCRIPTION, scheduledPaymentModel.getSchpayDescription());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_VALUE, scheduledPaymentModel.getSchpayValue());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_DATE, scheduledPaymentModel.getSchpayDate());
+        db.insert(TABLE_SCHEDULED_PAYMENT, null, cv);
+    }
+
+    public void updateScheduledPayment(int schpayID, ScheduledPaymentModel scheduledPaymentModel) {
+        int schpayOldValue = 0, schpayNewValue;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String getTransactionStatement = "SELECT schpayValue FROM " + TABLE_SCHEDULED_PAYMENT + " WHERE " + COLUMN_SCHEDULED_PAYMENT_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(getTransactionStatement, new String[] {Integer.toString(schpayID)});
+        if (cursor.moveToFirst()) {
+            do {
+                schpayOldValue = cursor.getInt(cursor.getColumnIndex(COLUMN_SCHEDULED_PAYMENT_VALUE));
+            } while (cursor.moveToNext());
+        }
+
+        schpayNewValue = scheduledPaymentModel.getSchpayValue();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SCHEDULED_PAYMENT_BUDGET_ID, scheduledPaymentModel.getSchpayBudID());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_CATEGORY_ID, scheduledPaymentModel.getSchpayCatID());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_DESCRIPTION, scheduledPaymentModel.getSchpayDescription());
+        cv.put(COLUMN_SCHEDULED_PAYMENT_VALUE, schpayNewValue);
+        cv.put(COLUMN_SCHEDULED_PAYMENT_DATE, scheduledPaymentModel.getSchpayDate());
+        db.update(TABLE_SCHEDULED_PAYMENT, cv, COLUMN_SCHEDULED_PAYMENT_ID + " = " + schpayID, null);
+        cursor.close();
+    }
+
+    public void deleteScheduledPayment(int schpayID) {
+        int schpayValue = 0, schpayBudID = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+        String getScheduledPaymentStatement = "SELECT schpayValue, schpayBudID FROM " + TABLE_SCHEDULED_PAYMENT + " WHERE " + COLUMN_SCHEDULED_PAYMENT_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(getScheduledPaymentStatement, new String[] {Integer.toString(schpayID)});
+        if (cursor.moveToFirst()) {
+            do {
+                schpayValue = cursor.getInt(cursor.getColumnIndex(COLUMN_SCHEDULED_PAYMENT_VALUE));
+                schpayBudID = cursor.getInt(cursor.getColumnIndex(COLUMN_SCHEDULED_PAYMENT_BUDGET_ID));
+            } while (cursor.moveToNext());
+        }
+        db.delete(TABLE_SCHEDULED_PAYMENT, COLUMN_SCHEDULED_PAYMENT_ID + " = " + schpayID, null);
+        cursor.close();
+    }
+
+    public List<ScheduledPaymentModel> getScheduledPaymentsList() {
+        List<ScheduledPaymentModel> scheduledPaymentList = new ArrayList<>();
+        String getScheduledPaymentsListStatement = "SELECT * FROM " + TABLE_SCHEDULED_PAYMENT + " WHERE " + COLUMN_SCHEDULED_PAYMENT_PROFILE_ID +  " = " + chosenProfileID + " ORDER BY " + COLUMN_SCHEDULED_PAYMENT_DATE + " DESC, " + COLUMN_SCHEDULED_PAYMENT_ID + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getScheduledPaymentsListStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int schpayID = cursor.getInt(cursor.getColumnIndex("schpayID"));
+                int schpayProfID = cursor.getInt(cursor.getColumnIndex("schpayProfID"));
+                int schpayBudID = cursor.getInt(cursor.getColumnIndex("schpayBudID"));
+                int schpayCatID = cursor.getInt(cursor.getColumnIndex("schpayCatID"));
+                String schpayDescription = cursor.getString(cursor.getColumnIndex("schpayDescription"));
+                int schpayValue = cursor.getInt(cursor.getColumnIndex("schpayValue"));
+                String schpayDate = cursor.getString(cursor.getColumnIndex("schpayDate"));
+
+                ScheduledPaymentModel scheduledPaymentModel = new ScheduledPaymentModel(schpayID, schpayDescription, schpayValue, schpayDate, schpayProfID, schpayBudID, schpayCatID);
+
+                scheduledPaymentList.add(scheduledPaymentModel);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return scheduledPaymentList;
+    }
+
+    public int getLastScheduledPayment() {
+        int lastScheduledPayment = 0;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_SCHEDULED_PAYMENT, null);
+        if (cursor.moveToLast()){
+            lastScheduledPayment = cursor.getInt(cursor.getColumnIndex(COLUMN_SCHEDULED_PAYMENT_ID));
+        }
+
+        cursor.close();
+        return lastScheduledPayment;
+    }
+
     public boolean checkStartDateInCreateDialog(int profID, String startDateFromDialog) throws ParseException {
         boolean checkStartDate;
         int betweenCounter = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getBudgetDates = "SELECT " + COLUMN_BUDGET_START_DATE + ", " + COLUMN_BUDGET_END_DATE + " FROM " + TABLE_BUDGET + " WHERE " + COLUMN_BUDGET_PROFILE_ID + " = ?";
@@ -1027,7 +1183,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int betweenCounter = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getBudgetDates = "SELECT " + COLUMN_BUDGET_START_DATE + ", " + COLUMN_BUDGET_END_DATE + " FROM " + TABLE_BUDGET + " WHERE " + COLUMN_BUDGET_PROFILE_ID + " = ?";
@@ -1068,7 +1224,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int betweenCounter = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getBudgetDates = "SELECT " + COLUMN_BUDGET_START_DATE + ", " + COLUMN_BUDGET_END_DATE + " FROM " + TABLE_BUDGET + " WHERE " + COLUMN_BUDGET_PROFILE_ID + " = ?";
@@ -1109,7 +1265,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int betweenCounter = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getBudgetDates = "SELECT " + COLUMN_BUDGET_START_DATE + ", " + COLUMN_BUDGET_END_DATE + " FROM " + TABLE_BUDGET + " WHERE " + COLUMN_BUDGET_PROFILE_ID + " = ? AND " + COLUMN_BUDGET_ID + " <> ?" ;
@@ -1151,7 +1307,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int betweenCounter = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getBudgetDates = "SELECT " + COLUMN_BUDGET_START_DATE + ", " + COLUMN_BUDGET_END_DATE + " FROM " + TABLE_BUDGET + " WHERE " + COLUMN_BUDGET_PROFILE_ID + " = ? AND " + COLUMN_BUDGET_ID + " <> ?" ;
@@ -1193,7 +1349,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int betweenCounter = 0;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
 
         SQLiteDatabase db = this.getReadableDatabase();
         String getBudgetDates = "SELECT " + COLUMN_BUDGET_START_DATE + ", " + COLUMN_BUDGET_END_DATE + " FROM " + TABLE_BUDGET + " WHERE " + COLUMN_BUDGET_PROFILE_ID + " = ? AND " + COLUMN_BUDGET_ID + " <> ?" ;
@@ -1233,7 +1389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean checkStartAndEndDate = false;
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT+1"));
+        dateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE));
 
         checkStartAndEndDate = dateFormat.parse(startDate).compareTo(dateFormat.parse(endDate)) <= 0;
 
@@ -1368,13 +1524,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
         cv.put(COLUMN_SETTINGS_NAME, "currency");
-        cv.put(COLUMN_SETTINGS_VALUE, "PLN");
+        cv.put(COLUMN_SETTINGS_VALUE, "zł");
         db.insert(TABLE_SETTINGS, null, cv);
         cv.clear();
 
         cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
         cv.put(COLUMN_SETTINGS_NAME, "theme");
         cv.put(COLUMN_SETTINGS_VALUE, "dark");
+        db.insert(TABLE_SETTINGS, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
+        cv.put(COLUMN_SETTINGS_NAME, "notificationsTime");
+        cv.put(COLUMN_SETTINGS_VALUE, "19:00");
+        db.insert(TABLE_SETTINGS, null, cv);
+        cv.clear();
+
+        cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
+        cv.put(COLUMN_SETTINGS_NAME, "peopleInHousehold");
+        cv.put(COLUMN_SETTINGS_VALUE, "1");
         db.insert(TABLE_SETTINGS, null, cv);
         cv.clear();
     }
@@ -1420,12 +1588,180 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return currency;
     }
 
+    public String[] getNotificationsTime(int profID) {
+        String notificationsTimeString = "";
+        String notificationsTime[];
+        String getCurrencyStatement = "SELECT " + COLUMN_SETTINGS_VALUE + " FROM " + TABLE_SETTINGS + " WHERE " + COLUMN_SETTINGS_PROFILE_ID + " = ? AND " + COLUMN_SETTINGS_NAME + " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getCurrencyStatement, new String[] {Integer.toString(profID), "notificationsTime"});
+        if (cursor.moveToFirst()) {
+            do {
+                notificationsTimeString = cursor.getString(cursor.getColumnIndex(COLUMN_SETTINGS_VALUE));
+
+            } while (cursor.moveToNext());
+        }
+
+        notificationsTime = notificationsTimeString.split(":");
+
+        cursor.close();
+        return notificationsTime;
+    }
+
+    public int getPeopleInHousehold(int profID) {
+        int peopleInHousehold = 0;
+        String getCurrencyStatement = "SELECT " + COLUMN_SETTINGS_VALUE + " FROM " + TABLE_SETTINGS + " WHERE " + COLUMN_SETTINGS_PROFILE_ID + " = ? AND " + COLUMN_SETTINGS_NAME + " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getCurrencyStatement, new String[] {Integer.toString(profID), "peopleInHousehold"});
+        if (cursor.moveToFirst()) {
+            do {
+                peopleInHousehold = cursor.getInt(cursor.getColumnIndex(COLUMN_SETTINGS_VALUE));
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return peopleInHousehold;
+    }
+
     public void updateSettings(SettingsModel settingsModel, int setID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_SETTINGS_VALUE, settingsModel.getSetValue());
         db.update(TABLE_SETTINGS, cv, COLUMN_SETTINGS_ID + " = " + setID, null);
+    }
+
+    public List<Map> getProfileStatistics() throws ParseException {
+        List<Map> profileStatistics = new ArrayList<>();
+        Map<String, BigDecimal> bigIntegerStatistics = new HashMap<>();
+        Map<String, String> stringStatistics = new HashMap<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
+
+        String startDate, endDate;
+        startDate = endDate = "1900-01-01";
+
+        int sumOfIncomes, sumOfExpenses, balance, numberOfIncomes, numberOfExpenses, maxIncome, maxExpense;
+        sumOfIncomes = sumOfExpenses = numberOfIncomes = numberOfExpenses = maxIncome = maxExpense = 0;
+
+        String getProfileStatisticsStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " ORDER BY " + COLUMN_TRANSACTION_DATE + " DESC, " + COLUMN_TRANSACTION_ID + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getProfileStatisticsStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String transType = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_TYPE));
+                int transValue = cursor.getInt(cursor.getColumnIndex(COLUMN_TRANSACTION_VALUE));
+                String transDate = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_DATE));
+
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(startDate)) <= 0 || dateFormat.parse(startDate).compareTo(dateFormat.parse("1900-01-01")) == 0) startDate = transDate;
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(endDate)) >= 0) endDate = transDate;
+
+                if (transType.equals("income")) {
+                    sumOfIncomes += transValue;
+                    numberOfIncomes++;
+                    if (transValue > maxIncome) maxIncome = transValue;
+                } else {
+                    sumOfExpenses += transValue;
+                    numberOfExpenses++;
+                    if (transValue > maxExpense) maxExpense = transValue;
+                }
+
+            } while (cursor.moveToNext());
+
+            balance = sumOfIncomes - sumOfExpenses;
+
+            int monthsBetween = getNumberOfMonthsBetweenDates(dateFormat.parse(endDate), dateFormat.parse(startDate));
+            if (numberOfIncomes + numberOfExpenses != 0 && monthsBetween == 0) monthsBetween = 1;
+
+            bigIntegerStatistics.put("balance", BigDecimal.valueOf(balance));
+            bigIntegerStatistics.put("numberOfIncomes", BigDecimal.valueOf(numberOfIncomes));
+            bigIntegerStatistics.put("numberOfExpenses", BigDecimal.valueOf(numberOfExpenses));
+            bigIntegerStatistics.put("numberOfTransactions", BigDecimal.valueOf(numberOfIncomes + numberOfExpenses));
+            bigIntegerStatistics.put("sumOfIncomes", BigDecimal.valueOf(sumOfIncomes));
+            bigIntegerStatistics.put("sumOfExpenses", BigDecimal.valueOf(sumOfExpenses));
+            bigIntegerStatistics.put("maxIncome", BigDecimal.valueOf(maxIncome));
+            bigIntegerStatistics.put("maxExpense", BigDecimal.valueOf(maxExpense));
+            bigIntegerStatistics.put("averageIncome", BigDecimal.valueOf((numberOfIncomes == 0)? 0 : sumOfIncomes / numberOfIncomes));
+            bigIntegerStatistics.put("averageExpense", BigDecimal.valueOf((numberOfExpenses == 0)? 0 : sumOfExpenses / numberOfExpenses));
+            bigIntegerStatistics.put("numberOfMonths", BigDecimal.valueOf(monthsBetween));
+            bigIntegerStatistics.put("averageIncomePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfIncomes / monthsBetween));
+            bigIntegerStatistics.put("averageExpensePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfExpenses / monthsBetween));
+            bigIntegerStatistics.put("averageCost", BigDecimal.valueOf(sumOfExpenses / getPeopleInHousehold(chosenProfileID)));
+
+            stringStatistics.put("startDate", startDate);
+            stringStatistics.put("endDate", endDate);
+        }
+
+        profileStatistics.add(bigIntegerStatistics);
+        profileStatistics.add(stringStatistics);
+
+        cursor.close();
+        return profileStatistics;
+    }
+
+    public List<Map> getProfileStatisticsForPieChart() {
+        List<Map> profileStatisticsForPieChart = new ArrayList<>();
+        Map<String, BigDecimal> incomeStatisticsForPieChart = new HashMap<>();
+        Map<String, BigDecimal> expenseStatisticsForPieChart = new HashMap<>();
+        BigDecimal value = BigDecimal.valueOf(0);
+        String sumOfTransactionsColumn = "transSum";
+
+        String getIncomeStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_INCOME_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_INCOME_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_INCOME_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        String getExpenseStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_EXPENSE_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_EXPENSE_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_EXPENSE_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor incomeCursor = db.rawQuery(getIncomeStatisticsStatement, new String[] {"income"});
+        if (incomeCursor.moveToFirst()) {
+            do {
+                int transSum = incomeCursor.getInt(incomeCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = incomeCursor.getString(incomeCursor.getColumnIndex(COLUMN_INCOME_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                incomeStatisticsForPieChart.put(transCategory, value);
+
+            } while (incomeCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(incomeStatisticsForPieChart);
+        incomeCursor.close();
+
+        Cursor expenseCursor = db.rawQuery(getExpenseStatisticsStatement, new String[] {"expense"});
+        if (expenseCursor.moveToFirst()) {
+            do {
+                int transSum = expenseCursor.getInt(expenseCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = expenseCursor.getString(expenseCursor.getColumnIndex(COLUMN_EXPENSE_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                expenseStatisticsForPieChart.put(transCategory, value);
+
+            } while (expenseCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(expenseStatisticsForPieChart);
+        expenseCursor.close();
+
+        return profileStatisticsForPieChart;
+    }
+
+    public boolean doesUserHaveAnyTransaction(int profID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String doesUserHaveAnyTransactionNameStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(doesUserHaveAnyTransactionNameStatement, new String[] {String.valueOf(profID)});
+        cursor.moveToFirst();
+
+        int transactionCounter = cursor.getCount();
+        boolean doesUserHaveAnyTransaction = (transactionCounter > 0) ? TRUE : FALSE;
+
+        cursor.close();
+        return doesUserHaveAnyTransaction;
     }
 
 }

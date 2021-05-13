@@ -35,8 +35,7 @@
             android:layout_below="@+id/expcat_deleteform_logo"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:text="@string/expcat_deleteform_info_delete"
-            android:singleLine="true" >
+            android:text="@string/expcat_deleteform_info_delete" >
         </TextView>
 
         <TextView

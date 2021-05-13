@@ -20,6 +20,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/exp_rc_icon"
+        android:gravity="center_vertical"
         android:ellipsize="marquee"
         android:text="@string/exp_rc_secondLine"
         android:textSize="12sp"
@@ -32,6 +33,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/exp_rc_icon"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical|end"
         android:ellipsize="marquee"
         android:text="@string/exp_rc_category"
         android:textSize="12sp"
@@ -61,7 +64,6 @@
         android:layout_toEndOf="@id/exp_rc_firstLine"
         android:layout_marginStart="5dp"
         android:gravity="center_vertical"
-        android:text="@string/exp_rc_currency"
         android:textSize="16sp" />
 
 
@@ -74,7 +76,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignWithParentIfMissing="true"
         android:layout_toEndOf="@id/exp_rc_icon"
-        android:gravity="end"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical|end"
         android:text="@string/exp_rc_transDate"
         android:textAlignment="textEnd"
         android:textSize="16sp" />

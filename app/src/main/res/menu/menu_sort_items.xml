@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item android:id="@+id/menu_sort_action_sort_value_asc"
+        android:title="@string/menu_sort_action_sort_value_asc" />
+
+    <item android:id="@+id/menu_sort_action_sort_value_desc"
+        android:title="@string/menu_sort_action_sort_value_desc" />
+
+    <item android:id="@+id/menu_sort_action_sort_date_asc"
+        android:title="@string/menu_sort_action_sort_date_asc" />
+
+    <item android:id="@+id/menu_sort_action_sort_date_desc"
+        android:title="@string/menu_sort_action_sort_date_desc" />
+
+</menu>

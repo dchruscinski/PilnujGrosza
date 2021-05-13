@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whiteBackground"
+    tools:context="pl.dchruscinski.pilnujgrosza.Transaction">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/schpay_list_rc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" >
+
+            <!-- FAB - "Dodaj wydatek / Add expense" -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/schpay_fab_addScheduledPayment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/fab_margin"
+                android:backgroundTint="@color/flat_minus_background"
+                app:tint="@null"
+                android:tooltipText="@string/schpay_fab_addScheduledPayment"
+                app:srcCompat="@drawable/baseline_more_time_black_48" />
+
+        </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -148,7 +148,7 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/budget_delete_cont_text_desc"
             android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:text="@string/budget_delete_cont_info_delete"
             android:textAlignment="center"
             android:textSize="20sp" >
@@ -160,7 +160,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_below="@+id/budget_delete_cont_info_delete"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:text="@string/budget_delete_cont_unlinkTrans" />
 
         <Button
@@ -170,7 +170,7 @@
             android:layout_centerInParent="true"
             android:layout_below="@+id/budget_delete_cont_unlinkTrans"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="30dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/budget_delete_cont_deleteTrans" />
 
 

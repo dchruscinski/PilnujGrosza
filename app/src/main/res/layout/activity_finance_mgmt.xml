@@ -42,7 +42,24 @@
             android:text="@string/finmgmt_transactionsList_button" />
         </TableRow>
 
-    <!-- Row #3 - income categories button -->
+    <!-- Row #3 - scheduled payments button -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginBottom="20dp" >
+
+        <!-- scheduled payment button -->
+        <Button
+            android:id="@+id/finmgmt_schpay_button"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:layout_weight="1"
+            android:text="@string/finmgmt_schpay_button" />
+    </TableRow>
+
+    <!-- Row #4 - income categories button -->
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -58,7 +75,7 @@
             android:text="@string/finmgmt_inccat_button" />
     </TableRow>
 
-    <!-- Row #4 - expense categories button -->
+    <!-- Row #5 - expense categories button -->
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -75,40 +92,7 @@
             android:text="@string/finmgmt_expcat_button" />
     </TableRow>
 
-    <!-- Row #5 - calendar button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-        <!-- calendar button -->
-        <Button
-            android:id="@+id/finmgmt_calendar_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_calendar_button" />
-    </TableRow>
-
-    <!-- Row #6 - fee schedule button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginBottom="20dp" >
-
-        <!-- calendar button -->
-        <Button
-            android:id="@+id/finmgmt_feeSchedule_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_feeSchedule_button" />
-    </TableRow>
-
-    <!-- Row #7 - summary button -->
+    <!-- Row #6 - summary button -->
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent"

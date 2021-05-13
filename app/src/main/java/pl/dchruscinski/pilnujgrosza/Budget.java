@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import org.w3c.dom.Text;
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -66,7 +68,7 @@ public class Budget extends AppCompatActivity {
 
     public void showCreateDialog() {
         final EditText initialAmount, description;
-        final TextView startDateTextView, endDateTextView;
+        final TextView startDateTextView, endDateTextView, currency;
         Button submitCreate;
 
         final Calendar startDateCalendar = Calendar.getInstance();
@@ -92,8 +94,11 @@ public class Budget extends AppCompatActivity {
         startDateTextView = (TextView) dialog.findViewById(R.id.budget_createform_text_startDate);
         endDateTextView = (TextView) dialog.findViewById(R.id.budget_createform_text_endDate);
         initialAmount = (EditText) dialog.findViewById(R.id.budget_createform_text_initialAmount);
+        currency = (TextView) dialog.findViewById(R.id.budget_createform_text_currency);
         description = (EditText) dialog.findViewById(R.id.budget_createform_text_desc);
         submitCreate = (Button) dialog.findViewById(R.id.budget_createform_submit);
+
+        currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
         startDateTextView.setText(databaseHelper.getCurrentDate());
         endDateTextView.setText(databaseHelper.getNextMonthDate());

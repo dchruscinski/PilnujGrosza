@@ -127,7 +127,12 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             String lastLoginDate = (profilesList.get(position).getProfLastLoginDate() == null) ?
                     "" : "Ostatnie logowanie: " + profilesList.get(position).getProfLastLoginDate();
-            profileHolder.txtFooter.setText(lastLoginDate);
+            if (lastLoginDate.equals("")) {
+                profileHolder.txtFooter.setVisibility(View.GONE);
+            } else {
+                profileHolder.txtFooter.setText(lastLoginDate);
+            }
+
 
             profileHolder.txtHeader.setOnClickListener(new View.OnClickListener() {
                 @Override

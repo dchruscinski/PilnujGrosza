@@ -20,7 +20,6 @@
                 android:layout_height="match_parent"
                 android:gravity="bottom|center_horizontal"
                 android:textSize="20sp"
-                android:layout_weight="1"
                 android:text="Saldo dla profilu:"
                 android:singleLine="true" >
             </TextView>
@@ -29,10 +28,10 @@
                 android:id="@+id/mainmenu_profile_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
+                android:gravity="bottom|start"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_weight="3"
+                android:layout_weight="1"
                 android:singleLine="true" >
             </TextView>
 

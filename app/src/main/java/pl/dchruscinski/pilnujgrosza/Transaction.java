@@ -1,5 +1,7 @@
 package pl.dchruscinski.pilnujgrosza;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -11,6 +13,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -19,9 +24,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -29,6 +36,8 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -39,8 +48,8 @@ import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfileID;
 
 public class Transaction extends AppCompatActivity {
     private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
     private ArrayList<TransactionModel> transactionsList;
-    private List<String> incomeCategoriesListForSpinner, expenseCategoriesListForSpinner, budgetsListForSpinner;
     FloatingActionButton addIncomeFAB;
     FloatingActionButton addExpenseFAB;
     DatabaseHelper databaseHelper;
@@ -52,6 +61,7 @@ public class Transaction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
 
         recyclerView = (RecyclerView) findViewById(R.id.expense_list_rc);
         addIncomeFAB = (FloatingActionButton) findViewById(R.id.trans_fab_addIncome);
@@ -83,11 +93,63 @@ public class Transaction extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_sort, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+        switch(item.getItemId()) {
+            case R.id.menu_sort_action_sort:
+                View sortMenuItemView = findViewById(R.id.menu_sort_action_sort);
+                PopupMenu popup = new PopupMenu(this, sortMenuItemView);
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_sort_items, popup.getMenu());
+                popup.setOnMenuItemClickListener(item1 -> {
+                    switch (item1.getItemId()) {
+                        case R.id.menu_sort_action_sort_value_asc:
+                            Collections.sort(transactionsList, TransactionModel.transactionValueAscComparator);
+                            Toast.makeText(Transaction.this, "a ", Toast.LENGTH_SHORT).show();
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        case R.id.menu_sort_action_sort_value_desc:
+                            Collections.sort(transactionsList, TransactionModel.transactionValueDescComparator);
+                            Toast.makeText(Transaction.this, "b ", Toast.LENGTH_SHORT).show();
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        case R.id.menu_sort_action_sort_date_asc:
+                            Collections.sort(transactionsList, TransactionModel.transactionDateAscComparator);
+                            Toast.makeText(Transaction.this, "c ", Toast.LENGTH_SHORT).show();
+                            adapter.notifyDataSetChanged();
+                            return true;
+                        case R.id.menu_sort_action_sort_date_desc:
+                            Collections.sort(transactionsList, TransactionModel.transactionDateDescComparator);
+                            Toast.makeText(Transaction.this, "d ", Toast.LENGTH_SHORT).show();
+                            adapter.notifyDataSetChanged();
+                            return true;
+                    }
+
+                    return super.onOptionsItemSelected(item);
+                });
+                popup.show();
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
     public void displayTransactionsList() {
         transactionsList = new ArrayList<>(databaseHelper.getTransactionsList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        TransactionAdapter adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
+        adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -160,16 +222,16 @@ public class Transaction extends AppCompatActivity {
         // dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.show();
 
-        dateTextView = (TextView) dialog.findViewById(R.id.income_createform_text_date);
-        value = (EditText) dialog.findViewById(R.id.income_createform_text_value);
-        currency = (TextView) dialog.findViewById(R.id.income_createform_text_currency);
-        description = (EditText) dialog.findViewById(R.id.income_createform_text_desc);
-        category = (Spinner) dialog.findViewById(R.id.income_createform_spin_cat);
-        countToBudget = (CheckBox) dialog.findViewById(R.id.income_createform_checkbox_budget);
-        changeBudgetInitialAmount = (CheckBox) dialog.findViewById(R.id.income_createform_checkbox_budgetInitialAmount);
-        budget = (Spinner) dialog.findViewById(R.id.income_createform_spin_budget);
-        budgetText = (TextView) dialog.findViewById(R.id.income_createform_spin_budget_info);
-        submitCreate = (Button) dialog.findViewById(R.id.income_createform_submit);
+        dateTextView = dialog.findViewById(R.id.income_createform_text_date);
+        value = dialog.findViewById(R.id.income_createform_text_value);
+        currency = dialog.findViewById(R.id.income_createform_text_currency);
+        description = dialog.findViewById(R.id.income_createform_text_desc);
+        category = dialog.findViewById(R.id.income_createform_spin_cat);
+        countToBudget = dialog.findViewById(R.id.income_createform_checkbox_budget);
+        changeBudgetInitialAmount = dialog.findViewById(R.id.income_createform_checkbox_budgetInitialAmount);
+        budget = dialog.findViewById(R.id.income_createform_spin_budget);
+        budgetText = dialog.findViewById(R.id.income_createform_spin_budget_info);
+        submitCreate = dialog.findViewById(R.id.income_createform_submit);
 
         currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
@@ -254,8 +316,10 @@ public class Transaction extends AppCompatActivity {
                     transactionModel.setTransDescription(description.getText().toString());
                     transactionModel.setTransDate(dateTextView.getText().toString());
                     if(changeBudgetInitialAmount.isChecked()) {
+                        transactionModel.setTransChangeInitialBudget(1);
                         databaseHelper.addIncome(transactionModel, true);
                     } else {
+                        transactionModel.setTransChangeInitialBudget(0);
                         databaseHelper.addIncome(transactionModel, false);
                     }
 

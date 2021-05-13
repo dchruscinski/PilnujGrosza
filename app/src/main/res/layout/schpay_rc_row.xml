@@ -1,0 +1,88 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip"
+    android:background="@color/whiteBackground" >
+
+    <ImageView
+        android:id="@+id/schpay_rc_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="6dip"
+        android:layout_marginEnd="12dip"
+        android:src="@drawable/baseline_schedule_black_48" />
+
+    <TextView
+        android:id="@+id/schpay_rc_secondLine"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/schpay_rc_icon"
+        android:gravity="center_vertical"
+        android:ellipsize="marquee"
+        android:text="@string/schpay_rc_secondLine"
+        android:textSize="12sp"
+
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/schpay_rc_category"
+        android:layout_width="fill_parent"
+        android:layout_height="26dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/schpay_rc_icon"
+        android:layout_marginEnd="10dp"
+        android:gravity="center_vertical|end"
+        android:ellipsize="marquee"
+        android:text="@string/schpay_rc_category"
+        android:textSize="12sp"
+        android:textAlignment="textEnd"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/schpay_rc_firstLine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/schpay_rc_secondLine"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/schpay_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/schpay_rc_firstLine"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/schpay_rc_currency"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/schpay_rc_secondLine"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/schpay_rc_firstLine"
+        android:layout_marginStart="5dp"
+        android:gravity="center_vertical"
+        android:text="@string/schpay_rc_currency"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/schpay_rc_transDate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/schpay_rc_secondLine"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginEnd="10dp"
+        android:layout_toEndOf="@id/schpay_rc_icon"
+        android:gravity="center_vertical|end"
+        android:text="@string/schpay_rc_transDate"
+        android:textAlignment="textEnd"
+        android:textSize="16sp" />
+
+</RelativeLayout>

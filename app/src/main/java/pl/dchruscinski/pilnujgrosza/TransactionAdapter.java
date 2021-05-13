@@ -71,7 +71,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class ViewHolderExpense extends RecyclerView.ViewHolder {
 
-        public TextView txtHeader, txtFooter, transactionDate, categoryName;
+        public TextView txtHeader, txtFooter, currency, transactionDate, categoryName;
         public View layout;
 
         public ViewHolderExpense(View v) {
@@ -79,6 +79,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.exp_rc_firstLine);
             txtFooter = (TextView) v.findViewById(R.id.exp_rc_secondLine);
+            currency = (TextView)  v.findViewById(R.id.exp_rc_currency);
             transactionDate = (TextView) v.findViewById(R.id.exp_rc_transDate);
             categoryName = (TextView) v.findViewById(R.id.exp_rc_category);
         }
@@ -86,7 +87,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     public class ViewHolderIncome extends RecyclerView.ViewHolder {
 
-        public TextView txtHeader, txtFooter, transactionDate, categoryName;
+        public TextView txtHeader, txtFooter, currency, transactionDate, categoryName;
         public View layout;
 
         public ViewHolderIncome(View v) {
@@ -94,6 +95,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             layout = v;
             txtHeader = (TextView) v.findViewById(R.id.inc_rc_firstLine);
             txtFooter = (TextView) v.findViewById(R.id.inc_rc_secondLine);
+            currency = (TextView)  v.findViewById(R.id.inc_rc_currency);
             transactionDate = (TextView) v.findViewById(R.id.inc_rc_transDate);
             categoryName = (TextView) v.findViewById(R.id.inc_rc_category);
         }
@@ -158,6 +160,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             expenseHolder.txtHeader.setText(transactionValue.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(transactionValue) : new DecimalFormat("#.##").format(transactionValue));
             expenseHolder.txtFooter.setText(expense.getTransDescription());
+            expenseHolder.currency.setText(databaseHelper.getCurrency(chosenProfileID));
             expenseHolder.transactionDate.setText(expense.getTransDate());
             expenseHolder.categoryName.setText(databaseHelper.getExpenseCategory(expense.getTransCatID()).getExpcatName());
 
@@ -197,6 +200,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             incomeHolder.txtHeader.setText(transactionValue.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(transactionValue) : new DecimalFormat("#.##").format(transactionValue));
             incomeHolder.txtFooter.setText(income.getTransDescription());
+            incomeHolder.currency.setText(databaseHelper.getCurrency(chosenProfileID));
             incomeHolder.transactionDate.setText(income.getTransDate());
             incomeHolder.categoryName.setText(databaseHelper.getIncomeCategory(income.getTransCatID()).getInccatName());
 
@@ -583,6 +587,12 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         currency.setText(databaseHelper.getCurrency(chosenProfileID));
         description.setText(transactionsList.get(position).getTransDescription());
 
+        if (transactionsList.get(position).getTransChangeInitialBudget() == 1) {
+            changeBudgetInitialAmount.setChecked(true);
+        } else {
+            changeBudgetInitialAmount.setChecked(false);
+        }
+
         if (transactionsList.get(position).getTransCatID() != 0) {
             selectedCategory = databaseHelper.getIncomeCategory(transactionsList.get(position).getTransCatID()).getInccatName();
         } else {
@@ -683,9 +693,13 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     transactionModel.setTransDescription(description.getText().toString());
                     transactionModel.setTransDate(dateTextView.getText().toString());
                     if (changeBudgetInitialAmount.isChecked()) {
+                        transactionModel.setTransChangeInitialBudget(1);
                         databaseHelper.updateIncome(transactionsList.get(position).getTransID(), transactionModel, true);
+                        transactionsList.get(position).setTransChangeInitialBudget(1);
                     } else {
+                        transactionModel.setTransChangeInitialBudget(0);
                         databaseHelper.updateIncome(transactionsList.get(position).getTransID(), transactionModel, false);
+                        transactionsList.get(position).setTransChangeInitialBudget(0);
                     }
 
                     transactionsList.get(position).setTransDate(dateTextView.getText().toString());

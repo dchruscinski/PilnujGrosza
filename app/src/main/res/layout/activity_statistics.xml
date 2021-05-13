@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/whiteBackground"
+tools:context="pl.dchruscinski.pilnujgrosza.Statistics"
+xmlns:tools="http://schemas.android.com/tools" >
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:scrollbars="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+    <TextView
+        android:id="@+id/stat_description_info"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/stat_description_info"
+        android:textSize="20sp" >
+    </TextView>
+
+    <RadioGroup
+        android:id="@+id/stat_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/stat_description_info">
+
+        <RadioButton
+            android:id="@+id/stat_overall_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingStart="6dp"
+            android:text="@string/stat_overall_rb"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/stat_monthly_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingStart="6dp"
+            android:text="dla określonego miesiąca" />
+
+        <TextView
+            android:id="@+id/stat_text_monthly"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="36dp"
+            android:drawableStart="@drawable/baseline_today_black_24dp"
+            android:drawablePadding="10dp"
+            android:textSize="18sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:singleLine="true"
+            android:visibility="gone" >
+        </TextView>
+
+        <RadioButton
+            android:id="@+id/stat_budget_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingStart="6dp"
+            android:text="@string/stat_budget_rb" />
+
+        <Spinner
+            android:id="@+id/stat_spin_budget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/stat_budget_rb"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginHorizontal="36dp"
+            android:visibility="gone" >
+        </Spinner>
+
+        <RadioButton
+            android:id="@+id/stat_period_rb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:paddingStart="6dp"
+            android:text="@string/stat_period_rb" />
+
+        <TextView
+            android:id="@+id/stat_startDate_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="36dp"
+            android:text="@string/stat_startDate_info"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/stat_text_startDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="36dp"
+            android:drawableStart="@drawable/baseline_today_black_24dp"
+            android:drawablePadding="10dp"
+            android:textSize="18sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:singleLine="true"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/stat_endDate_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="36dp"
+            android:text="@string/stat_endDate_info"
+            android:textStyle="bold"
+            android:singleLine="true"
+            android:visibility="gone" >
+        </TextView>
+
+        <TextView
+            android:id="@+id/stat_text_endDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="36dp"
+            android:drawableStart="@drawable/baseline_today_black_24dp"
+            android:drawablePadding="10dp"
+            android:textSize="18sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:clickable="true"
+            android:singleLine="true"
+            android:visibility="gone" >
+        </TextView>
+
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/stat_submit"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/stat_radio_group"
+        android:layout_margin="20dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:text="@string/stat_submit" />
+
+</RelativeLayout>
+</ScrollView>

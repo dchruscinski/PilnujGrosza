@@ -1,5 +1,7 @@
 package pl.dchruscinski.pilnujgrosza;
 
+import java.util.Comparator;
+
 public class TransactionModel {
 
     private int transID;
@@ -10,8 +12,9 @@ public class TransactionModel {
     private int transProfID;
     private int transBudID;
     private int transCatID;
+    private int transChangeInitialBudget;
 
-    public TransactionModel(int transID, String transType, String transDescription, int transValue, String transDate, int transProfID, int transBudID, int transCatID) {
+    public TransactionModel(int transID, String transType, String transDescription, int transValue, String transDate, int transProfID, int transBudID, int transCatID, int transChangeInitialBudget) {
         this.transID = transID;
         this.transType = transType;
         this.transDescription = transDescription;
@@ -20,11 +23,40 @@ public class TransactionModel {
         this.transProfID = transProfID;
         this.transBudID = transBudID;
         this.transCatID = transCatID;
+        this.transChangeInitialBudget = transChangeInitialBudget;
     }
 
     public TransactionModel() {
 
     }
+
+    public static Comparator<TransactionModel> transactionDateAscComparator = new Comparator<TransactionModel>() {
+        @Override
+        public int compare(TransactionModel t1, TransactionModel t2) {
+            return t1.getTransDate().compareTo(t2.getTransDate());
+        }
+    };
+
+    public static Comparator<TransactionModel> transactionDateDescComparator = new Comparator<TransactionModel>() {
+        @Override
+        public int compare(TransactionModel t1, TransactionModel t2) {
+            return t2.getTransDate().compareTo(t1.getTransDate());
+        }
+    };
+
+    public static Comparator<TransactionModel> transactionValueAscComparator = new Comparator<TransactionModel>() {
+        @Override
+        public int compare(TransactionModel t1, TransactionModel t2) {
+            return t1.getTransValue() - t2.getTransValue();
+        }
+    };
+
+    public static Comparator<TransactionModel> transactionValueDescComparator = new Comparator<TransactionModel>() {
+        @Override
+        public int compare(TransactionModel t1, TransactionModel t2) {
+            return t2.getTransValue() - t1.getTransValue();
+        }
+    };
 
     @Override
     public String toString() {
@@ -33,10 +65,11 @@ public class TransactionModel {
                 ", transType='" + transType + '\'' +
                 ", transDescription='" + transDescription + '\'' +
                 ", transValue=" + transValue +
-                ", transDate=" + transDate +
+                ", transDate='" + transDate + '\'' +
                 ", transProfID=" + transProfID +
                 ", transBudID=" + transBudID +
                 ", transCatID=" + transCatID +
+                ", transChangeInitialBudget=" + transChangeInitialBudget +
                 '}';
     }
 
@@ -102,5 +135,13 @@ public class TransactionModel {
 
     public void setTransCatID(int transCatID) {
         this.transCatID = transCatID;
+    }
+
+    public int getTransChangeInitialBudget() {
+        return transChangeInitialBudget;
+    }
+
+    public void setTransChangeInitialBudget(int transChangeInitialBudget) {
+        this.transChangeInitialBudget = transChangeInitialBudget;
     }
 }

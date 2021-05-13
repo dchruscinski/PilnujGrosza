@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/whiteBackground"
+tools:context="pl.dchruscinski.pilnujgrosza.Statistics"
+xmlns:tools="http://schemas.android.com/tools" >
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_horizontal"
+    android:scrollbars="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+    <ImageView
+        android:id="@+id/stat_pres_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/pilnuj_grosza_logo_foreground"
+        android:scaleType="center"
+        android:scaleX="2"
+        android:scaleY="2">
+    </ImageView>
+
+    <TextView
+        android:id="@+id/stat_pres_title"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_below="@+id/stat_pres_logo"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:text="@string/stat_pres_title">
+    </TextView>
+
+    <TextView
+        android:id="@+id/stat_pres_startDate_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_title"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_startDate_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_startDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_title"
+        android:layout_toEndOf="@id/stat_pres_startDate_info"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_endDate_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_startDate_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_endDate_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_endDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_startDate_info"
+        android:layout_toEndOf="@id/stat_pres_endDate_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_balance_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_endDate_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_balance_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_endDate_info"
+        android:layout_toEndOf="@id/stat_pres_balance_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_balance_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_endDate_info"
+        android:layout_toEndOf="@id/stat_pres_balance"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfTransactions_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_balance_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_numberOfTransactions_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfTransactions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_balance_info"
+        android:layout_toEndOf="@id/stat_pres_numberOfTransactions_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfIncomes_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfTransactions_info"
+        android:layout_marginStart="60dp"
+        android:text="@string/stat_pres_numberOfIncomes_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfIncomes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfTransactions_info"
+        android:layout_toEndOf="@id/stat_pres_numberOfIncomes_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfExpenses_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfIncomes_info"
+        android:layout_marginStart="60dp"
+        android:text="@string/stat_pres_numberOfExpenses_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfExpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfIncomes_info"
+        android:layout_toEndOf="@id/stat_pres_numberOfExpenses_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_sumOfIncomes_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfExpenses_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_sumOfIncomes_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_sumOfIncomes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/stat_pres_numberOfExpenses_info"
+        android:layout_toEndOf="@id/stat_pres_sumOfIncomes_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_sumOfIncomes_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfExpenses_info"
+        android:layout_toEndOf="@id/stat_pres_sumOfIncomes"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_sumOfExpenses_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_sumOfIncomes_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_sumOfExpenses_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_sumOfExpenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_sumOfIncomes_info"
+        android:layout_toEndOf="@id/stat_pres_sumOfExpenses_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_sumOfExpenses_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_sumOfIncomes_info"
+        android:layout_toEndOf="@id/stat_pres_sumOfExpenses"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_maxIncome_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_sumOfExpenses_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_maxIncome_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_maxIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/stat_pres_sumOfExpenses_info"
+        android:layout_toEndOf="@id/stat_pres_maxIncome_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_maxIncome_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_sumOfExpenses_info"
+        android:layout_toEndOf="@id/stat_pres_maxIncome"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_maxExpense_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_maxIncome_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_maxExpense_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_maxExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_maxIncome_info"
+        android:layout_toEndOf="@id/stat_pres_maxExpense_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_maxExpense_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_maxIncome_info"
+        android:layout_toEndOf="@id/stat_pres_maxExpense"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageIncome_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_maxExpense_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_averageIncome_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_maxExpense_info"
+        android:layout_toEndOf="@id/stat_pres_averageIncome_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageIncome_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_maxExpense_info"
+        android:layout_toEndOf="@id/stat_pres_averageIncome"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageExpense_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageIncome_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_averageExpense_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageExpense"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageIncome_info"
+        android:layout_toEndOf="@id/stat_pres_averageExpense_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageExpense_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageIncome_info"
+        android:layout_toEndOf="@id/stat_pres_averageExpense"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfMonths_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageExpense_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_numberOfMonths_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_numberOfMonths"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageExpense_info"
+        android:layout_toEndOf="@id/stat_pres_numberOfMonths_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageIncomePerMonth_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfMonths_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_averageIncomePerMonth_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageIncomePerMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfMonths_info"
+        android:layout_toEndOf="@id/stat_pres_averageIncomePerMonth_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageIncomePerMonth_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_numberOfMonths_info"
+        android:layout_toEndOf="@id/stat_pres_averageIncomePerMonth"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageExpensePerMonth_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageIncomePerMonth_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_averageExpensePerMonth_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageExpensePerMonth"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageIncomePerMonth_info"
+        android:layout_toEndOf="@id/stat_pres_averageExpensePerMonth_info"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageExpensePerMonth_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageIncomePerMonth_info"
+        android:layout_toEndOf="@id/stat_pres_averageExpensePerMonth"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageCost_info"
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageExpensePerMonth_info"
+        android:layout_marginStart="20dp"
+        android:text="@string/stat_pres_averageCost_info" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageExpensePerMonth_info"
+        android:layout_toEndOf="@id/stat_pres_averageCost_info"
+        android:layout_marginTop="8.5dp"
+        android:layout_marginStart="10dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_averageCost_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageExpensePerMonth_info"
+        android:layout_toEndOf="@id/stat_pres_averageCost"
+        android:layout_marginTop="8.5dp"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/stat_pres_inc_pieChart_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_averageCost_info"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:text="@string/stat_pres_inc_pieChart_info" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/stat_pres_inc_pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/stat_pres_inc_pieChart_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp" >
+    </com.github.mikephil.charting.charts.PieChart>
+
+    <TextView
+        android:id="@+id/stat_pres_exp_pieChart_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/stat_pres_inc_pieChart"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:text="@string/stat_pres_exp_pieChart_info" />
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/stat_pres_exp_pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@id/stat_pres_exp_pieChart_info"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="20dp" >
+    </com.github.mikephil.charting.charts.PieChart>
+
+</RelativeLayout>
+</ScrollView>

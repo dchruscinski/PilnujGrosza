@@ -35,8 +35,7 @@
             android:layout_below="@+id/inccat_deleteform_logo"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:text="@string/inccat_deleteform_info_delete"
-            android:singleLine="true" >
+            android:text="@string/inccat_deleteform_info_delete" >
         </TextView>
 
         <TextView

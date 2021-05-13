@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 
 public class FinanceManagement extends AppCompatActivity {
-    Button budgetButton, transactionsListButton, incomeCategoriesButton, expenseCategoriesButton, calendarButton, statisticsButton;
+    Button budgetButton, transactionsListButton, scheduledPaymentsButton, incomeCategoriesButton, expenseCategoriesButton, calendarButton, statisticsButton;
     TextView actualBudget;
     // ArrayList<ProfileModel> profilesList;
     DatabaseHelper databaseHelper;
@@ -25,9 +25,9 @@ public class FinanceManagement extends AppCompatActivity {
 
         budgetButton = (Button) findViewById(R.id.finmgmt_budgetmenu_button);
         transactionsListButton = (Button) findViewById(R.id.finmgmt_transactionsList_button);
+        scheduledPaymentsButton = (Button) findViewById(R.id.finmgmt_schpay_button);
         incomeCategoriesButton = (Button) findViewById(R.id.finmgmt_inccat_button);
         expenseCategoriesButton = (Button) findViewById(R.id.finmgmt_expcat_button);
-        calendarButton = (Button) findViewById(R.id.finmgmt_calendar_button);
         statisticsButton = (Button) findViewById(R.id.finmgmt_statistics_button);
 
         budgetButton.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +44,13 @@ public class FinanceManagement extends AppCompatActivity {
             }
         });
 
+        scheduledPaymentsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(v.getContext(), ScheduledPayment.class));
+            }
+        });
+
         incomeCategoriesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,13 +62,6 @@ public class FinanceManagement extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), ExpenseCategory.class));
-            }
-        });
-
-        calendarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), TransactionCalendar.class));
             }
         });
 

@@ -20,6 +20,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@id/prof_rc_icon"
+        android:gravity="center_vertical"
         android:ellipsize="marquee"
         android:text="@string/prof_rc_secondLine"
         android:textSize="12sp"
@@ -42,7 +43,7 @@
         android:id="@+id/prof_rc_editicon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="6dip"
+        android:layout_marginEnd="10dp"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_edit_black_24dp"/>
