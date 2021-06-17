@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteBackground"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="?android:attr/colorBackground" >
 
     <ImageView
         android:id="@+id/profile_empty_logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/profile_empty_logo"
+        android:src="@drawable/baseline_account_circle_24"
         android:alpha="0.3" />
 
     <TextView

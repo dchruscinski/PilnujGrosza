@@ -1,30 +1,127 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tableLayout"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    android:background="@color/whiteBackground"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="pl.dchruscinski.pilnujgrosza.Settings">
+    android:background="?android:attr/colorBackground"
+    tools:context="pl.dchruscinski.pilnujgrosza.Settings"
+    xmlns:tools="http://schemas.android.com/tools" >
 
-    <!-- Row #3 - settings list -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+    <TextView
+        android:id="@+id/set_currency_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:text="@string/set_currency_info"
+        android:textSize="20sp" >
+    </TextView>
 
-        <!-- TextView as filler -->
-        <TextView
-            android:id="@+id/settings_text_test"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/settings_text_test"/>
-    </TableRow>
+    <EditText
+        android:id="@+id/set_currency_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_toEndOf="@id/set_currency_info"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:maxLength="4"
+        android:inputType="text"
+        android:singleLine="true" >
+    </EditText>
 
-</TableLayout>
+    <TextView
+        android:id="@+id/set_people_in_household_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/set_currency_info"
+        android:text="@string/set_people_in_household_info"
+        android:textSize="20sp" >
+    </TextView>
+
+    <EditText
+        android:id="@+id/set_people_in_household_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:layout_below="@+id/set_currency_info"
+        android:layout_toEndOf="@id/set_people_in_household_info"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:maxLength="2"
+        android:inputType="number"
+        android:singleLine="true" >
+    </EditText>
+
+    <TextView
+        android:id="@+id/set_notifications_time_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/set_people_in_household_info"
+        android:text="@string/set_notifications_time_info"
+        android:textSize="20sp" >
+    </TextView>
+
+    <TextView
+        android:id="@+id/set_notifications_time_info_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/set_people_in_household_info"
+        android:layout_toEndOf="@id/set_notifications_time_info"
+        android:textSize="20sp"
+        android:textStyle="bold" >
+    </TextView>
+
+    <Button
+        android:id="@+id/set_notifications_time_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/set_notifications_time_info"
+        android:layout_marginTop="10dp"
+        android:layout_centerInParent="true"
+        android:text="@string/set_notifications_time_button" >
+    </Button>
+
+    <TextView
+        android:id="@+id/set_night_mode_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/set_notifications_time_button"
+        android:text="@string/set_night_mode_info"
+        android:textSize="20sp" >
+    </TextView>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/set_night_mode_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/set_notifications_time_button"
+        android:layout_toEndOf="@id/set_night_mode_info">
+    </androidx.appcompat.widget.SwitchCompat>
+
+    <Button
+        android:id="@+id/set_save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:text="@string/set_save_button" >
+    </Button>
+
+</RelativeLayout>

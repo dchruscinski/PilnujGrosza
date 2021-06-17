@@ -298,6 +298,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_INCOME_CATEGORY, COLUMN_INCOME_CATEGORY_PROFILE_ID + " = " + profID, null);
         db.delete(TABLE_EXPENSE_CATEGORY, COLUMN_EXPENSE_CATEGORY_PROFILE_ID + " = " + profID, null);
         db.delete(TABLE_BUDGET, COLUMN_BUDGET_PROFILE_ID + " = " + profID, null);
+        db.delete(TABLE_SCHEDULED_PAYMENT, COLUMN_SCHEDULED_PAYMENT_PROFILE_ID + " = " + profID, null);
         db.delete(TABLE_SETTINGS, COLUMN_SETTINGS_PROFILE_ID + " = " + profID, null);
     }
 
@@ -1530,7 +1531,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
         cv.put(COLUMN_SETTINGS_NAME, "theme");
-        cv.put(COLUMN_SETTINGS_VALUE, "dark");
+        cv.put(COLUMN_SETTINGS_VALUE, "light");
         db.insert(TABLE_SETTINGS, null, cv);
         cv.clear();
 
@@ -1625,15 +1626,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return peopleInHousehold;
     }
 
-    public void updateSettings(SettingsModel settingsModel, int setID) {
+    public void updateSettings(SettingsModel settingsModel, String setName, int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_SETTINGS_VALUE, settingsModel.getSetValue());
-        db.update(TABLE_SETTINGS, cv, COLUMN_SETTINGS_ID + " = " + setID, null);
+        db.update(TABLE_SETTINGS, cv, COLUMN_SETTINGS_PROFILE_ID + " = " + profID + " AND " + COLUMN_SETTINGS_NAME + " = '" + setName + "'", null);
     }
 
-    public List<Map> getProfileStatistics() throws ParseException {
+    public List<Map> getProfileOverallStatistics() throws ParseException {
         List<Map> profileStatistics = new ArrayList<>();
         Map<String, BigDecimal> bigIntegerStatistics = new HashMap<>();
         Map<String, String> stringStatistics = new HashMap<>();
@@ -1704,7 +1705,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return profileStatistics;
     }
 
-    public List<Map> getProfileStatisticsForPieChart() {
+    public List<Map> getProfileOverallStatisticsForPieChart() {
         List<Map> profileStatisticsForPieChart = new ArrayList<>();
         Map<String, BigDecimal> incomeStatisticsForPieChart = new HashMap<>();
         Map<String, BigDecimal> expenseStatisticsForPieChart = new HashMap<>();
@@ -1750,9 +1751,402 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return profileStatisticsForPieChart;
     }
 
+    public List<Map> getProfileBudgetStatistics(int budID) throws ParseException {
+        List<Map> profileStatistics = new ArrayList<>();
+        Map<String, BigDecimal> bigIntegerStatistics = new HashMap<>();
+        Map<String, String> stringStatistics = new HashMap<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
+
+        String startDate, endDate;
+        startDate = endDate = "1900-01-01";
+
+        int sumOfIncomes, sumOfExpenses, balance, numberOfIncomes, numberOfExpenses, maxIncome, maxExpense;
+        sumOfIncomes = sumOfExpenses = numberOfIncomes = numberOfExpenses = maxIncome = maxExpense = 0;
+
+        String getProfileStatisticsStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_BUDGET_ID + " = " + budID + " ORDER BY " + COLUMN_TRANSACTION_DATE + " DESC, " + COLUMN_TRANSACTION_ID + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getProfileStatisticsStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String transType = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_TYPE));
+                int transValue = cursor.getInt(cursor.getColumnIndex(COLUMN_TRANSACTION_VALUE));
+                String transDate = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_DATE));
+
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(startDate)) <= 0 || dateFormat.parse(startDate).compareTo(dateFormat.parse("1900-01-01")) == 0) startDate = transDate;
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(endDate)) >= 0) endDate = transDate;
+
+                if (transType.equals("income")) {
+                    sumOfIncomes += transValue;
+                    numberOfIncomes++;
+                    if (transValue > maxIncome) maxIncome = transValue;
+                } else {
+                    sumOfExpenses += transValue;
+                    numberOfExpenses++;
+                    if (transValue > maxExpense) maxExpense = transValue;
+                }
+
+            } while (cursor.moveToNext());
+
+            balance = sumOfIncomes - sumOfExpenses;
+
+            int monthsBetween = getNumberOfMonthsBetweenDates(dateFormat.parse(endDate), dateFormat.parse(startDate));
+            if (numberOfIncomes + numberOfExpenses != 0 && monthsBetween == 0) monthsBetween = 1;
+
+            bigIntegerStatistics.put("balance", BigDecimal.valueOf(balance));
+            bigIntegerStatistics.put("numberOfIncomes", BigDecimal.valueOf(numberOfIncomes));
+            bigIntegerStatistics.put("numberOfExpenses", BigDecimal.valueOf(numberOfExpenses));
+            bigIntegerStatistics.put("numberOfTransactions", BigDecimal.valueOf(numberOfIncomes + numberOfExpenses));
+            bigIntegerStatistics.put("sumOfIncomes", BigDecimal.valueOf(sumOfIncomes));
+            bigIntegerStatistics.put("sumOfExpenses", BigDecimal.valueOf(sumOfExpenses));
+            bigIntegerStatistics.put("maxIncome", BigDecimal.valueOf(maxIncome));
+            bigIntegerStatistics.put("maxExpense", BigDecimal.valueOf(maxExpense));
+            bigIntegerStatistics.put("averageIncome", BigDecimal.valueOf((numberOfIncomes == 0)? 0 : sumOfIncomes / numberOfIncomes));
+            bigIntegerStatistics.put("averageExpense", BigDecimal.valueOf((numberOfExpenses == 0)? 0 : sumOfExpenses / numberOfExpenses));
+            bigIntegerStatistics.put("numberOfMonths", BigDecimal.valueOf(monthsBetween));
+            bigIntegerStatistics.put("averageIncomePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfIncomes / monthsBetween));
+            bigIntegerStatistics.put("averageExpensePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfExpenses / monthsBetween));
+            bigIntegerStatistics.put("averageCost", BigDecimal.valueOf(sumOfExpenses / getPeopleInHousehold(chosenProfileID)));
+
+            stringStatistics.put("startDate", startDate);
+            stringStatistics.put("endDate", endDate);
+        }
+
+        profileStatistics.add(bigIntegerStatistics);
+        profileStatistics.add(stringStatistics);
+
+        cursor.close();
+        return profileStatistics;
+    }
+
+    public List<Map> getProfileBudgetStatisticsForPieChart(int budID) {
+        List<Map> profileStatisticsForPieChart = new ArrayList<>();
+        Map<String, BigDecimal> incomeStatisticsForPieChart = new HashMap<>();
+        Map<String, BigDecimal> expenseStatisticsForPieChart = new HashMap<>();
+        BigDecimal value = BigDecimal.valueOf(0);
+        String sumOfTransactionsColumn = "transSum";
+
+        String getIncomeStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_INCOME_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_INCOME_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_INCOME_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_BUDGET_ID + " = " + budID + " AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        String getExpenseStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_EXPENSE_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_EXPENSE_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_EXPENSE_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_BUDGET_ID + " = " + budID + " AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor incomeCursor = db.rawQuery(getIncomeStatisticsStatement, new String[] {"income"});
+        if (incomeCursor.moveToFirst()) {
+            do {
+                int transSum = incomeCursor.getInt(incomeCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = incomeCursor.getString(incomeCursor.getColumnIndex(COLUMN_INCOME_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                incomeStatisticsForPieChart.put(transCategory, value);
+
+            } while (incomeCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(incomeStatisticsForPieChart);
+        incomeCursor.close();
+
+        Cursor expenseCursor = db.rawQuery(getExpenseStatisticsStatement, new String[] {"expense"});
+        if (expenseCursor.moveToFirst()) {
+            do {
+                int transSum = expenseCursor.getInt(expenseCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = expenseCursor.getString(expenseCursor.getColumnIndex(COLUMN_EXPENSE_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                expenseStatisticsForPieChart.put(transCategory, value);
+
+            } while (expenseCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(expenseStatisticsForPieChart);
+        expenseCursor.close();
+
+        return profileStatisticsForPieChart;
+    }
+
+    public List<Map> getProfileMonthStatistics(String month) throws ParseException {
+        List<Map> profileStatistics = new ArrayList<>();
+        Map<String, BigDecimal> bigIntegerStatistics = new HashMap<>();
+        Map<String, String> stringStatistics = new HashMap<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
+
+        String startDate, endDate;
+        startDate = endDate = "1900-01-01";
+
+        int sumOfIncomes, sumOfExpenses, balance, numberOfIncomes, numberOfExpenses, maxIncome, maxExpense;
+        sumOfIncomes = sumOfExpenses = numberOfIncomes = numberOfExpenses = maxIncome = maxExpense = 0;
+
+        String getProfileStatisticsStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + month + "-01' AND '" + month + "-31' ORDER BY " + COLUMN_TRANSACTION_DATE + " DESC, " + COLUMN_TRANSACTION_ID + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getProfileStatisticsStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String transType = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_TYPE));
+                int transValue = cursor.getInt(cursor.getColumnIndex(COLUMN_TRANSACTION_VALUE));
+                String transDate = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_DATE));
+
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(startDate)) <= 0 || dateFormat.parse(startDate).compareTo(dateFormat.parse("1900-01-01")) == 0) startDate = transDate;
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(endDate)) >= 0) endDate = transDate;
+
+                if (transType.equals("income")) {
+                    sumOfIncomes += transValue;
+                    numberOfIncomes++;
+                    if (transValue > maxIncome) maxIncome = transValue;
+                } else {
+                    sumOfExpenses += transValue;
+                    numberOfExpenses++;
+                    if (transValue > maxExpense) maxExpense = transValue;
+                }
+
+            } while (cursor.moveToNext());
+
+            balance = sumOfIncomes - sumOfExpenses;
+
+            int monthsBetween = getNumberOfMonthsBetweenDates(dateFormat.parse(endDate), dateFormat.parse(startDate));
+            if (numberOfIncomes + numberOfExpenses != 0 && monthsBetween == 0) monthsBetween = 1;
+
+            bigIntegerStatistics.put("balance", BigDecimal.valueOf(balance));
+            bigIntegerStatistics.put("numberOfIncomes", BigDecimal.valueOf(numberOfIncomes));
+            bigIntegerStatistics.put("numberOfExpenses", BigDecimal.valueOf(numberOfExpenses));
+            bigIntegerStatistics.put("numberOfTransactions", BigDecimal.valueOf(numberOfIncomes + numberOfExpenses));
+            bigIntegerStatistics.put("sumOfIncomes", BigDecimal.valueOf(sumOfIncomes));
+            bigIntegerStatistics.put("sumOfExpenses", BigDecimal.valueOf(sumOfExpenses));
+            bigIntegerStatistics.put("maxIncome", BigDecimal.valueOf(maxIncome));
+            bigIntegerStatistics.put("maxExpense", BigDecimal.valueOf(maxExpense));
+            bigIntegerStatistics.put("averageIncome", BigDecimal.valueOf((numberOfIncomes == 0)? 0 : sumOfIncomes / numberOfIncomes));
+            bigIntegerStatistics.put("averageExpense", BigDecimal.valueOf((numberOfExpenses == 0)? 0 : sumOfExpenses / numberOfExpenses));
+            bigIntegerStatistics.put("numberOfMonths", BigDecimal.valueOf(monthsBetween));
+            bigIntegerStatistics.put("averageIncomePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfIncomes / monthsBetween));
+            bigIntegerStatistics.put("averageExpensePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfExpenses / monthsBetween));
+            bigIntegerStatistics.put("averageCost", BigDecimal.valueOf(sumOfExpenses / getPeopleInHousehold(chosenProfileID)));
+
+            stringStatistics.put("startDate", startDate);
+            stringStatistics.put("endDate", endDate);
+        }
+
+        profileStatistics.add(bigIntegerStatistics);
+        profileStatistics.add(stringStatistics);
+
+        cursor.close();
+        return profileStatistics;
+    }
+
+    public List<Map> getProfileMonthStatisticsForPieChart(String month) {
+        List<Map> profileStatisticsForPieChart = new ArrayList<>();
+        Map<String, BigDecimal> incomeStatisticsForPieChart = new HashMap<>();
+        Map<String, BigDecimal> expenseStatisticsForPieChart = new HashMap<>();
+        BigDecimal value = BigDecimal.valueOf(0);
+        String sumOfTransactionsColumn = "transSum";
+
+        String getIncomeStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_INCOME_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_INCOME_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_INCOME_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + month + "-01' AND '" + month + "-31' AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        String getExpenseStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_EXPENSE_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_EXPENSE_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_EXPENSE_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + month + "-01' AND '" + month + "-31' AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor incomeCursor = db.rawQuery(getIncomeStatisticsStatement, new String[] {"income"});
+        if (incomeCursor.moveToFirst()) {
+            do {
+                int transSum = incomeCursor.getInt(incomeCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = incomeCursor.getString(incomeCursor.getColumnIndex(COLUMN_INCOME_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                incomeStatisticsForPieChart.put(transCategory, value);
+
+            } while (incomeCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(incomeStatisticsForPieChart);
+        incomeCursor.close();
+
+        Cursor expenseCursor = db.rawQuery(getExpenseStatisticsStatement, new String[] {"expense"});
+        if (expenseCursor.moveToFirst()) {
+            do {
+                int transSum = expenseCursor.getInt(expenseCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = expenseCursor.getString(expenseCursor.getColumnIndex(COLUMN_EXPENSE_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                expenseStatisticsForPieChart.put(transCategory, value);
+
+            } while (expenseCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(expenseStatisticsForPieChart);
+        expenseCursor.close();
+
+        return profileStatisticsForPieChart;
+    }
+
+    public List<Map> getProfilePeriodStatistics(String transStartDate, String transEndDate) throws ParseException {
+        List<Map> profileStatistics = new ArrayList<>();
+        Map<String, BigDecimal> bigIntegerStatistics = new HashMap<>();
+        Map<String, String> stringStatistics = new HashMap<>();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd", Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Europe/Warsaw"));
+
+        String startDate, endDate;
+        startDate = endDate = "1900-01-01";
+
+        int sumOfIncomes, sumOfExpenses, balance, numberOfIncomes, numberOfExpenses, maxIncome, maxExpense;
+        sumOfIncomes = sumOfExpenses = numberOfIncomes = numberOfExpenses = maxIncome = maxExpense = 0;
+
+        String getProfileStatisticsStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + transStartDate + "' AND '" + transEndDate + "' ORDER BY " + COLUMN_TRANSACTION_DATE + " DESC, " + COLUMN_TRANSACTION_ID + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getProfileStatisticsStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                String transType = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_TYPE));
+                int transValue = cursor.getInt(cursor.getColumnIndex(COLUMN_TRANSACTION_VALUE));
+                String transDate = cursor.getString(cursor.getColumnIndex(COLUMN_TRANSACTION_DATE));
+
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(startDate)) <= 0 || dateFormat.parse(startDate).compareTo(dateFormat.parse("1900-01-01")) == 0) startDate = transDate;
+                if (dateFormat.parse(transDate).compareTo(dateFormat.parse(endDate)) >= 0) endDate = transDate;
+
+                if (transType.equals("income")) {
+                    sumOfIncomes += transValue;
+                    numberOfIncomes++;
+                    if (transValue > maxIncome) maxIncome = transValue;
+                } else {
+                    sumOfExpenses += transValue;
+                    numberOfExpenses++;
+                    if (transValue > maxExpense) maxExpense = transValue;
+                }
+
+            } while (cursor.moveToNext());
+
+            balance = sumOfIncomes - sumOfExpenses;
+
+            int monthsBetween = getNumberOfMonthsBetweenDates(dateFormat.parse(endDate), dateFormat.parse(startDate));
+            if (numberOfIncomes + numberOfExpenses != 0 && monthsBetween == 0) monthsBetween = 1;
+
+            bigIntegerStatistics.put("balance", BigDecimal.valueOf(balance));
+            bigIntegerStatistics.put("numberOfIncomes", BigDecimal.valueOf(numberOfIncomes));
+            bigIntegerStatistics.put("numberOfExpenses", BigDecimal.valueOf(numberOfExpenses));
+            bigIntegerStatistics.put("numberOfTransactions", BigDecimal.valueOf(numberOfIncomes + numberOfExpenses));
+            bigIntegerStatistics.put("sumOfIncomes", BigDecimal.valueOf(sumOfIncomes));
+            bigIntegerStatistics.put("sumOfExpenses", BigDecimal.valueOf(sumOfExpenses));
+            bigIntegerStatistics.put("maxIncome", BigDecimal.valueOf(maxIncome));
+            bigIntegerStatistics.put("maxExpense", BigDecimal.valueOf(maxExpense));
+            bigIntegerStatistics.put("averageIncome", BigDecimal.valueOf((numberOfIncomes == 0)? 0 : sumOfIncomes / numberOfIncomes));
+            bigIntegerStatistics.put("averageExpense", BigDecimal.valueOf((numberOfExpenses == 0)? 0 : sumOfExpenses / numberOfExpenses));
+            bigIntegerStatistics.put("numberOfMonths", BigDecimal.valueOf(monthsBetween));
+            bigIntegerStatistics.put("averageIncomePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfIncomes / monthsBetween));
+            bigIntegerStatistics.put("averageExpensePerMonth", BigDecimal.valueOf((monthsBetween == 0)? 0 : sumOfExpenses / monthsBetween));
+            bigIntegerStatistics.put("averageCost", BigDecimal.valueOf(sumOfExpenses / getPeopleInHousehold(chosenProfileID)));
+
+            stringStatistics.put("startDate", startDate);
+            stringStatistics.put("endDate", endDate);
+        }
+
+        profileStatistics.add(bigIntegerStatistics);
+        profileStatistics.add(stringStatistics);
+
+        cursor.close();
+        return profileStatistics;
+    }
+
+    public List<Map> getProfilePeriodStatisticsForPieChart(String transStartDate, String transEndDate) {
+        List<Map> profileStatisticsForPieChart = new ArrayList<>();
+        Map<String, BigDecimal> incomeStatisticsForPieChart = new HashMap<>();
+        Map<String, BigDecimal> expenseStatisticsForPieChart = new HashMap<>();
+        BigDecimal value = BigDecimal.valueOf(0);
+        String sumOfTransactionsColumn = "transSum";
+
+        String getIncomeStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_INCOME_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_INCOME_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_INCOME_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + transStartDate + "' AND '" + transEndDate + "' AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        String getExpenseStatisticsStatement = "SELECT SUM(" + COLUMN_TRANSACTION_VALUE + ") AS " + sumOfTransactionsColumn + ", " + COLUMN_EXPENSE_CATEGORY_NAME + " FROM " + TABLE_TRANSACTION + " A INNER JOIN " + TABLE_EXPENSE_CATEGORY + " B ON "
+                + COLUMN_TRANSACTION_CATEGORY_ID + " = " + COLUMN_EXPENSE_CATEGORY_ID + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID +  " = " + chosenProfileID + " AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + transStartDate + "' AND '" + transEndDate + "' AND " + COLUMN_TRANSACTION_TYPE + " = ? GROUP BY 2";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor incomeCursor = db.rawQuery(getIncomeStatisticsStatement, new String[] {"income"});
+        if (incomeCursor.moveToFirst()) {
+            do {
+                int transSum = incomeCursor.getInt(incomeCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = incomeCursor.getString(incomeCursor.getColumnIndex(COLUMN_INCOME_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                incomeStatisticsForPieChart.put(transCategory, value);
+
+            } while (incomeCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(incomeStatisticsForPieChart);
+        incomeCursor.close();
+
+        Cursor expenseCursor = db.rawQuery(getExpenseStatisticsStatement, new String[] {"expense"});
+        if (expenseCursor.moveToFirst()) {
+            do {
+                int transSum = expenseCursor.getInt(expenseCursor.getColumnIndex(sumOfTransactionsColumn));
+                String transCategory = expenseCursor.getString(expenseCursor.getColumnIndex(COLUMN_EXPENSE_CATEGORY_NAME));
+
+                value = BigDecimal.valueOf(transSum).divide(BigDecimal.valueOf(100));
+                expenseStatisticsForPieChart.put(transCategory, value);
+
+            } while (expenseCursor.moveToNext());
+        }
+
+        profileStatisticsForPieChart.add(expenseStatisticsForPieChart);
+        expenseCursor.close();
+
+        return profileStatisticsForPieChart;
+    }
+
     public boolean doesUserHaveAnyTransaction(int profID) {
         SQLiteDatabase db = this.getReadableDatabase();
         String doesUserHaveAnyTransactionNameStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(doesUserHaveAnyTransactionNameStatement, new String[] {String.valueOf(profID)});
+        cursor.moveToFirst();
+
+        int transactionCounter = cursor.getCount();
+        boolean doesUserHaveAnyTransaction = (transactionCounter > 0) ? TRUE : FALSE;
+
+        cursor.close();
+        return doesUserHaveAnyTransaction;
+    }
+
+    public boolean doesUserHaveAnyTransactionInBudget(int profID, int budID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String doesUserHaveAnyTransactionNameStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID + " = ? AND " + COLUMN_TRANSACTION_BUDGET_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(doesUserHaveAnyTransactionNameStatement, new String[] {String.valueOf(profID), String.valueOf(budID)});
+        cursor.moveToFirst();
+
+        int transactionCounter = cursor.getCount();
+        boolean doesUserHaveAnyTransaction = (transactionCounter > 0) ? TRUE : FALSE;
+
+        cursor.close();
+        return doesUserHaveAnyTransaction;
+    }
+
+    public boolean doesUserHaveAnyTransactionInMonth(int profID, String month) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String doesUserHaveAnyTransactionNameStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID + " = ? AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + month + "-01' AND '" + month + "-31'";
+
+        Cursor cursor = db.rawQuery(doesUserHaveAnyTransactionNameStatement, new String[] {String.valueOf(profID)});
+        cursor.moveToFirst();
+
+        int transactionCounter = cursor.getCount();
+        boolean doesUserHaveAnyTransaction = (transactionCounter > 0) ? TRUE : FALSE;
+
+        cursor.close();
+        return doesUserHaveAnyTransaction;
+    }
+
+    public boolean doesUserHaveAnyTransactionInPeriod(int profID, String startDate, String endDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String doesUserHaveAnyTransactionNameStatement = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE " + COLUMN_TRANSACTION_PROFILE_ID + " = ? AND " + COLUMN_TRANSACTION_DATE + " BETWEEN '" + startDate + "' AND '" + endDate + "'";
 
         Cursor cursor = db.rawQuery(doesUserHaveAnyTransactionNameStatement, new String[] {String.valueOf(profID)});
         cursor.moveToFirst();

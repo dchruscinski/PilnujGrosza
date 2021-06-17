@@ -9,5 +9,17 @@
   <color name="primaryTextColor">#000000</color>
   <color name="secondaryTextColor">#ffffff</color>
   <color name="background">#C8BEBE</color>
+
+  <color name="primaryColorForDarkMode">#37474f</color>
+  <color name="primaryLightColorForDarkMode">#62727b</color>
+  <color name="primaryDarkColorForDarkMode">#102027</color>
+  <color name="secondaryColorForDarkMode">#ffcc80</color>
+  <color name="secondaryLightColorForDarkMode">#ffffb0</color>
+  <color name="secondaryDarkColorForDarkMode">#ca9b52</color>
+  <color name="primaryTextColorForDarkMode">#ffffff</color>
+  <color name="secondaryTextColorForDarkMode">#000000</color>
+  <color name="backgroundForDarkMode">#171F24</color>
+
   <color name="whiteBackground">#ffffff</color>
+  <color name="blackBackground">#000000</color>
 </resources>

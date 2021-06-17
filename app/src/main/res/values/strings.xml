@@ -329,6 +329,13 @@
     <string name="stat_pres_endDate_info">Data ostatniej transakcji:</string>
     <string name="stat_pres_inc_pieChart_info">Zależność przychodów od ich kategorii</string>
     <string name="stat_pres_exp_pieChart_info">Zależność wydatków od ich kategorii</string>
+    <string name="set_currency_info">Waluta:</string>
+    <string name="set_notifications_time_info">Godzina powiadomień:</string>
+    <string name="set_notifications_time_button">Ustaw godzinę powiadomień</string>
+    <string name="set_people_in_household_info">Liczba osób w gosp. dom.</string>
+    <string name="set_night_mode_info">Tryb nocny:</string>
+    <string name="set_save_button">Zapisz ustawienia</string>
+    <string name="set_timepicker_dialog_title">Wybierz godzinę</string>
 
 
 </resources>

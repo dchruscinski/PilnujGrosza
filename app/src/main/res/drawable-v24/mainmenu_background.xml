@@ -5,7 +5,7 @@
     android:opacity="opaque" >
 
     <!-- The background color, preferably the same as your normal theme -->
-    <item android:drawable="@android:color/background_light" />
+    <item android:drawable="?android:attr/colorBackground" />
 
     <!-- Your product logo - 144dp color version of your app icon -->
     <item>

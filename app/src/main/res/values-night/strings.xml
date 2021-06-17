@@ -1,23 +1,58 @@
 <resources>
-    <string name="app_name">PilnujGrosza</string>
+    <!-- App name -->
+    <string name="app_name">Pilnuj Grosza</string>
 
+    <!-- Main menu part -->
     <string name="menu_budget">Budżet</string>
     <string name="menu_shopping">Zakupy</string>
     <string name="menu_calendar">Kalendarz</string>
     <string name="menu_profile">Profil</string>
     <string name="menu_settings">Ustawienia</string>
-    <string name="budget_incomes">Przychody</string>
-    <string name="budget_expenses">Wydatki</string>
-    <string name="budget_summary">Podsumowanie transakcji</string>
-    <string name="budget_text_addIncome">Dodaj przychód</string>
-    <string name="budget_text_addExpense">Dodaj wydatek</string>
+
+    <!-- Shopping part -->
     <string name="shopping_text_addShopping">Dodaj zakupy</string>
     <string name="shopping_btn_shoppingLists">Listy zakupów</string>
     <string name="shopping_btn_receipts">Paragony</string>
+    <string name="shopping_text_test">Tu w przyszłości będzie lista zakupów.</string>
+
+    <!-- Calendar part -->
     <string name="calendar_text_test">Tu w przyszłości będzie kalendarz.</string>
-    <string name="title_activity_settings">Settings</string>
+
+    <!-- Profile part -->
     <string name="profile_text_addProfile">Dodaj profil</string>
     <string name="profile_text_test">Tu w przyszłości będzie lista profili.</string>
+
+    <!-- Settings part -->
+    <string name="settings_text_test">Tu w przyszłości będą ustawienia.</string>
+
+    <!-- Expenses part -->
+    <string name="expensesList_text_test">Tu w przyszłości będzie lista wydatków.</string>
+
+    <!-- Income part -->
+    <string name="incomeList_text_test">Tu w przyszłości będzie lista przychodów.</string>
+
+    <!-- Shopping list part -->
+    <string name="shoppingList_text_addShoppingList">Dodaj listę zakupów</string>
+    <string name="shoppingList_text_test">Tu w przyszłości będzie lista list zakupów.</string>
+
+    <!-- Receipt part -->
+    <string name="receipt_text_addReceipt">Dodaj paragon</string>
+    <string name="receipt_text_test">Tu w przyszłości będzie lista paragonów.</string>
+
+    <!-- Summary part -->
+    <string name="summary_text_test">Tu w przyszłości będzie ekran podsumowujący.</string>
+
+    <!-- Preference Titles -->
+    <string name="title_activity_settings">Ustawienia</string>
+    <string name="title_activity_budget">Budżet</string>
+    <string name="title_activity_shopping">Zakupy</string>
+    <string name="title_activity_calendar">Kalendarz</string>
+    <string name="title_activity_profile">Profil</string>
+    <string name="title_activity_statistics">Statystyki</string>
+    <string name="title_activity_expenses_list">Lista wydatków</string>
+    <string name="title_activity_income_list">Lista przychodów</string>
+    <string name="title_activity_receipt">Paragony</string>
+    <string name="title_activity_shopping_list">Listy zakupów</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
@@ -33,70 +68,81 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="settings_text_test">Tu w przyszłości będą ustawienia.</string>
-    <string name="shopping_text_test">Tu w przyszłości będzie lista zakupów.</string>
-    <string name="title_activity_budget">Budżet</string>
-    <string name="title_activity_shopping">Zakupy</string>
-    <string name="title_activity_calendar">Kalendarz</string>
-    <string name="title_activity_expenses_list">Lista wydatków</string>
-    <string name="title_activity_income_list">Lista przychodów</string>
-    <string name="title_activity_shopping_list">Listy zakupów</string>
-    <string name="expensesList_text_test">Tu w przyszłości będzie lista wydatków.</string>
-    <string name="shoppingList_text_test">Tu w przyszłości będzie lista list zakupów.</string>
-    <string name="prof_adapter_footer">\"Ostatnie logowanie: \"</string>
-    <string name="profile_form_name">Student Firstname</string>
-    <string name="profile_form_pin">PIN</string>
-    <string name="profile_form_initialBalance">Saldo początkowe</string>
-    <string name="prof_alertDialog_addProfile">Dodaj profil</string>
-    <string name="prof_toast_createSuccessful_true">"Dodano profil: "</string>
+
+
+    <string name="prof_adapter_footer">Ostatnie logowanie:</string>
+    <string name="profile_createform_name">Nazwa profilu</string>
+    <string name="profile_createform_email">Adres e-mail</string>
+    <string name="profile_createform_pin">Kod PIN</string>
+    <string name="profile_createform_initialBalance">Saldo początkowe (domyślnie: 0)</string>
+    <string name="prof_alertDialog_addProfile">Utwórz profil</string>
+    <string name="prof_toast_createSuccessful_true">"Profil został utworzony."</string>
     <string name="prof_toast_createSuccessful_false">Nie udało się stworzyć profilu.</string>
+    <string name="profile_editform_submit_name">Zmień nazwę profilu</string>
     <string name="profile_editform_submit_email">Zmień adres e-mail</string>
-    <string name="profile_editform_text_oldPIN">Stary kod PIN</string>
+    <string name="profile_editform_text_oldPIN">Obecny kod PIN</string>
     <string name="profile_editform_text_newPIN">Nowy kod PIN</string>
     <string name="profile_editform_text_newPIN_confirm">Potwiedź nowy kod PIN</string>
     <string name="profile_editform_submit_PIN">Zmień kod PIN</string>
-    <string name="profile_createform_submitProfile">Dodaj profil</string>
+    <string name="profile_createform_submitProfile">Utwórz profil</string>
     <string name="profile_editform_submit_deleteProfile">Usuń profil</string>
     <string name="profile_editform_email">Nowy adres e-mail</string>
     <string name="profile_editform_name">Nowa nazwa profilu</string>
     <string name="profile_loginform_info_login">Tworzenie profilu</string>
-    <string name="profile_createform_text_pin_confirm">Powtórz PIN</string>
+    <string name="profile_createform_text_pin_confirm">Powtórz kod PIN</string>
     <string name="profile_editform_info_login">Edycja profilu</string>
     <string name="profile_createform_info_login">Tworzenie profilu</string>
     <string name="title_activity_menu">Menu główne</string>
+    <string name="profile_loginform_predelete_info">Wpisz kod PIN, aby potwierdzić operację usunięcia profilu</string>
+    <string name="profile_loginform_predelete_button_login">Usuń profil</string>
     <string name="profile_createform_button_nextstage">Dalej</string>
     <string name="profile_createform_text_helperquestion_answer">Odpowiedź na pytanie pomocnicze</string>
     <string name="profile_createform_text_helperquestion_question">Pytanie pomocniczne</string>
     <string name="profile_createform_info_helperquestion">Ustawianie pytania pomocniczego</string>
-    <string name="profile_showPIN_info_helperquestion">Przypomnienie PIN</string>
+    <string name="profile_remindPIN_submitRemind">Przypomnij kod PIN</string>
+    <string name="profile_showPIN_info_helperquestion">Przypomnienie kodu PIN</string>
     <string name="profile_remindPIN_info_helperquestion">Przypomnienie kodu PIN</string>
     <string name="profile_showPIN_submitRemind">Zakończ</string>
+    <string name="profile_empty_text">Jak widzisz, nie ma tutaj żadnego profilu, stwórz go!</string>
     <string name="profile_editform_text_newHelperQuestion">Nowe pytanie pomocnicze</string>
     <string name="profile_editform_text_newHelperAnswer">Odpowiedź na nowe pytanie pomocnicze</string>
     <string name="profile_editform_submit_QandA">Zmień pytanie i odpowiedź pomocniczą</string>
     <string name="profile_fab_tooltip_addProfile">Utwórz profil</string>
+    <string name="mainmenu_addIncome_button">Dodaj przychód</string>
+    <string name="mainmenu_addExpense_button">Dodaj wydatek</string>
+    <string name="mainmenu_finMgmt_button">Zarządzanie finansami</string>
+    <string name="mainmenu_addReceipt_button">Dodaj paragon</string>
+    <string name="mainmenu_addShoppingList_button">Dodaj listę zakupów</string>
+    <string name="mainmenu_shoppingLists_button">Listy zakupów</string>
+    <string name="mainmenu_profiles_button">Wyloguj się</string>
+    <string name="mainmenu_settings_button">Ustawienia</string>
     <string name="mainmenu_receiptsList_button">Lista paragonów</string>
     <string name="prof_rc_secondLine">Description</string>
     <string name="prof_rc_firstLine">Example</string>
     <string name="expcat_rc_name">Example</string>
     <string name="expcat_empty_text">Jak widzisz, nie ma tutaj żadnej kategorii, stwórz ją!</string>
+    <string name="expcat_editform_info_edit">Edycja<br /> kategorii wydatków</string>
     <string name="expcat_editform_text_name">Nowa nazwa kategorii wydatków</string>
     <string name="expcat_editform_submit">Zmień nazwę kategorii wydatków</string>
-    <string name="expcat_create_info_login">Tworzenie kategorii wydatków</string>
+    <string name="expcat_create_info_login">Tworzenie<br /> kategorii wydatków</string>
     <string name="expcat_createform_text_name">Nazwa kategorii wydatków</string>
     <string name="expcat_createform_submit">Utwórz kategorię wydatków</string>
+    <string name="expcat_deleteform_info_delete">Usuwanie<br /> kategorii wydatków</string>
     <string name="expcat_deleteform_delete">Czy chcesz usunąć tę kategorię wydatków?</string>
     <string name="expcat_deleteform_submit">Usuń kategorię wydatków</string>
     <string name="expcat_fab_addExpense">Utwórz wydatek</string>
     <string name="expense_expcatList_button">Lista kategorii wydatków</string>
-    <string name="expense_fab_addExpense">Utwórz kategorię wydatków</string>
+    <string name="expense_fab_addExpense">Utwórz wydatkek</string>
     <string name="title_activity_expense_category">Kategorie wydatków</string>
-    <string name="trans_empty_text">Jak widzisz, nie ma żadnej transakcji, dodaj ją!</string>
+    <string name="trans_empty_text">Jak widzisz, nie ma tutaj żadnej transakcji, dodaj ją!</string>
     <string name="exp_rc_firstLine">Example</string>
     <string name="exp_rc_secondLine">Description</string>
     <string name="inc_rc_secondLine">Description</string>
     <string name="inc_rc_firstLine">Example</string>
     <string name="budget_statistics_button">Statystyki</string>
+    <string name="finmgmt_calendar_button">Kalendarz</string>
+    <string name="finmgmt_actualBudget_info_text">Aktualny budżet:</string>
+    <string name="finmgmt_budgetmenu_button">Menu budżetów</string>
     <string name="finmgmt_statistics_button">Statystyki</string>
     <string name="finmgmt_transactionsList_button">Lista transakcji</string>
     <string name="trans_fab_addIncome">Dodaj przychód</string>
@@ -105,28 +151,31 @@
     <string name="finmgmt_expcat_button">Kategorie wydatków</string>
     <string name="inccat_fab_addIncCat">Utwórz kategorię przychodów</string>
     <string name="expcat_fab_addExpCat">Utwórz kategorię wydatków</string>
+    <string name="inccat_empty_text">Jak widzisz, nie ma tutaj żadnej kategorii, stwórz ją!</string>
     <string name="inccat_rc_name">Example</string>
-    <string name="inccat_create_info_login">Tworzenie kategorii przychodów</string>
+    <string name="inccat_create_info_login">Tworzenie<br /> kategorii przychodów</string>
     <string name="inccat_createform_text_name">Nazwa kategorii przychodów</string>
     <string name="inccat_createform_submit">Utwórz kategorię przychodów</string>
-    <string name="inccat_deleteform_info_delete">Usuwanie kategorii przychodów</string>
+    <string name="inccat_deleteform_info_delete">Usuwanie<br /> kategorii przychodów</string>
     <string name="inccat_deleteform_delete">Czy chcesz usunąć tę kategorię przychodów?</string>
     <string name="inccat_deleteform_submit">Usuń kategorię przychodów</string>
-    <string name="inccat_editform_info_edit">Edycja kategorii przychodów</string>
+    <string name="inccat_editform_info_edit">Edycja<br /> kategorii przychodów</string>
     <string name="inccat_editform_text_name">Nowa nazwa kategorii przychodów</string>
-    <string name="inccat_editform_submit">Nowa nazwa kategorii przychodów</string>
+    <string name="inccat_editform_submit">Zmień nazwę kategorii przychodów</string>
     <string name="finmgmt_feeSchedule_button">Harmonogram opłat</string>
     <string name="income_create_info_login">Tworzenie przychodu</string>
     <string name="income_createform_text_value">Wartość przychodu</string>
     <string name="income_createform_submit">Utwórz przychód</string>
     <string name="income_createform_text_desc">Opis przychodu</string>
     <string name="expense_create_info_login">Tworzenie wydatku</string>
+    <string name="expense_createform_text_value">Wartość wydatku</string>
     <string name="expense_createform_text_desc">Opis wydatku</string>
     <string name="expense_createform_submit">Utwórz wydatek</string>
     <string name="title_activity_financeManagement">Zarządzanie finansami</string>
+    <string name="title_activity_income_category">Kategorie przychodów</string>
     <string name="title_activity_transaction">Lista transakcji</string>
     <string name="income_createform_spin_cat_info">Kategoria:</string>
-    <string name="income_createform_spin_budget_info">Budżet</string>
+    <string name="income_createform_spin_budget_info">Budżet:</string>
     <string name="expense_createform_spin_cat_info">Kategoria:</string>
     <string name="expense_createform_spin_budget_info">Budżet:</string>
     <string name="budget_rc_fromDate">od:</string>
@@ -138,11 +187,12 @@
     <string name="budget_createform_text_desc">Opis budżetu</string>
     <string name="budget_createform_submit">Utwórz budżet</string>
     <string name="budget_create_info_login">Tworzenie budżetu</string>
-    <string name="budget_createform_fromDate_info">Od:</string>
+    <string name="budget_createform_fromDate_info">od:</string>
     <string name="budget_createform_toDate_info">do:</string>
     <string name="budget_createform_text_initialAmount">Wysokość budżetu</string>
     <string name="budget_edit_info_login">Edycja budżetu</string>
-    <string name="budget_editform_text_initialAmount">Nowa wysokość budżetu</string>
+    <string name="budget_editform_text_initialAmount">Nowy budżet</string>
+    <string name="budget_editform_text_desc">Nowy opis budżetu</string>
     <string name="budget_editform_submit">Edytuj budżet</string>
     <string name="budget_editform_delete">Usuń budżet</string>
     <string name="budget_delete_info">Usuwanie budżetu</string>
@@ -152,7 +202,7 @@
     <string name="budget_delete_submit">Usuń budżet</string>
     <string name="budget_delete_info_delete">Czy na pewno chcesz usunąć ten budżet?</string>
     <string name="budget_empty_text">Jak widzisz, nie ma tutaj żadnego budżetu, stwórz go!</string>
-    <string name="budget_rc_amount_info">Wydane pieniądze:</string>
+    <string name="budget_rc_amount_info">wydano:</string>
     <string name="exp_rc_transDate">1900-01-01</string>
     <string name="exp_rc_category">Example</string>
     <string name="inc_rc_category">Example</string>
@@ -161,11 +211,12 @@
     <string name="income_createform_checkbox_budget">Zaliczany do budżetu</string>
     <string name="exp_rc_currency">PLN</string>
     <string name="budget_rc_currency">PLN</string>
+    <string name="budget_delete_cont_info">Usuwanie budżetu</string>
     <string name="budget_delete_cont_fromDate_info">od:</string>
     <string name="budget_delete_cont_toDate_info">do:</string>
     <string name="budget_delete_cont_text_initialAmount">Wysokość budżetu</string>
     <string name="budget_delete_cont_text_desc">Opis budżetu</string>
-    <string name="budget_delete_cont_info_delete">Czy na pewno chcesz usunąć ten budżet?</string>
+    <string name="budget_delete_cont_info_delete">Co chcesz, aby stało się z transakcjami powiązanymi z usuwanym budżetem?</string>
     <string name="budget_delete_cont_unlinkTrans">Odepnij transakcje od budżetu</string>
     <string name="budget_delete_cont_deleteTrans">Usuń transakcje razem z budżetem</string>
     <string name="income_createform_checkbox_budgetInitialAmount">Zmienia limit budżetu</string>
@@ -175,6 +226,7 @@
     <string name="budtrans_rc_startDate">1900-01-01</string>
     <string name="budtrans_rc_toDate">do:</string>
     <string name="budtrans_rc_endDate">1900-12-31</string>
+    <string name="budtrans_rc_amount_info">wydano:</string>
     <string name="budtrans_rc_amountSlider">/</string>
     <string name="budtrans_rc_currency">PLN</string>
     <string name="title_activity_budgettransaction">Lista transakcji w budżecie</string>
@@ -182,12 +234,14 @@
     <string name="expense_editform_text_value">Wartość wydatku</string>
     <string name="expense_editform_text_desc">Opis wydatku</string>
     <string name="expense_editform_spin_cat_info">Kategoria:</string>
+    <string name="expense_editform_checkbox_budget">Zaliczany do budżetu</string>
     <string name="expense_editform_spin_budget_info">Budżet:</string>
     <string name="expense_editform_submitEdit">Edytuj wydatek</string>
+    <string name="expense_deleteform_submitDelete">Usuń wydatek</string>
     <string name="expense_delete_info_login">Usuwanie wydatku</string>
-    <string name="expense_deleteform_spin_cat_info">Kategoria</string>
-    <string name="expense_deleteform_spin_budget_info">Budżet</string>
-    <string name="expense_deleteform_confirmation_info">Czy na pewno chcesz usunąć tę transakcję?</string>
+    <string name="expense_deleteform_spin_cat_info">Kategoria:</string>
+    <string name="expense_deleteform_spin_budget_info">Budżet:</string>
+    <string name="expense_deleteform_confirmation_info">Czy na pewno chcesz<br /> usunąć tę transakcję?</string>
     <string name="income_editform_info_login">Edycja przychodu</string>
     <string name="income_editform_text_value">Wartość przychodu</string>
     <string name="income_editform_text_desc">Opis przychodu</string>
@@ -195,17 +249,18 @@
     <string name="income_editform_checkbox_budget">Zaliczany do budżetu</string>
     <string name="income_editform_spin_budget_info">Budżet:</string>
     <string name="income_editform_checkbox_budgetInitialAmount">Zmienia limit budżetu</string>
+    <string name="income_editform_submitEdit">Edytuj przychód</string>
     <string name="income_editform_submitDelete">Usuń przychód</string>
     <string name="income_delete_info_login">Usuwanie przychodu</string>
-    <string name="income_deleteform_spin_cat_info">"Kategoria: "</string>
+    <string name="income_deleteform_spin_cat_info">Kategoria:</string>
     <string name="income_deleteform_spin_budget_info">Budżet:</string>
-    <string name="income_deleteform_confirmation_info">Czy na pewno chcesz usunąć tę transakcję?</string>
+    <string name="income_deleteform_confirmation_info">Czy na pewno chcesz<br /> usunąć tę transakcję?</string>
     <string name="income_deleteform_submitDelete">Usuń przychód</string>
     <string name="income_deleteform_cont_confirmation_info">Czy chcesz zmniejszyć limit budżetu o wartość tej transakcji?</string>
     <string name="income_deleteform_cont_submitChange">Tak</string>
     <string name="income_deleteform_cont_submitDontChange">Nie</string>
     <string name="income_deleteform_cont_spin_budget_info">Budżet:</string>
-    <string name="budget_rc_desc">opis:</string>
+    <string name="budget_rc_desc">description</string>
     <string name="menu_sort_action_sort">Sortuj</string>
     <string name="menu_sort_action_sort_value_asc">Wartość rosnąco</string>
     <string name="menu_sort_action_sort_value_desc">Wartość malejąco</string>
@@ -216,16 +271,16 @@
     <string name="schpay_rc_firstLine">Example</string>
     <string name="schpay_rc_currency">PLN</string>
     <string name="schpay_rc_transDate">1900-01-01</string>
-    <string name="schpay_empty_text">Jak widzisz, nie ma tutaj żadnej zaplanowanej płatności, dodaj ją!</string>
+    <string name="schpay_empty_text">Jak widzisz, nie ma tutaj<br /> żadnej zaplanowanej płatności, dodaj ją!</string>
     <string name="schpay_fab_addScheduledPayment">Dodaj zaplanowaną płatność</string>
-    <string name="schpay_create_info_login">Tworzenie zaplanowanej płatności</string>
+    <string name="schpay_create_info_login">Tworzenie<br /> zaplanowanej płatności</string>
     <string name="schpay_createform_text_value">Wartość płatności</string>
     <string name="schpay_createform_text_desc">Opis płatności</string>
     <string name="schpay_createform_spin_cat_info">Kategoria:</string>
     <string name="schpay_createform_checkbox_budget">Zaliczana do budżetu</string>
     <string name="schpay_createform_spin_budget_info">Budżet:</string>
     <string name="schpay_createform_submit">Utwórz zaplanowaną płatność</string>
-    <string name="schpay_edit_info_login">Edycja zaplanowanej płatności</string>
+    <string name="schpay_edit_info_login">Edycja<br /> zaplanowanej płatności</string>
     <string name="schpay_editform_text_value">Wartość płatności</string>
     <string name="schpay_editform_text_desc">Opis płatności</string>
     <string name="schpay_editform_spin_cat_info">Kategoria:</string>
@@ -233,43 +288,54 @@
     <string name="schpay_editform_spin_budget_info">Budżet:</string>
     <string name="schpay_editform_submitEdit">Edytuj zaplanowaną płatność</string>
     <string name="schpay_deleteform_submitDelete">Usuń zaplanowaną płatność</string>
-    <string name="schpay_delete_info_login">Usuwanie zaplanowanej płatności</string>
+    <string name="schpay_delete_info_login">Usuwanie<br /> zaplanowanej płatności</string>
     <string name="schpay_deleteform_spin_cat_info">Kategoria:</string>
     <string name="schpay_deleteform_spin_budget_info">Budżet:</string>
-    <string name="schpay_deleteform_confirmation_info">Czy na pewno chcesz usunąć tę płatność?</string>
+    <string name="schpay_deleteform_confirmation_info">Czy na pewno<br /> chcesz usunąć tę płatność?</string>
     <string name="finmgmt_schpay_button">Zaplanowane płatności</string>
     <string name="title_activity_scheduled_payment">Zaplanowane płatności</string>
-    <string name="schpay_calevent_title">\"Zaplanowana płatność: \"</string>
+    <string name="schpay_calevent_title">Zaplanowana płatność:</string>
     <string name="schpay_editform_createTransaction">Utwórz transakcję</string>
-    <string name="schpay_create_transaction_info_create">Tworzenie transakcji na podstawie zaplanowanej płatności</string>
+    <string name="schpay_create_transaction_info_create">Tworzenie transakcji<br /> na podstawie<br /> zaplanowanej płatności</string>
     <string name="schpay_create_transaction_spin_cat_info">"Kategoria: "</string>
     <string name="schpay_create_transaction_spin_budget_info">Budżet:</string>
-    <string name="schpay_create_transaction_confirmation_info">Czy na pewno chcesz utworzyć transakcję?</string>
+    <string name="schpay_create_transaction_confirmation_info">Czy na pewno<br /> chcesz utworzyć transakcję?</string>
     <string name="schpay_create_transaction_submit">Utwórz transakcję</string>
     <string name="ok">OK</string>
     <string name="cancel">Anuluj</string>
     <string name="stat_description_info">Dla jakiego okresu chcesz uzyskać dane?</string>
     <string name="stat_overall_rb">dla całości</string>
     <string name="stat_budget_rb">dla określonego budżetu</string>
+    <string name="stat_period_rb">dla określonego przedziału czasowego</string>
     <string name="stat_submit">Pokaż statystyki</string>
+    <string name="stat_startDate_info">od:</string>
     <string name="stat_endDate_info">do:</string>
-    <string name="stat_pres_title">Statystyki ogólne dla profilu %1$s%</string>
-    <string name="stat_pres_numberOfIncomes">w tym przychodów:</string>
-    <string name="stat_pres_numberOfTransactions">Liczba dokonanych transakcji</string>
-    <string name="stat_pres_numberOfExpenses">wydatków:</string>
-    <string name="stat_pres_balance">Saldo:</string>
-    <string name="stat_pres_currency" />
+    <string name="stat_pres_title">Statystyki ogólne <br /> dla profilu</string>
+    <string name="stat_pres_numberOfTransactions_info">Liczba dokonanych transakcji:</string>
+    <string name="stat_pres_numberOfIncomes_info">przychodów:</string>
+    <string name="stat_pres_numberOfExpenses_info">wydatków:</string>
+    <string name="stat_pres_balance_info">Saldo:</string>
     <string name="stat_pres_sumOfIncomes_info">Suma przychodów:</string>
-    <string name="stat_pres_sumOfExpenses_info">Suma wydatków;</string>
-    <string name="stat_pres_averageIncome_info">Średnia wartość przychodu</string>
+    <string name="stat_pres_sumOfExpenses_info">Suma wydatków:</string>
+    <string name="stat_pres_averageIncome_info">Średnia wartość przychodu:</string>
     <string name="stat_pres_averageExpense_info">Średnia wartość wydatku:</string>
-    <string name="stat_pres_numberOfMonths_info">Liczba miesięcy w okresie rozliczeniowym</string>
-    <string name="stat_pres_averageIncomePerMonth_info">Średni miesięczny przychód</string>
-    <string name="stat_pres_averageExpensePerMonth_info" />
-    <string name="stat_pres_averageCost_info">Średni miesięczny koszt na osobę przebywającą w gospodarstwie domowym</string>
-    <string name="stat_pres_maxIncome_info">Maksymalna wartość wydatku:</string>
+    <string name="stat_pres_numberOfMonths_info">Liczba miesięcy w okresie rozliczeniowym:</string>
+    <string name="stat_pres_averageIncomePerMonth_info">Średni miesięczny przychód:</string>
+    <string name="stat_pres_averageExpensePerMonth_info">Średni miesięczny wydatek:</string>
+    <string name="stat_pres_averageCost_info">Średni miesięczny koszt na osobę<br /> w gospodarstwie domowym:</string>
+    <string name="stat_pres_maxIncome_info">Maksymalna wartość przychodu:</string>
     <string name="stat_pres_maxExpense_info">Maksymalna wartość wydatku:</string>
     <string name="stat_pres_startDate_info">Data pierwszej transakcji:</string>
     <string name="stat_pres_endDate_info">Data ostatniej transakcji:</string>
     <string name="stat_pres_inc_pieChart_info">Zależność przychodów od ich kategorii</string>
+    <string name="stat_pres_exp_pieChart_info">Zależność wydatków od ich kategorii</string>
+    <string name="set_currency_info">Waluta:</string>
+    <string name="set_notifications_time_info">Godzina powiadomień:</string>
+    <string name="set_notifications_time_button">Ustaw godzinę powiadomień</string>
+    <string name="set_people_in_household_info">Liczba osób w gosp. dom.</string>
+    <string name="set_night_mode_info">Tryb nocny:</string>
+    <string name="set_save_button">Zapisz ustawienia</string>
+    <string name="set_timepicker_dialog_title">Wybierz godzinę</string>
+
+
 </resources>

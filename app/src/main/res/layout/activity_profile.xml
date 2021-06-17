@@ -5,8 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteBackground"
-
+    android:background="?android:attr/colorBackground"
     tools:context="pl.dchruscinski.pilnujgrosza.Profile">
 
     <androidx.recyclerview.widget.RecyclerView

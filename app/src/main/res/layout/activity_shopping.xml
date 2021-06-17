@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
-    android:background="@color/whiteBackground"
     android:weightSum="5"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:attr/colorBackground"
     tools:context="pl.dchruscinski.pilnujgrosza.Shopping">
 
     <!-- Row #1 - FAB "Add shopping" and description text view -->

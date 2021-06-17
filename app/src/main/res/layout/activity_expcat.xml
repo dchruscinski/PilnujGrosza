@@ -5,9 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteBackground"
-
-    tools:context="pl.dchruscinski.pilnujgrosza.ExpenseCategory">
+    android:background="?android:attr/colorBackground"
+   tools:context="pl.dchruscinski.pilnujgrosza.ExpenseCategory">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expcat_list_rc"

@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/whiteBackground"
     android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?android:attr/colorBackground" >
 
     <ImageView
         android:id="@+id/trans_empty_logo"
@@ -20,5 +20,5 @@
         android:layout_marginTop="16dp"
         android:text="@string/trans_empty_text"
         android:alpha="0.3"
-        android:textColor="#000000" />
+        android:textColor="?attr/colorOnPrimary" />
 </LinearLayout>

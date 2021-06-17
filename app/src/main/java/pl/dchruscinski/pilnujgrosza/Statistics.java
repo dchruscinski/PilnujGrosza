@@ -178,17 +178,17 @@ public class Statistics extends AppCompatActivity {
                         startActivity(intent);
                     }
                 } else if (budgetButton.isChecked()) {
-                    if (!databaseHelper.doesUserHaveAnyTransaction(chosenProfileID)) {
+                    if (!databaseHelper.doesUserHaveAnyTransactionInBudget(chosenProfileID, (int) budget.getSelectedItemId())) {
                         submit.requestFocus();
                         submit.setError("Użytkownik nie dokonał jeszcze żadnej transakcji.");
                     } else {
                         Intent intent = new Intent(v.getContext(), StatisticsPresentation.class)
                                 .putExtra("type","budget")
-                                .putExtra("budID", budget.getSelectedItemId());
+                                .putExtra("budID", (int) budget.getSelectedItemId());
                         startActivity(intent);
                     }
                 } else if (monthlyButton.isChecked()) {
-                    if (!databaseHelper.doesUserHaveAnyTransaction(chosenProfileID)) {
+                    if (!databaseHelper.doesUserHaveAnyTransactionInMonth(chosenProfileID, monthlyDateTextView.getText().toString())) {
                         submit.requestFocus();
                         submit.setError("Użytkownik nie dokonał jeszcze żadnej transakcji.");
                     } else {
@@ -198,7 +198,7 @@ public class Statistics extends AppCompatActivity {
                         startActivity(intent);
                     }
                 } else {
-                    if (!databaseHelper.doesUserHaveAnyTransaction(chosenProfileID)) {
+                    if (!databaseHelper.doesUserHaveAnyTransactionInPeriod(chosenProfileID, startDateTextView.getText().toString(), endDateTextView.getText().toString())) {
                         submit.requestFocus();
                         submit.setError("Użytkownik nie dokonał jeszcze żadnej transakcji.");
                     } else {

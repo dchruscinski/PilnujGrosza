@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:layout_marginTop="20dp"
     android:layout_marginBottom="20dp"
-    android:background="@color/whiteBackground"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="?android:attr/colorBackground"
     tools:context="pl.dchruscinski.pilnujgrosza.FinanceManagement">
 
     <!-- Row #1 - budget menu -->

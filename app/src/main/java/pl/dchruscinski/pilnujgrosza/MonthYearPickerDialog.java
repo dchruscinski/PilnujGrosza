@@ -20,6 +20,7 @@ import java.util.Calendar;
 
 public class MonthYearPickerDialog extends DialogFragment {
 
+    private static final int MIN_YEAR = 2000;
     private static final int MAX_YEAR = 2099;
     private DatePickerDialog.OnDateSetListener listener;
     private Calendar calendar;
@@ -43,13 +44,13 @@ public class MonthYearPickerDialog extends DialogFragment {
         final NumberPicker monthPicker = (NumberPicker) dialog.findViewById(R.id.picker_month);
 
         int year = calendar.get(Calendar.YEAR);
-        yearPicker.setMinValue(year);
+        yearPicker.setMinValue(MIN_YEAR);
         yearPicker.setMaxValue(MAX_YEAR);
         yearPicker.setValue(year);
 
         monthPicker.setMinValue(1);
         monthPicker.setMaxValue(12);
-        monthPicker.setValue(calendar.get(Calendar.MONTH));
+        monthPicker.setValue(calendar.get(Calendar.MONTH)+1);
 
         builder.setView(dialog)
                 // Add action buttons

@@ -3,23 +3,18 @@ package pl.dchruscinski.pilnujgrosza;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.listener.ChartTouchListener;
 import com.github.mikephil.charting.listener.OnChartGestureListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -43,7 +38,7 @@ public class StatisticsPresentation extends AppCompatActivity {
     Map<String, BigDecimal> incomePieChartStatistics = new HashMap<>();
     Map<String, BigDecimal> expensePieChartStatistics = new HashMap<>();
     TextView startDateTextView, endDateTextView, numberOfTransactionsTextView, balanceCurrencyTextView, numberOfIncomesTextView, numberOfExpensesTextView, balanceTextView, sumOfIncomesTextView, sumOfExpensesTextView, averageIncomeTextView,
-            averageExpenseTextView, averageIncomePerMonthTextView, averageExpensePerMonthTextView, averageCostTextView, maxIncomeTextView, maxExpenseTextView, numberOfMonthsTextView, titleTextView,
+            averageExpenseTextView, averageIncomePerMonthTextView, averageExpensePerMonthTextView, averageCostTextView, maxIncomeTextView, maxExpenseTextView, numberOfMonthsTextView, titleTextView, titleSecondLineTextView,
             sumOfIncomesCurrencyTextView, sumOfExpensesCurrencyTextView, averageIncomeCurrencyTextView, averageExpenseCurrencyTextView, averageIncomePerMonthCurrencyTextView, averageExpensePerMonthCurrencyTextView,
             averageCostCurrencyTextView, maxIncomeCurrencyTextView, maxExpenseCurrencyTextView;
     PieChart incomePieChart, expensePieChart;
@@ -86,7 +81,7 @@ public class StatisticsPresentation extends AppCompatActivity {
 
         if (getIntent().getExtras() != null && getIntent().getStringExtra("type").equals("overall")) {
             try {
-                profileStringStatistics = databaseHelper.getProfileStatistics();
+                profileStringStatistics = databaseHelper.getProfileOverallStatistics();
                 bigIntegerStringStatistics = profileStringStatistics.get(0);
                 stringStringStatistics = profileStringStatistics.get(1);
 
@@ -182,7 +177,7 @@ public class StatisticsPresentation extends AppCompatActivity {
             maxExpenseTextView.setText(String.valueOf(maxExpense));
             maxExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
 
-            profilePieChartGStatistics = databaseHelper.getProfileStatisticsForPieChart();
+            profilePieChartGStatistics = databaseHelper.getProfileOverallStatisticsForPieChart();
             incomePieChartStatistics = profilePieChartGStatistics.get(0);
             expensePieChartStatistics = profilePieChartGStatistics.get(1);
             ArrayList<BigDecimal> incomeValuesList = new ArrayList<>(incomePieChartStatistics.values());
@@ -332,19 +327,753 @@ public class StatisticsPresentation extends AppCompatActivity {
 
         } else if (getIntent().getExtras() != null && getIntent().getStringExtra("type").equals("budget")) {
             int budID = getIntent().getExtras().getInt("budID");
+            String budgetName = databaseHelper.getBudget(budID).getBudStartDate() + " <> " + databaseHelper.getBudget(budID).getBudEndDate();
+            try {
+                profileStringStatistics = databaseHelper.getProfileBudgetStatistics(budID);
+                bigIntegerStringStatistics = profileStringStatistics.get(0);
+                stringStringStatistics = profileStringStatistics.get(1);
 
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            startDate = stringStringStatistics.get("startDate");
+            endDate = stringStringStatistics.get("endDate");
+
+            numberOfTransactions = bigIntegerStringStatistics.get("numberOfTransactions");
+            numberOfIncomes = bigIntegerStringStatistics.get("numberOfIncomes");
+            numberOfExpenses = bigIntegerStringStatistics.get("numberOfExpenses");
+            balance = bigIntegerStringStatistics.get("balance");
+            sumOfIncomes = bigIntegerStringStatistics.get("sumOfIncomes");
+            sumOfExpenses = bigIntegerStringStatistics.get("sumOfExpenses");
+            averageIncome = bigIntegerStringStatistics.get("averageIncome");
+            averageExpense = bigIntegerStringStatistics.get("averageExpense");
+            numberOfMonths = bigIntegerStringStatistics.get("numberOfMonths");
+            averageIncomePerMonth = bigIntegerStringStatistics.get("averageIncomePerMonth");
+            averageExpensePerMonth = bigIntegerStringStatistics.get("averageExpensePerMonth");
+            averageCost = bigIntegerStringStatistics.get("averageCost");
+            maxIncome = bigIntegerStringStatistics.get("maxIncome");
+            maxExpense = bigIntegerStringStatistics.get("maxExpense");
+
+            balance = balance.divide(BigDecimal.valueOf(100));
+            sumOfIncomes = sumOfIncomes.divide(BigDecimal.valueOf(100));
+            sumOfExpenses = sumOfExpenses.divide(BigDecimal.valueOf(100));
+            averageIncome = averageIncome.divide(BigDecimal.valueOf(100));
+            averageExpense = averageExpense.divide(BigDecimal.valueOf(100));
+            averageIncomePerMonth = averageIncomePerMonth.divide(BigDecimal.valueOf(100));
+            averageExpensePerMonth = averageExpensePerMonth.divide(BigDecimal.valueOf(100));
+            averageCost = averageCost.divide(BigDecimal.valueOf(100));
+            maxIncome = maxIncome.divide(BigDecimal.valueOf(100));
+            maxExpense = maxExpense.divide(BigDecimal.valueOf(100));
+
+            startDateTextView = findViewById(R.id.stat_pres_startDate);
+            endDateTextView = findViewById(R.id.stat_pres_endDate);
+            titleTextView = findViewById(R.id.stat_pres_title);
+            titleSecondLineTextView = findViewById(R.id.stat_pres_title_second_line);
+            numberOfTransactionsTextView = findViewById(R.id.stat_pres_numberOfTransactions);
+            balanceTextView = findViewById(R.id.stat_pres_balance);
+            balanceCurrencyTextView = findViewById(R.id.stat_pres_balance_currency);
+            numberOfIncomesTextView = findViewById(R.id.stat_pres_numberOfIncomes);
+            numberOfExpensesTextView = findViewById(R.id.stat_pres_numberOfExpenses);
+            sumOfIncomesTextView = findViewById(R.id.stat_pres_sumOfIncomes);
+            sumOfIncomesCurrencyTextView = findViewById(R.id.stat_pres_sumOfIncomes_currency);
+            sumOfExpensesTextView = findViewById(R.id.stat_pres_sumOfExpenses);
+            sumOfExpensesCurrencyTextView = findViewById(R.id.stat_pres_sumOfExpenses_currency);
+            averageIncomeTextView = findViewById(R.id.stat_pres_averageIncome);
+            averageIncomeCurrencyTextView = findViewById(R.id.stat_pres_averageIncome_currency);
+            averageExpenseTextView = findViewById(R.id.stat_pres_averageExpense);
+            averageExpenseCurrencyTextView = findViewById(R.id.stat_pres_averageExpense_currency);
+            numberOfMonthsTextView = findViewById(R.id.stat_pres_numberOfMonths);
+            averageIncomePerMonthTextView = findViewById(R.id.stat_pres_averageIncomePerMonth);
+            averageIncomePerMonthCurrencyTextView = findViewById(R.id.stat_pres_averageIncomePerMonth_currency);
+            averageExpensePerMonthTextView = findViewById(R.id.stat_pres_averageExpensePerMonth);
+            averageExpensePerMonthCurrencyTextView = findViewById(R.id.stat_pres_averageExpensePerMonth_currency);
+            averageCostTextView = findViewById(R.id.stat_pres_averageCost);
+            averageCostCurrencyTextView = findViewById(R.id.stat_pres_averageCost_currency);
+            maxIncomeTextView = findViewById(R.id.stat_pres_maxIncome);
+            maxIncomeCurrencyTextView = findViewById(R.id.stat_pres_maxIncome_currency);
+            maxExpenseTextView = findViewById(R.id.stat_pres_maxExpense);
+            maxExpenseCurrencyTextView = findViewById(R.id.stat_pres_maxExpense_currency);
+
+
+            activityTitle = "Statystyki budżetu dla profilu: " + databaseHelper.getProfile(chosenProfileID).getProfName();
+            titleTextView.setText(activityTitle);
+            titleSecondLineTextView.setText(budgetName);
+
+            startDateTextView.setText(startDate);
+            endDateTextView.setText(endDate);
+            numberOfTransactionsTextView.setText(String.valueOf(numberOfTransactions));
+            balanceCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            numberOfIncomesTextView.setText(String.valueOf(numberOfIncomes));
+            numberOfExpensesTextView.setText(String.valueOf(numberOfExpenses));
+            balanceTextView.setText(String.valueOf(balance));
+            sumOfIncomesTextView.setText(String.valueOf(sumOfIncomes));
+            sumOfIncomesCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            sumOfExpensesTextView.setText(String.valueOf(sumOfExpenses));
+            sumOfExpensesCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageIncomeTextView.setText(String.valueOf(averageIncome));
+            averageIncomeCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageExpenseTextView.setText(String.valueOf(averageExpense));
+            averageExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            numberOfMonthsTextView.setText(String.valueOf(numberOfMonths));
+            averageIncomePerMonthTextView.setText(String.valueOf(averageIncomePerMonth));
+            averageIncomePerMonthCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageExpensePerMonthTextView.setText(String.valueOf(averageExpensePerMonth));
+            averageExpensePerMonthCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageCostTextView.setText(String.valueOf(averageCost));
+            averageCostCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            maxIncomeTextView.setText(String.valueOf(maxIncome));
+            maxIncomeCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            maxExpenseTextView.setText(String.valueOf(maxExpense));
+            maxExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+
+            profilePieChartGStatistics = databaseHelper.getProfileBudgetStatisticsForPieChart(budID);
+            incomePieChartStatistics = profilePieChartGStatistics.get(0);
+            expensePieChartStatistics = profilePieChartGStatistics.get(1);
+            ArrayList<BigDecimal> incomeValuesList = new ArrayList<>(incomePieChartStatistics.values());
+            ArrayList<String> incomeKeysList = new ArrayList<>(incomePieChartStatistics.keySet());
+            ArrayList<BigDecimal> expenseValuesList = new ArrayList<>(expensePieChartStatistics.values());
+            ArrayList<String> expenseKeysList = new ArrayList<>(expensePieChartStatistics.keySet());
+
+            noDataText = "Brak danych";
+
+            incomePieChart = findViewById(R.id.stat_pres_inc_pieChart);
+            incomePieChart.setBackgroundColor(Color.WHITE);
+            incomePieChart.setUsePercentValues(true);
+            areIncomePieChartValuesPercentage = true;
+            incomePieChart.setDrawHoleEnabled(true);
+            incomePieChart.setNoDataText(noDataText);
+            incomePieChart.getDescription().setEnabled(false);
+            incomePieChart.setEntryLabelColor(Color.BLACK);
+
+            expensePieChart = findViewById(R.id.stat_pres_exp_pieChart);
+            expensePieChart.setBackgroundColor(Color.WHITE);
+            expensePieChart.setUsePercentValues(true);
+            areExpensePieChartValuesPercentage = true;
+            expensePieChart.setDrawHoleEnabled(true);
+            expensePieChart.setNoDataText(noDataText);
+            expensePieChart.getDescription().setEnabled(false);
+            expensePieChart.setEntryLabelColor(Color.BLACK);
+
+            if (incomeValuesList.size() > 0) {
+                setData(incomeValuesList, incomeKeysList, "Katgorie przychodów", incomePieChart, dataSetColors);
+            }
+            if (expenseValuesList.size() > 0) {
+                setData(expenseValuesList, expenseKeysList, "Katgorie wydatków", expensePieChart, dataSetColors);
+            }
+
+            Legend incomePieChartLegend = incomePieChart.getLegend();
+            incomePieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            incomePieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            incomePieChartLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            incomePieChartLegend.setDrawInside(false);
+            incomePieChartLegend.setWordWrapEnabled(true);
+
+            Legend expensePieChartLegend = expensePieChart.getLegend();
+            expensePieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            expensePieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            expensePieChartLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            expensePieChartLegend.setDrawInside(false);
+            expensePieChartLegend.setWordWrapEnabled(true);
+
+
+
+            incomePieChart.setOnChartGestureListener(new OnChartGestureListener() {
+                @Override
+                public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartLongPressed(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartDoubleTapped(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartSingleTapped(MotionEvent me) {
+                    if (areIncomePieChartValuesPercentage) {
+                        incomePieChart.setUsePercentValues(false);
+                        areIncomePieChartValuesPercentage = false;
+                    } else {
+                        incomePieChart.setUsePercentValues(true);
+                        areIncomePieChartValuesPercentage = true;
+                    }
+                }
+
+                @Override
+                public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+                }
+
+                @Override
+                public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+                }
+
+                @Override
+                public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+                }
+            });
+
+            expensePieChart.setOnChartGestureListener(new OnChartGestureListener() {
+                @Override
+                public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartLongPressed(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartDoubleTapped(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartSingleTapped(MotionEvent me) {
+                    if (areExpensePieChartValuesPercentage) {
+                        expensePieChart.setUsePercentValues(false);
+                        areExpensePieChartValuesPercentage = false;
+                    } else {
+                        expensePieChart.setUsePercentValues(true);
+                        areExpensePieChartValuesPercentage = true;
+                    }
+
+                }
+
+                @Override
+                public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+                }
+
+                @Override
+                public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+                }
+
+                @Override
+                public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+                }
+            });
 
         } else if (getIntent().getExtras() != null && getIntent().getStringExtra("type").equals("monthly")) {
             String monthDate = getIntent().getExtras().getString("month");
+            try {
+                profileStringStatistics = databaseHelper.getProfileMonthStatistics(monthDate);
+                bigIntegerStringStatistics = profileStringStatistics.get(0);
+                stringStringStatistics = profileStringStatistics.get(1);
 
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            startDate = stringStringStatistics.get("startDate");
+            endDate = stringStringStatistics.get("endDate");
+
+            numberOfTransactions = bigIntegerStringStatistics.get("numberOfTransactions");
+            numberOfIncomes = bigIntegerStringStatistics.get("numberOfIncomes");
+            numberOfExpenses = bigIntegerStringStatistics.get("numberOfExpenses");
+            balance = bigIntegerStringStatistics.get("balance");
+            sumOfIncomes = bigIntegerStringStatistics.get("sumOfIncomes");
+            sumOfExpenses = bigIntegerStringStatistics.get("sumOfExpenses");
+            averageIncome = bigIntegerStringStatistics.get("averageIncome");
+            averageExpense = bigIntegerStringStatistics.get("averageExpense");
+            numberOfMonths = bigIntegerStringStatistics.get("numberOfMonths");
+            averageIncomePerMonth = bigIntegerStringStatistics.get("averageIncomePerMonth");
+            averageExpensePerMonth = bigIntegerStringStatistics.get("averageExpensePerMonth");
+            averageCost = bigIntegerStringStatistics.get("averageCost");
+            maxIncome = bigIntegerStringStatistics.get("maxIncome");
+            maxExpense = bigIntegerStringStatistics.get("maxExpense");
+
+            balance = balance.divide(BigDecimal.valueOf(100));
+            sumOfIncomes = sumOfIncomes.divide(BigDecimal.valueOf(100));
+            sumOfExpenses = sumOfExpenses.divide(BigDecimal.valueOf(100));
+            averageIncome = averageIncome.divide(BigDecimal.valueOf(100));
+            averageExpense = averageExpense.divide(BigDecimal.valueOf(100));
+            averageIncomePerMonth = averageIncomePerMonth.divide(BigDecimal.valueOf(100));
+            averageExpensePerMonth = averageExpensePerMonth.divide(BigDecimal.valueOf(100));
+            averageCost = averageCost.divide(BigDecimal.valueOf(100));
+            maxIncome = maxIncome.divide(BigDecimal.valueOf(100));
+            maxExpense = maxExpense.divide(BigDecimal.valueOf(100));
+
+            startDateTextView = findViewById(R.id.stat_pres_startDate);
+            endDateTextView = findViewById(R.id.stat_pres_endDate);
+            titleTextView = findViewById(R.id.stat_pres_title);
+            titleSecondLineTextView = findViewById(R.id.stat_pres_title_second_line);
+            numberOfTransactionsTextView = findViewById(R.id.stat_pres_numberOfTransactions);
+            balanceTextView = findViewById(R.id.stat_pres_balance);
+            balanceCurrencyTextView = findViewById(R.id.stat_pres_balance_currency);
+            numberOfIncomesTextView = findViewById(R.id.stat_pres_numberOfIncomes);
+            numberOfExpensesTextView = findViewById(R.id.stat_pres_numberOfExpenses);
+            sumOfIncomesTextView = findViewById(R.id.stat_pres_sumOfIncomes);
+            sumOfIncomesCurrencyTextView = findViewById(R.id.stat_pres_sumOfIncomes_currency);
+            sumOfExpensesTextView = findViewById(R.id.stat_pres_sumOfExpenses);
+            sumOfExpensesCurrencyTextView = findViewById(R.id.stat_pres_sumOfExpenses_currency);
+            averageIncomeTextView = findViewById(R.id.stat_pres_averageIncome);
+            averageIncomeCurrencyTextView = findViewById(R.id.stat_pres_averageIncome_currency);
+            averageExpenseTextView = findViewById(R.id.stat_pres_averageExpense);
+            averageExpenseCurrencyTextView = findViewById(R.id.stat_pres_averageExpense_currency);
+            numberOfMonthsTextView = findViewById(R.id.stat_pres_numberOfMonths);
+            averageIncomePerMonthTextView = findViewById(R.id.stat_pres_averageIncomePerMonth);
+            averageIncomePerMonthCurrencyTextView = findViewById(R.id.stat_pres_averageIncomePerMonth_currency);
+            averageExpensePerMonthTextView = findViewById(R.id.stat_pres_averageExpensePerMonth);
+            averageExpensePerMonthCurrencyTextView = findViewById(R.id.stat_pres_averageExpensePerMonth_currency);
+            averageCostTextView = findViewById(R.id.stat_pres_averageCost);
+            averageCostCurrencyTextView = findViewById(R.id.stat_pres_averageCost_currency);
+            maxIncomeTextView = findViewById(R.id.stat_pres_maxIncome);
+            maxIncomeCurrencyTextView = findViewById(R.id.stat_pres_maxIncome_currency);
+            maxExpenseTextView = findViewById(R.id.stat_pres_maxExpense);
+            maxExpenseCurrencyTextView = findViewById(R.id.stat_pres_maxExpense_currency);
+
+
+            activityTitle = "Statystyki miesięczne dla profilu: " + databaseHelper.getProfile(chosenProfileID).getProfName();
+            titleTextView.setText(activityTitle);
+            titleSecondLineTextView.setText(monthDate);
+
+            startDateTextView.setText(startDate);
+            endDateTextView.setText(endDate);
+            numberOfTransactionsTextView.setText(String.valueOf(numberOfTransactions));
+            balanceCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            numberOfIncomesTextView.setText(String.valueOf(numberOfIncomes));
+            numberOfExpensesTextView.setText(String.valueOf(numberOfExpenses));
+            balanceTextView.setText(String.valueOf(balance));
+            sumOfIncomesTextView.setText(String.valueOf(sumOfIncomes));
+            sumOfIncomesCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            sumOfExpensesTextView.setText(String.valueOf(sumOfExpenses));
+            sumOfExpensesCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageIncomeTextView.setText(String.valueOf(averageIncome));
+            averageIncomeCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageExpenseTextView.setText(String.valueOf(averageExpense));
+            averageExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            numberOfMonthsTextView.setText(String.valueOf(numberOfMonths));
+            averageIncomePerMonthTextView.setText(String.valueOf(averageIncomePerMonth));
+            averageIncomePerMonthCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageExpensePerMonthTextView.setText(String.valueOf(averageExpensePerMonth));
+            averageExpensePerMonthCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageCostTextView.setText(String.valueOf(averageCost));
+            averageCostCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            maxIncomeTextView.setText(String.valueOf(maxIncome));
+            maxIncomeCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            maxExpenseTextView.setText(String.valueOf(maxExpense));
+            maxExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+
+            profilePieChartGStatistics = databaseHelper.getProfileMonthStatisticsForPieChart(monthDate);
+            incomePieChartStatistics = profilePieChartGStatistics.get(0);
+            expensePieChartStatistics = profilePieChartGStatistics.get(1);
+            ArrayList<BigDecimal> incomeValuesList = new ArrayList<>(incomePieChartStatistics.values());
+            ArrayList<String> incomeKeysList = new ArrayList<>(incomePieChartStatistics.keySet());
+            ArrayList<BigDecimal> expenseValuesList = new ArrayList<>(expensePieChartStatistics.values());
+            ArrayList<String> expenseKeysList = new ArrayList<>(expensePieChartStatistics.keySet());
+
+            noDataText = "Brak danych";
+
+            incomePieChart = findViewById(R.id.stat_pres_inc_pieChart);
+            incomePieChart.setBackgroundColor(Color.WHITE);
+            incomePieChart.setUsePercentValues(true);
+            areIncomePieChartValuesPercentage = true;
+            incomePieChart.setDrawHoleEnabled(true);
+            incomePieChart.setNoDataText(noDataText);
+            incomePieChart.getDescription().setEnabled(false);
+            incomePieChart.setEntryLabelColor(Color.BLACK);
+
+            expensePieChart = findViewById(R.id.stat_pres_exp_pieChart);
+            expensePieChart.setBackgroundColor(Color.WHITE);
+            expensePieChart.setUsePercentValues(true);
+            areExpensePieChartValuesPercentage = true;
+            expensePieChart.setDrawHoleEnabled(true);
+            expensePieChart.setNoDataText(noDataText);
+            expensePieChart.getDescription().setEnabled(false);
+            expensePieChart.setEntryLabelColor(Color.BLACK);
+
+            if (incomeValuesList.size() > 0) {
+                setData(incomeValuesList, incomeKeysList, "Katgorie przychodów", incomePieChart, dataSetColors);
+            }
+            if (expenseValuesList.size() > 0) {
+                setData(expenseValuesList, expenseKeysList, "Katgorie wydatków", expensePieChart, dataSetColors);
+            }
+
+            Legend incomePieChartLegend = incomePieChart.getLegend();
+            incomePieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            incomePieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            incomePieChartLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            incomePieChartLegend.setDrawInside(false);
+            incomePieChartLegend.setWordWrapEnabled(true);
+
+            Legend expensePieChartLegend = expensePieChart.getLegend();
+            expensePieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            expensePieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            expensePieChartLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            expensePieChartLegend.setDrawInside(false);
+            expensePieChartLegend.setWordWrapEnabled(true);
+
+            incomePieChart.setOnChartGestureListener(new OnChartGestureListener() {
+                @Override
+                public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartLongPressed(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartDoubleTapped(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartSingleTapped(MotionEvent me) {
+                    if (areIncomePieChartValuesPercentage) {
+                        incomePieChart.setUsePercentValues(false);
+                        areIncomePieChartValuesPercentage = false;
+                    } else {
+                        incomePieChart.setUsePercentValues(true);
+                        areIncomePieChartValuesPercentage = true;
+                    }
+                }
+
+                @Override
+                public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+                }
+
+                @Override
+                public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+                }
+
+                @Override
+                public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+                }
+            });
+
+            expensePieChart.setOnChartGestureListener(new OnChartGestureListener() {
+                @Override
+                public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartLongPressed(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartDoubleTapped(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartSingleTapped(MotionEvent me) {
+                    if (areExpensePieChartValuesPercentage) {
+                        expensePieChart.setUsePercentValues(false);
+                        areExpensePieChartValuesPercentage = false;
+                    } else {
+                        expensePieChart.setUsePercentValues(true);
+                        areExpensePieChartValuesPercentage = true;
+                    }
+
+                }
+
+                @Override
+                public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+                }
+
+                @Override
+                public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+                }
+
+                @Override
+                public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+                }
+            });
 
         } else if (getIntent().getExtras() != null && getIntent().getStringExtra("type").equals("period")) {
-            String startDate = getIntent().getExtras().getString("startDate");
-            String endDate = getIntent().getExtras().getString("endDate");
+            String transStartDate = getIntent().getExtras().getString("startDate");
+            String transEndDate = getIntent().getExtras().getString("endDate");
 
+            try {
+                profileStringStatistics = databaseHelper.getProfilePeriodStatistics(transStartDate, transEndDate);
+                bigIntegerStringStatistics = profileStringStatistics.get(0);
+                stringStringStatistics = profileStringStatistics.get(1);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            startDate = stringStringStatistics.get("startDate");
+            endDate = stringStringStatistics.get("endDate");
+
+            numberOfTransactions = bigIntegerStringStatistics.get("numberOfTransactions");
+            numberOfIncomes = bigIntegerStringStatistics.get("numberOfIncomes");
+            numberOfExpenses = bigIntegerStringStatistics.get("numberOfExpenses");
+            balance = bigIntegerStringStatistics.get("balance");
+            sumOfIncomes = bigIntegerStringStatistics.get("sumOfIncomes");
+            sumOfExpenses = bigIntegerStringStatistics.get("sumOfExpenses");
+            averageIncome = bigIntegerStringStatistics.get("averageIncome");
+            averageExpense = bigIntegerStringStatistics.get("averageExpense");
+            numberOfMonths = bigIntegerStringStatistics.get("numberOfMonths");
+            averageIncomePerMonth = bigIntegerStringStatistics.get("averageIncomePerMonth");
+            averageExpensePerMonth = bigIntegerStringStatistics.get("averageExpensePerMonth");
+            averageCost = bigIntegerStringStatistics.get("averageCost");
+            maxIncome = bigIntegerStringStatistics.get("maxIncome");
+            maxExpense = bigIntegerStringStatistics.get("maxExpense");
+
+            balance = balance.divide(BigDecimal.valueOf(100));
+            sumOfIncomes = sumOfIncomes.divide(BigDecimal.valueOf(100));
+            sumOfExpenses = sumOfExpenses.divide(BigDecimal.valueOf(100));
+            averageIncome = averageIncome.divide(BigDecimal.valueOf(100));
+            averageExpense = averageExpense.divide(BigDecimal.valueOf(100));
+            averageIncomePerMonth = averageIncomePerMonth.divide(BigDecimal.valueOf(100));
+            averageExpensePerMonth = averageExpensePerMonth.divide(BigDecimal.valueOf(100));
+            averageCost = averageCost.divide(BigDecimal.valueOf(100));
+            maxIncome = maxIncome.divide(BigDecimal.valueOf(100));
+            maxExpense = maxExpense.divide(BigDecimal.valueOf(100));
+
+            startDateTextView = findViewById(R.id.stat_pres_startDate);
+            endDateTextView = findViewById(R.id.stat_pres_endDate);
+            titleTextView = findViewById(R.id.stat_pres_title);
+            titleSecondLineTextView = findViewById(R.id.stat_pres_title_second_line);
+            numberOfTransactionsTextView = findViewById(R.id.stat_pres_numberOfTransactions);
+            balanceTextView = findViewById(R.id.stat_pres_balance);
+            balanceCurrencyTextView = findViewById(R.id.stat_pres_balance_currency);
+            numberOfIncomesTextView = findViewById(R.id.stat_pres_numberOfIncomes);
+            numberOfExpensesTextView = findViewById(R.id.stat_pres_numberOfExpenses);
+            sumOfIncomesTextView = findViewById(R.id.stat_pres_sumOfIncomes);
+            sumOfIncomesCurrencyTextView = findViewById(R.id.stat_pres_sumOfIncomes_currency);
+            sumOfExpensesTextView = findViewById(R.id.stat_pres_sumOfExpenses);
+            sumOfExpensesCurrencyTextView = findViewById(R.id.stat_pres_sumOfExpenses_currency);
+            averageIncomeTextView = findViewById(R.id.stat_pres_averageIncome);
+            averageIncomeCurrencyTextView = findViewById(R.id.stat_pres_averageIncome_currency);
+            averageExpenseTextView = findViewById(R.id.stat_pres_averageExpense);
+            averageExpenseCurrencyTextView = findViewById(R.id.stat_pres_averageExpense_currency);
+            numberOfMonthsTextView = findViewById(R.id.stat_pres_numberOfMonths);
+            averageIncomePerMonthTextView = findViewById(R.id.stat_pres_averageIncomePerMonth);
+            averageIncomePerMonthCurrencyTextView = findViewById(R.id.stat_pres_averageIncomePerMonth_currency);
+            averageExpensePerMonthTextView = findViewById(R.id.stat_pres_averageExpensePerMonth);
+            averageExpensePerMonthCurrencyTextView = findViewById(R.id.stat_pres_averageExpensePerMonth_currency);
+            averageCostTextView = findViewById(R.id.stat_pres_averageCost);
+            averageCostCurrencyTextView = findViewById(R.id.stat_pres_averageCost_currency);
+            maxIncomeTextView = findViewById(R.id.stat_pres_maxIncome);
+            maxIncomeCurrencyTextView = findViewById(R.id.stat_pres_maxIncome_currency);
+            maxExpenseTextView = findViewById(R.id.stat_pres_maxExpense);
+            maxExpenseCurrencyTextView = findViewById(R.id.stat_pres_maxExpense_currency);
+
+
+            activityTitle = "Statystyki miesięczne dla profilu: " + databaseHelper.getProfile(chosenProfileID).getProfName();
+            titleTextView.setText(activityTitle);
+            titleSecondLineTextView.setText("od " + transStartDate + " do " + transEndDate);
+
+            startDateTextView.setText(startDate);
+            endDateTextView.setText(endDate);
+            numberOfTransactionsTextView.setText(String.valueOf(numberOfTransactions));
+            balanceCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            numberOfIncomesTextView.setText(String.valueOf(numberOfIncomes));
+            numberOfExpensesTextView.setText(String.valueOf(numberOfExpenses));
+            balanceTextView.setText(String.valueOf(balance));
+            sumOfIncomesTextView.setText(String.valueOf(sumOfIncomes));
+            sumOfIncomesCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            sumOfExpensesTextView.setText(String.valueOf(sumOfExpenses));
+            sumOfExpensesCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageIncomeTextView.setText(String.valueOf(averageIncome));
+            averageIncomeCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageExpenseTextView.setText(String.valueOf(averageExpense));
+            averageExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            numberOfMonthsTextView.setText(String.valueOf(numberOfMonths));
+            averageIncomePerMonthTextView.setText(String.valueOf(averageIncomePerMonth));
+            averageIncomePerMonthCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageExpensePerMonthTextView.setText(String.valueOf(averageExpensePerMonth));
+            averageExpensePerMonthCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            averageCostTextView.setText(String.valueOf(averageCost));
+            averageCostCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            maxIncomeTextView.setText(String.valueOf(maxIncome));
+            maxIncomeCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+            maxExpenseTextView.setText(String.valueOf(maxExpense));
+            maxExpenseCurrencyTextView.setText(databaseHelper.getCurrency(chosenProfileID));
+
+            profilePieChartGStatistics = databaseHelper.getProfilePeriodStatisticsForPieChart(startDate, endDate);
+            incomePieChartStatistics = profilePieChartGStatistics.get(0);
+            expensePieChartStatistics = profilePieChartGStatistics.get(1);
+            ArrayList<BigDecimal> incomeValuesList = new ArrayList<>(incomePieChartStatistics.values());
+            ArrayList<String> incomeKeysList = new ArrayList<>(incomePieChartStatistics.keySet());
+            ArrayList<BigDecimal> expenseValuesList = new ArrayList<>(expensePieChartStatistics.values());
+            ArrayList<String> expenseKeysList = new ArrayList<>(expensePieChartStatistics.keySet());
+
+            noDataText = "Brak danych";
+
+            incomePieChart = findViewById(R.id.stat_pres_inc_pieChart);
+            incomePieChart.setBackgroundColor(Color.WHITE);
+            incomePieChart.setUsePercentValues(true);
+            areIncomePieChartValuesPercentage = true;
+            incomePieChart.setDrawHoleEnabled(true);
+            incomePieChart.setNoDataText(noDataText);
+            incomePieChart.getDescription().setEnabled(false);
+            incomePieChart.setEntryLabelColor(Color.BLACK);
+
+            expensePieChart = findViewById(R.id.stat_pres_exp_pieChart);
+            expensePieChart.setBackgroundColor(Color.WHITE);
+            expensePieChart.setUsePercentValues(true);
+            areExpensePieChartValuesPercentage = true;
+            expensePieChart.setDrawHoleEnabled(true);
+            expensePieChart.setNoDataText(noDataText);
+            expensePieChart.getDescription().setEnabled(false);
+            expensePieChart.setEntryLabelColor(Color.BLACK);
+
+            if (incomeValuesList.size() > 0) {
+                setData(incomeValuesList, incomeKeysList, "Katgorie przychodów", incomePieChart, dataSetColors);
+            }
+            if (expenseValuesList.size() > 0) {
+                setData(expenseValuesList, expenseKeysList, "Katgorie wydatków", expensePieChart, dataSetColors);
+            }
+
+            Legend incomePieChartLegend = incomePieChart.getLegend();
+            incomePieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            incomePieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            incomePieChartLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            incomePieChartLegend.setDrawInside(false);
+            incomePieChartLegend.setWordWrapEnabled(true);
+
+            Legend expensePieChartLegend = expensePieChart.getLegend();
+            expensePieChartLegend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            expensePieChartLegend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+            expensePieChartLegend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            expensePieChartLegend.setDrawInside(false);
+            expensePieChartLegend.setWordWrapEnabled(true);
+
+
+
+            incomePieChart.setOnChartGestureListener(new OnChartGestureListener() {
+                @Override
+                public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartLongPressed(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartDoubleTapped(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartSingleTapped(MotionEvent me) {
+                    if (areIncomePieChartValuesPercentage) {
+                        incomePieChart.setUsePercentValues(false);
+                        areIncomePieChartValuesPercentage = false;
+                    } else {
+                        incomePieChart.setUsePercentValues(true);
+                        areIncomePieChartValuesPercentage = true;
+                    }
+                }
+
+                @Override
+                public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+                }
+
+                @Override
+                public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+                }
+
+                @Override
+                public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+                }
+            });
+
+            expensePieChart.setOnChartGestureListener(new OnChartGestureListener() {
+                @Override
+                public void onChartGestureStart(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartGestureEnd(MotionEvent me, ChartTouchListener.ChartGesture lastPerformedGesture) {
+
+                }
+
+                @Override
+                public void onChartLongPressed(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartDoubleTapped(MotionEvent me) {
+
+                }
+
+                @Override
+                public void onChartSingleTapped(MotionEvent me) {
+                    if (areExpensePieChartValuesPercentage) {
+                        expensePieChart.setUsePercentValues(false);
+                        areExpensePieChartValuesPercentage = false;
+                    } else {
+                        expensePieChart.setUsePercentValues(true);
+                        areExpensePieChartValuesPercentage = true;
+                    }
+
+                }
+
+                @Override
+                public void onChartFling(MotionEvent me1, MotionEvent me2, float velocityX, float velocityY) {
+
+                }
+
+                @Override
+                public void onChartScale(MotionEvent me, float scaleX, float scaleY) {
+
+                }
+
+                @Override
+                public void onChartTranslate(MotionEvent me, float dX, float dY) {
+
+                }
+            });
 
         }
-
 
     }
 

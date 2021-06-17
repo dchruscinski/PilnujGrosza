@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:padding="6dip"
-    android:background="@color/whiteBackground" >
+    android:padding="6dip" >
 
     <ImageView
         android:id="@+id/inc_rc_icon"

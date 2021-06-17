@@ -2,17 +2,33 @@
     <!-- Base application theme. -->
     <style name="Theme.PilnujGrosza" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/primaryColor</item>
-        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
-        <item name="colorOnPrimary">@color/primaryTextColor</item>
-        <item name="colorPrimarySurface">@color/primaryLightColor</item>
+        <item name="colorPrimary">@color/primaryColorForDarkMode</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColorForDarkMode</item>
+        <item name="colorOnPrimary">@color/primaryTextColorForDarkMode</item>
+        <item name="colorPrimarySurface">@color/primaryLightColorForDarkMode</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/secondaryColor</item>
-        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
-        <item name="colorOnSecondary">@color/secondaryTextColor</item>
+        <item name="colorSecondary">@color/secondaryColorForDarkMode</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColorForDarkMode</item>
+        <item name="colorOnSecondary">@color/secondaryTextColorForDarkMode</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blackBackground</item>
         <!-- Customize your theme here. -->
-        <item name="backgroundColor">@color/background</item>
+        <item name="android:colorBackground">@color/backgroundForDarkMode</item>
+        <item name="colorSurface">@color/primaryColorForDarkMode</item>
     </style>
+
+    <style name="Theme.PilnujGrosza.Launcher">
+        <item name="android:windowBackground">@drawable/launch_screen_night</item>
+    </style>
+
+    <style name="Theme.PilnujGrosza.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.PilnujGrosza.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="colorOnPrimary">@color/primaryTextColorForDarkMode</item>
+    </style>
+
+    <style name="Theme.PilnujGrosza.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
