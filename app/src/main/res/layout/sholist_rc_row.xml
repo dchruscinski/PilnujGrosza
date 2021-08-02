@@ -1,0 +1,102 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="96dp"
+    android:padding="6dip" >
+
+    <ImageView
+        android:id="@+id/sholist_rc_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="12dip"
+        android:src="@drawable/outline_format_list_bulleted_black_48" />
+
+    <TextView
+        android:id="@+id/sholist_rc_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sholist_rc_desc"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/sholist_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/sholist_rc_name"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/sholist_rc_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/sholist_rc_desc"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginEnd="6dip"
+        android:gravity="center_vertical"
+        android:text="@string/sholist_rc_date"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/sholist_rc_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_above="@id/sholist_rc_num_of_prod"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/sholist_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/sholist_rc_desc"
+        android:singleLine="true"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/sholist_rc_num_of_prod"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/sholist_rc_icon"
+        android:text="@string/sholist_rc_num_of_prod"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/sholist_rc_num_of_prod_and_value_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/sholist_rc_num_of_prod"
+        android:layout_marginStart="5dp"
+        android:text="@string/sholist_rc_num_of_prod_and_value_info"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/sholist_rc_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@+id/sholist_rc_num_of_prod_and_value_info"
+        android:gravity="center_vertical"
+        android:layout_marginStart="6dip"
+        android:text="@string/sholist_rc_value"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/sholist_rc_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/sholist_rc_value"
+        android:layout_marginStart="5dp"
+        android:gravity="center_vertical"
+        android:text="@string/sholist_rc_currency"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

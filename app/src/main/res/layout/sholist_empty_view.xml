@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="?android:attr/colorBackground" >
+
+    <ImageView
+        android:id="@+id/sholist_empty_logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/baseline_reorder_24"
+        android:alpha="0.3" />
+
+    <TextView
+        android:id="@+id/sholist_empty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/sholist_empty_text"
+        android:alpha="0.3"
+        android:textColor="?attr/colorOnPrimary" />
+</LinearLayout>

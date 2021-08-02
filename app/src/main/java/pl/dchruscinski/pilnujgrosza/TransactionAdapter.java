@@ -471,6 +471,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     transactionsList.get(position).setTransCatID((int) category.getSelectedItemId());
 
                     // notify list
+                    if (context instanceof BudgetTransaction) {
+                        ((BudgetTransaction) context).displayBudget();
+                    }
                     notifyDataSetChanged();
                     dialog.cancel();
                 }
@@ -537,6 +540,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 dialog.cancel();
 
                 // notify list
+                if (context instanceof BudgetTransaction) {
+                    ((BudgetTransaction) context).displayBudget();
+                }
                 notifyDataSetChanged();
             }
         });
@@ -713,6 +719,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     transactionsList.get(position).setTransCatID((int) category.getSelectedItemId());
 
                     // notify list
+                    if (context instanceof BudgetTransaction) {
+                        ((BudgetTransaction) context).displayBudget();
+                    }
                     notifyDataSetChanged();
                     dialog.cancel();
                 }
@@ -785,6 +794,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     dialog.cancel();
 
                     // notify list
+                    if (context instanceof BudgetTransaction) {
+                        ((BudgetTransaction) context).displayBudget();
+                    }
                     notifyDataSetChanged();
                 } else {
                     dialog.cancel();
@@ -847,6 +859,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 dialog.cancel();
 
                 // notify list
+                if (context instanceof BudgetTransaction) {
+                    ((BudgetTransaction) context).displayBudget();
+                }
                 notifyDataSetChanged();
             }
         });
@@ -860,6 +875,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 dialog.cancel();
 
                 // notify list
+                if (context instanceof BudgetTransaction) {
+                    ((BudgetTransaction) context).displayBudget();
+                }
                 notifyDataSetChanged();
             }
         });

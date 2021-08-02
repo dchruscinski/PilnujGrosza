@@ -49,7 +49,7 @@ public class ExpenseCategory extends AppCompatActivity {
         expenseCategoriesList = new ArrayList<>(databaseHelper.getExpenseCategoryList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        ExpenseCategoryAdapter adapter = new ExpenseCategoryAdapter(getApplicationContext(), this, expenseCategoriesList);
+        ExpenseCategoryAdapter adapter = new ExpenseCategoryAdapter(this, this, expenseCategoriesList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -84,7 +84,7 @@ public class ExpenseCategory extends AppCompatActivity {
                     name.setError("Podaj nazwę kategorii.");
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
                     name.setError("Nazwa kategorii powinna składać się z co najmniej dwóch liter.");
-                } else if (databaseHelper.checkExistingExpenseCategoryName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingExpenseCategoryName(0, name.getText().toString())) {
                     System.out.println("Name: " + name.getText().toString());
                     name.setError("Istnieje już kategoria z podaną nazwą.");
                 } else {

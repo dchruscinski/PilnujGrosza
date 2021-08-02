@@ -79,6 +79,8 @@
             <!-- Add income button -->
             <Button
                 android:id="@+id/mainmenu_addIncome_button"
+                android:backgroundTint="?android:colorAccent"
+                android:textColor="?android:colorBackground"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -89,6 +91,8 @@
             <!-- Add expense button -->
             <Button
                 android:id="@+id/mainmenu_addExpense_button"
+                android:backgroundTint="?android:colorAccent"
+                android:textColor="?android:colorBackground"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -131,25 +135,27 @@
             android:layout_weight="1"
             android:layout_marginTop="20dp" >
 
-            <!-- Add receipt button -->
-            <Button
-                android:id="@+id/mainmenu_addReceipt_button"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="0.4"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/mainmenu_addReceipt_button"/>
-
             <!-- receipts list button -->
             <Button
                 android:id="@+id/mainmenu_receiptsList_button"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="0.6"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="5dp"
+                android:text="@string/mainmenu_receiptsList_button"/>
+
+            <!-- Add receipt button -->
+            <Button
+                android:id="@+id/mainmenu_addReceipt_button"
+                android:backgroundTint="?android:colorAccent"
+                android:textColor="?android:colorBackground"
+                android:layout_width="0dip"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="20dp"
-                android:text="@string/mainmenu_receiptsList_button"/>
+                android:text="@string/mainmenu_addReceipt_button"/>
         </TableRow>
 
         <!-- Row #6 - shopping lists section -->
@@ -171,6 +177,8 @@
             <!-- receipts list button -->
             <Button
                 android:id="@+id/mainmenu_addShoppingList_button"
+                android:backgroundTint="?android:colorAccent"
+                android:textColor="?android:colorBackground"
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:layout_weight="0.4"

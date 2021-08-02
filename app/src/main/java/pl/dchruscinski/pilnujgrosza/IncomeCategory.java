@@ -49,7 +49,7 @@ public class IncomeCategory extends AppCompatActivity {
         incomeCategoriesList = new ArrayList<>(databaseHelper.getIncomeCategoryList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        IncomeCategoryAdapter adapter = new IncomeCategoryAdapter(getApplicationContext(), this, incomeCategoriesList);
+        IncomeCategoryAdapter adapter = new IncomeCategoryAdapter(this, this, incomeCategoriesList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -84,7 +84,7 @@ public class IncomeCategory extends AppCompatActivity {
                     name.setError("Podaj nazwę kategorii.");
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
                     name.setError("Nazwa kategorii powinna składać się z co najmniej dwóch liter.");
-                } else if (databaseHelper.checkExistingIncomeCategoryName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingIncomeCategoryName(0, name.getText().toString())) {
                     name.setError("Istnieje już kategoria z podaną nazwą.");
                 } else {
                     incomeCategoryModel.setInccatName(name.getText().toString());

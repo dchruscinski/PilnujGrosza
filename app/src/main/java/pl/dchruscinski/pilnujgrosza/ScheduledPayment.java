@@ -1,20 +1,9 @@
 package pl.dchruscinski.pilnujgrosza;
 
-import android.Manifest;
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.Gravity;
@@ -36,11 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,11 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.view.View.VISIBLE;
 import static java.sql.Types.NULL;
 import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfileID;
@@ -76,7 +58,7 @@ public class ScheduledPayment extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scheduled_payment_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        adapter = new ScheduledPaymentAdapter(getApplicationContext(), this, scheduledPaymentList);
+        adapter = new ScheduledPaymentAdapter(this, this, scheduledPaymentList);
 
         recyclerView = (RecyclerView) findViewById(R.id.schpay_list_rc);
         addScheduledPaymentFAB = (FloatingActionButton) findViewById(R.id.schpay_fab_addScheduledPayment);
@@ -107,7 +89,7 @@ public class ScheduledPayment extends AppCompatActivity {
                 View sortMenuItemView = findViewById(R.id.menu_sort_action_sort);
                 PopupMenu popup = new PopupMenu(this, sortMenuItemView);
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.menu_sort_items, popup.getMenu());
+                inflater.inflate(R.menu.menu_sort_items_value_and_date, popup.getMenu());
                 popup.setOnMenuItemClickListener(item1 -> {
                     switch (item1.getItemId()) {
                         case R.id.menu_sort_action_sort_value_asc:

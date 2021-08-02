@@ -167,7 +167,7 @@ public class IncomeCategoryAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     name.setError("Podaj nazwę kategorii.");
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
                     name.setError("Nazwa kategorii powinna składać się z co najmniej dwóch liter.");
-                } else if (databaseHelper.checkExistingIncomeCategoryName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingIncomeCategoryName(incomeCategoriesList.get(position).getInccatID(), name.getText().toString())) {
                     name.setError("Istnieje już kategoria z podaną nazwą.");
                 } else {
                     databaseHelper.updateIncomeCategoryName(name.getText().toString(), incomeCategoriesList.get(position).getInccatID());

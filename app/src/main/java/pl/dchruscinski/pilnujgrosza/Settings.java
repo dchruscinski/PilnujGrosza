@@ -40,10 +40,6 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
-        final SharedPreferences.Editor editor = sharedPreferences.edit();
-        final boolean isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
-
         databaseHelper = new DatabaseHelper(this);
 
         notificationsTimeTextView = findViewById(R.id.set_notifications_time_info_2);
@@ -57,11 +53,23 @@ public class Settings extends AppCompatActivity {
         peopleInHouseholdEditText.setText(String.valueOf(databaseHelper.getPeopleInHousehold(chosenProfileID)));
         notificationsTimeTextView.setText(databaseHelper.getNotificationsTime(chosenProfileID)[0] + ":" + databaseHelper.getNotificationsTime(chosenProfileID)[1]);
 
+        boolean isDarkModeOn = databaseHelper.getTheme(chosenProfileID);
         if (isDarkModeOn) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             nightModeSwitch.setChecked(true);
         } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            nightModeSwitch.setChecked(false);
+        }
+
+        /*
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPrefs", MODE_PRIVATE);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        final boolean isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
+
+        if (isDarkModeOn) {
+            //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            nightModeSwitch.setChecked(true);
+        } else {
+            //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             nightModeSwitch.setChecked(false);
         }
 
@@ -79,6 +87,7 @@ public class Settings extends AppCompatActivity {
                 }
             }
         });
+        */
 
         setNotificationsTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,6 +117,7 @@ public class Settings extends AppCompatActivity {
                 SettingsModel currencySettingsModel = new SettingsModel();
                 SettingsModel peopleInHouseholdSettingsModel = new SettingsModel();
                 SettingsModel notificationsTimeSettingsModel = new SettingsModel();
+                SettingsModel darkModeModel = new SettingsModel();
 
                 if (currencyEditText.getText().toString().trim().isEmpty()) {
                     currencyEditText.setError("Podaj walutę.");
@@ -130,8 +140,16 @@ public class Settings extends AppCompatActivity {
                     notificationsTimeSettingsModel.setSetValue(notificationsTimeTextView.getText().toString());
                     databaseHelper.updateSettings(notificationsTimeSettingsModel, "notificationsTime", chosenProfileID);
 
-                    if (isDarkModeOn) {
-
+                    if (nightModeSwitch.isChecked()) {
+                        darkModeModel.setSetName("theme");
+                        darkModeModel.setSetValue("dark");
+                        databaseHelper.updateSettings(darkModeModel, "theme", chosenProfileID);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    } else {
+                        darkModeModel.setSetName("theme");
+                        darkModeModel.setSetValue("light");
+                        databaseHelper.updateSettings(darkModeModel, "theme", chosenProfileID);
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                     }
 
                     Toast.makeText(getApplicationContext(), "Zapisano ustawienia.", Toast.LENGTH_SHORT).show();

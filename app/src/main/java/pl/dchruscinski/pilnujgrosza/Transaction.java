@@ -1,7 +1,6 @@
 package pl.dchruscinski.pilnujgrosza;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,10 +35,9 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import static android.view.View.VISIBLE;
 import static java.sql.Types.NULL;
@@ -60,7 +58,7 @@ public class Transaction extends AppCompatActivity {
         setTheme(R.style.Theme_PilnujGrosza);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transactions_list);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
 
         recyclerView = (RecyclerView) findViewById(R.id.expense_list_rc);
@@ -108,27 +106,23 @@ public class Transaction extends AppCompatActivity {
                 View sortMenuItemView = findViewById(R.id.menu_sort_action_sort);
                 PopupMenu popup = new PopupMenu(this, sortMenuItemView);
                 MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.menu_sort_items, popup.getMenu());
+                inflater.inflate(R.menu.menu_sort_items_value_and_date, popup.getMenu());
                 popup.setOnMenuItemClickListener(item1 -> {
                     switch (item1.getItemId()) {
                         case R.id.menu_sort_action_sort_value_asc:
                             Collections.sort(transactionsList, TransactionModel.transactionValueAscComparator);
-                            Toast.makeText(Transaction.this, "a ", Toast.LENGTH_SHORT).show();
                             adapter.notifyDataSetChanged();
                             return true;
                         case R.id.menu_sort_action_sort_value_desc:
                             Collections.sort(transactionsList, TransactionModel.transactionValueDescComparator);
-                            Toast.makeText(Transaction.this, "b ", Toast.LENGTH_SHORT).show();
                             adapter.notifyDataSetChanged();
                             return true;
                         case R.id.menu_sort_action_sort_date_asc:
                             Collections.sort(transactionsList, TransactionModel.transactionDateAscComparator);
-                            Toast.makeText(Transaction.this, "c ", Toast.LENGTH_SHORT).show();
                             adapter.notifyDataSetChanged();
                             return true;
                         case R.id.menu_sort_action_sort_date_desc:
                             Collections.sort(transactionsList, TransactionModel.transactionDateDescComparator);
-                            Toast.makeText(Transaction.this, "d ", Toast.LENGTH_SHORT).show();
                             adapter.notifyDataSetChanged();
                             return true;
                     }
@@ -149,7 +143,7 @@ public class Transaction extends AppCompatActivity {
         transactionsList = new ArrayList<>(databaseHelper.getTransactionsList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
+        adapter = new TransactionAdapter(this, this, transactionsList);
         recyclerView.setAdapter(adapter);
     }
 

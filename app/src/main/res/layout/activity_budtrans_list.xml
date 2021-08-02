@@ -11,16 +11,14 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="6dip"
-        android:background="@color/whiteBackground" >
+        android:padding="6dip" >
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/budtrans_bud_info"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_marginBottom="20dp"
-        android:padding="6dip"
-        android:background="@color/whiteBackground" >
+        android:padding="6dip" >
 
         <ImageView
             android:id="@+id/budtrans_rc_icon"

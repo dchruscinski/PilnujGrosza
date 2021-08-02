@@ -171,7 +171,7 @@ public class ExpenseCategoryAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     name.setError("Podaj nazwę kategorii.");
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
                     name.setError("Nazwa kategorii powinna składać się z co najmniej dwóch liter.");
-                } else if (databaseHelper.checkExistingExpenseCategoryName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingExpenseCategoryName(expenseCategoriesList.get(position).getExpcatID(), name.getText().toString())) {
                     name.setError("Istnieje już kategoria z podaną nazwą.");
                 } else {
                     databaseHelper.updateExpenseCategoryName(name.getText().toString(), expenseCategoriesList.get(position).getExpcatID());

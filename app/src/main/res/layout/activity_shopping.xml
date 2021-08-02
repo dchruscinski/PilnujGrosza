@@ -1,96 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tableLayout"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    android:weightSum="5"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?android:attr/colorBackground"
     tools:context="pl.dchruscinski.pilnujgrosza.Shopping">
 
-    <!-- Row #1 - FAB "Add shopping" and description text view -->
-    <TableRow
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="40dp"
-        android:layout_weight="1"
-        android:weightSum="4">
+        android:padding="6dip" >
 
-        <!-- FAB - "Dodaj zakupy / Add shopping" -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/shopping_fab_addShopping"
-            android:clickable="true"
+    <RelativeLayout
+        android:id="@+id/shopping_bud_info"
+        android:layout_width="match_parent"
+        android:layout_height="96dp"
+        android:layout_marginBottom="10dp"
+        android:padding="6dip" >
+
+        <ImageView
+            android:id="@+id/shopping_rc_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="12dip"
+            android:src="@drawable/outline_format_list_bulleted_black_48" />
+
+        <TextView
+            android:id="@+id/shopping_rc_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_column="0"
-            android:layout_weight="1"
-            android:visibility="visible"
-            android:backgroundTint="@color/flat_plus_background"
-            app:tint="@null"
-            app:srcCompat="@mipmap/flat_plus_foreground" />
+            android:layout_above="@id/shopping_rc_desc"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/shopping_rc_icon"
+            android:gravity="center_vertical"
+            android:text="@string/sholist_rc_name"
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
-        <!-- Text view - FAB description "Dodaj zakupy / Add shopping" -->
         <TextView
-            android:id="@+id/budget_text_addShopping"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:textAllCaps="true"
-            android:textSize="20dp"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:text="@string/shopping_text_addShopping" />
-    </TableRow>
+            android:id="@+id/shopping_rc_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/shopping_rc_desc"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginEnd="6dip"
+            android:gravity="center_vertical"
+            android:text="@string/sholist_rc_date"
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/shopping_rc_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_above="@id/shopping_rc_num_of_prod"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/shopping_rc_icon"
+            android:gravity="center_vertical"
+            android:text="@string/sholist_rc_desc"
+            android:textSize="16sp" />
 
-    <!-- Row #2 - empty row -->
-    <TableRow
+        <TextView
+            android:id="@+id/shopping_rc_num_of_prod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/shopping_rc_icon"
+            android:text="@string/sholist_rc_num_of_prod"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/shopping_rc_num_of_prod_and_value_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/shopping_rc_num_of_prod"
+            android:layout_marginStart="5dp"
+            android:text="@string/sholist_rc_num_of_prod_and_value_info"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/shopping_rc_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@+id/shopping_rc_num_of_prod_and_value_info"
+            android:gravity="center_vertical"
+            android:layout_marginStart="6dip"
+            android:text="@string/sholist_rc_value"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/shopping_rc_currency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/shopping_rc_value"
+            android:layout_marginStart="5dp"
+            android:gravity="center_vertical"
+            android:text="@string/sholist_rc_currency"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/shopping_button_edit"
+        android:layout_width="170dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/shopping_bud_info"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:text="@string/shopping_button_edit"/>
+
+    <Button
+        android:id="@+id/shopping_button_delete"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/shopping_bud_info"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:text="@string/shopping_button_delete"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shocont_list_rc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="3" >
+        android:layout_below="@id/shopping_button_edit"
+        android:layout_marginTop="20dp"
+        />
 
-        <!-- TextView as filler -->
-        <TextView
-            android:id="@+id/shopping_text_test"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/shopping_text_test"/>
+    </RelativeLayout>
 
-    </TableRow>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/shopping_fab_addShoCont"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/flat_plus_background"
+        app:tint="@null"
+        android:tooltipText="Dodaj produkt do listy"
+        app:srcCompat="@mipmap/flat_plus_foreground" />
 
-    <!-- Row #3 - buttons: shoppings lists, receipts list -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-        <!-- Shopping lists button -->
-        <Button
-            android:id="@+id/shopping_btn_shoppingLists"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:onClick="onClickShoppingListsButton"
-            android:text="@string/shopping_btn_shoppingLists" />
-
-        <!-- Receipts button -->
-        <Button
-            android:id="@+id/shopping_btn_receipts"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:onClick="onClickReceiptsButton"
-            android:text="@string/shopping_btn_receipts" />
-    </TableRow>
-
-</TableLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -92,6 +92,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SETTINGS_NAME = "setName";
     public static final String COLUMN_SETTINGS_VALUE = "setValue";
 
+    public static final String TABLE_SHOPPING = "shopping";
+    public static final String COLUMN_SHOPPING_ID = "shoID";
+    public static final String COLUMN_SHOPPING_PROFILE_ID = "shoProfID";
+    public static final String COLUMN_SHOPPING_RECEIPT_ID = "shoRecID";
+    public static final String COLUMN_SHOPPING_EXPENSE_ID = "shoExpID";
+    public static final String COLUMN_SHOPPING_NAME = "shoName";
+    public static final String COLUMN_SHOPPING_DATE = "shoDate";
+    public static final String COLUMN_SHOPPING_DESCRIPTION = "shoDesc";
+    public static final String COLUMN_SHOPPING_VALUE = "shoValue";
+
+    public static final String TABLE_SHOPPING_CONTENT = "shoppingcontent";
+    public static final String COLUMN_SHOPPING_CONTENT_ID = "shoContID";
+    public static final String COLUMN_SHOPPING_CONTENT_SHOPPING_ID = "shoContShoID";
+    public static final String COLUMN_SHOPPING_CONTENT_NAME = "shoContName";
+    public static final String COLUMN_SHOPPING_CONTENT_AMOUNT = "shoContAmount";
+    public static final String COLUMN_SHOPPING_CONTENT_UNIT = "shoContUnit";
+    public static final String COLUMN_SHOPPING_CONTENT_VALUE = "shoContValue";
+    public static final String COLUMN_SHOPPING_CONTENT_STATUS = "shoContStatus";
+
     public static final String TIMEZONE = "Europe/Warsaw";
     static final int callbackId = 42;
 
@@ -170,6 +189,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_SETTINGS_NAME + " TEXT NOT NULL," +
                         COLUMN_SETTINGS_VALUE + " TEXT NOT NULL)";
 
+        String createShoppingTableStatement =
+                "CREATE TABLE " + TABLE_SHOPPING + " (" +
+                        COLUMN_SHOPPING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_SHOPPING_PROFILE_ID + " INTEGER NOT NULL," +
+                        COLUMN_SHOPPING_RECEIPT_ID + " INTEGER," +
+                        COLUMN_SHOPPING_EXPENSE_ID + " INTEGER," +
+                        COLUMN_SHOPPING_NAME + " TEXT NOT NULL," +
+                        COLUMN_SHOPPING_DATE + " DATE NOT NULL," +
+                        COLUMN_SHOPPING_DESCRIPTION + " TEXT," +
+                        COLUMN_SHOPPING_VALUE + " INTEGER)";
+
+        String createShoppingContentTableStatement =
+                "CREATE TABLE " + TABLE_SHOPPING_CONTENT + " (" +
+                        COLUMN_SHOPPING_CONTENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_SHOPPING_CONTENT_SHOPPING_ID + " INTEGER NOT NULL," +
+                        COLUMN_SHOPPING_CONTENT_NAME + " TEXT NOT NULL," +
+                        COLUMN_SHOPPING_CONTENT_AMOUNT + " TEXT NOT NULL," +
+                        COLUMN_SHOPPING_CONTENT_UNIT + " TEXT NOT NULL," +
+                        COLUMN_SHOPPING_CONTENT_VALUE + " INTEGER," +
+                        COLUMN_SHOPPING_CONTENT_STATUS + " BOOLEAN)";
+
         db.execSQL(createProfileTableStatement);
         db.execSQL(createExpenseCategoryTableStatement);
         db.execSQL(createIncomeCategoryTableStatement);
@@ -177,6 +217,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createScheduledPaymentTableStatement);
         db.execSQL(createBudgetTableStatement);
         db.execSQL(createSettingsTableStatement);
+        db.execSQL(createShoppingTableStatement);
+        db.execSQL(createShoppingContentTableStatement);
     }
 
     // making changes to existing table
@@ -190,6 +232,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String upgradeScheduledPaymentTableStatement = "DROP TABLE IF EXISTS " + TABLE_SCHEDULED_PAYMENT;
         String upgradeBudgetTableStatement = "DROP TABLE IF EXISTS " + TABLE_BUDGET;
         String upgradeSettingsTableStatement = "DROP TABLE IF EXISTS " + TABLE_SETTINGS;
+        String upgradeShoppingTableStatement = "DROP TABLE IF EXISTS " + TABLE_SHOPPING;
+        String upgradeShoppingContentTableStatement = "DROP TABLE IF EXISTS " + TABLE_SHOPPING_CONTENT;
 
         db.execSQL(upgradeProfileTableStatement);
         db.execSQL(upgradeExpenseCategoryTableStatement);
@@ -198,6 +242,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(upgradeScheduledPaymentTableStatement);
         db.execSQL(upgradeBudgetTableStatement);
         db.execSQL(upgradeSettingsTableStatement);
+        db.execSQL(upgradeShoppingTableStatement);
+        db.execSQL(upgradeShoppingContentTableStatement);
         onCreate(db);
     }
 
@@ -507,11 +553,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cursor.close();
     }
 
-    public boolean checkExistingProfileName(String name) {
+    public boolean checkExistingProfileName(int profID, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_NAME + " = ?";
+        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_PROFILE + " WHERE " + COLUMN_PROFILE_NAME + " = ? AND " + COLUMN_PROFILE_ID + " <> ?";
 
-        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name});
+        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name, String.valueOf(profID)});
         cursor.moveToFirst();
 
         int nameOccurrencesCounter = cursor.getCount();
@@ -598,11 +644,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_EXPENSE_CATEGORY, cv, COLUMN_EXPENSE_CATEGORY_ID + " = " + expcatID, null);
     }
 
-    public boolean checkExistingExpenseCategoryName(String name) {
+    public boolean checkExistingExpenseCategoryName(int expCatID, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_EXPENSE_CATEGORY + " WHERE " + COLUMN_EXPENSE_CATEGORY_NAME + " = ?" + " AND " + COLUMN_EXPENSE_CATEGORY_PROFILE_ID + " = " + chosenProfileID;
+        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_EXPENSE_CATEGORY + " WHERE " + COLUMN_EXPENSE_CATEGORY_NAME + " = ? AND "
+                + COLUMN_EXPENSE_CATEGORY_PROFILE_ID + " = " + chosenProfileID + " AND " + COLUMN_EXPENSE_CATEGORY_ID + " <> ?";
 
-        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name});
+        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name, String.valueOf(expCatID)});
         cursor.moveToFirst();
 
         int nameOccurrencesCounter = cursor.getCount();
@@ -726,8 +773,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return incomeCategoryModel;
     }
 
-
-
     public Cursor getIncomeCategoriesForSpinner() {
         String getIncomeCategoriesForSpinnerStatement = "SELECT " + COLUMN_INCOME_CATEGORY_ID + " AS _id, " + COLUMN_INCOME_CATEGORY_NAME + " FROM "
                 + TABLE_INCOME_CATEGORY + " WHERE " + COLUMN_INCOME_CATEGORY_PROFILE_ID +  " = " + chosenProfileID + " ORDER BY " + COLUMN_INCOME_CATEGORY_ID;
@@ -752,11 +797,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_INCOME_CATEGORY, cv, COLUMN_INCOME_CATEGORY_ID + " = " + inccatID, null);
     }
 
-    public boolean checkExistingIncomeCategoryName(String name) {
+    public boolean checkExistingIncomeCategoryName(int incCatID, String name) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_INCOME_CATEGORY + " WHERE " + COLUMN_INCOME_CATEGORY_NAME + " = ?" + " AND " + COLUMN_INCOME_CATEGORY_PROFILE_ID + " = " + chosenProfileID;
+        String checkDatabaseforNameStatement = "SELECT * FROM " + TABLE_INCOME_CATEGORY + " WHERE " + COLUMN_INCOME_CATEGORY_NAME + " = ? AND "
+                + COLUMN_INCOME_CATEGORY_PROFILE_ID + " = " + chosenProfileID + " AND " + COLUMN_INCOME_CATEGORY_ID + " <> ?";
 
-        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name});
+        Cursor cursor = db.rawQuery(checkDatabaseforNameStatement, new String[] {name, String.valueOf(incCatID)});
         cursor.moveToFirst();
 
         int nameOccurrencesCounter = cursor.getCount();
@@ -1626,6 +1672,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return peopleInHousehold;
     }
 
+    public boolean getTheme(int profID) {
+        String theme = "";
+        boolean isDarkModeOn = false;
+        String getCurrencyStatement = "SELECT " + COLUMN_SETTINGS_VALUE + " FROM " + TABLE_SETTINGS + " WHERE " + COLUMN_SETTINGS_PROFILE_ID + " = ? AND " + COLUMN_SETTINGS_NAME + " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getCurrencyStatement, new String[] {Integer.toString(profID), "theme"});
+        if (cursor.moveToFirst()) {
+            do {
+                theme = cursor.getString(cursor.getColumnIndex(COLUMN_SETTINGS_VALUE));
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        if (theme.equals("dark")) isDarkModeOn = true;
+        return isDarkModeOn;
+    }
+
     public void updateSettings(SettingsModel settingsModel, String setName, int profID) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -2156,6 +2221,286 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return doesUserHaveAnyTransaction;
+    }
+
+    public void addShopping(ShoppingModel shoppingModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SHOPPING_PROFILE_ID, chosenProfileID);
+        cv.put(COLUMN_SHOPPING_NAME, shoppingModel.getShoName());
+        cv.put(COLUMN_SHOPPING_DATE, shoppingModel.getShoDate());
+        cv.put(COLUMN_SHOPPING_DESCRIPTION, shoppingModel.getShoDesc());
+        cv.put(COLUMN_SHOPPING_VALUE, 0);
+        db.insert(TABLE_SHOPPING, null, cv);
+    }
+
+    public List<ShoppingModel> getShoppingList() {
+        List<ShoppingModel> shoppingList = new ArrayList<ShoppingModel>();
+        String getShoppingListStatement = "SELECT * FROM " + TABLE_SHOPPING + " WHERE " + COLUMN_SHOPPING_PROFILE_ID +  " = " + chosenProfileID + " ORDER BY " + COLUMN_SHOPPING_DATE + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getShoppingListStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int shoID = cursor.getInt(cursor.getColumnIndex("shoID"));
+                int shoProfID = cursor.getInt(cursor.getColumnIndex("shoProfID"));
+                int shoRecID = cursor.getInt(cursor.getColumnIndex("shoRecID"));
+                int shoExpID = cursor.getInt(cursor.getColumnIndex("shoExpID"));
+                String shoName = cursor.getString(cursor.getColumnIndex("shoName"));
+                String shoDate = cursor.getString(cursor.getColumnIndex("shoDate"));
+                String shoDesc = cursor.getString(cursor.getColumnIndex("shoDesc"));
+                int shoValue = cursor.getInt(cursor.getColumnIndex("shoValue"));
+
+                ShoppingModel shoppingModel = new ShoppingModel(shoID, shoProfID, shoRecID, shoExpID, shoName, shoDate, shoDesc, shoValue);
+
+                shoppingList.add(shoppingModel);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return shoppingList;
+    }
+
+    public ShoppingModel getShopping(int shoID) {
+        ShoppingModel shoppingModel = new ShoppingModel();
+        String getShoppingStatement = "SELECT * FROM " + TABLE_SHOPPING + " WHERE " + COLUMN_SHOPPING_ID +  " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getShoppingStatement, new String[] {Integer.toString(shoID)});
+        if (cursor.moveToFirst()) {
+            do {
+                int shoProfID = cursor.getInt(cursor.getColumnIndex("shoProfID"));
+                int shoRecID = cursor.getInt(cursor.getColumnIndex("shoRecID"));
+                int shoExpID = cursor.getInt(cursor.getColumnIndex("shoExpID"));
+                String shoName = cursor.getString(cursor.getColumnIndex("shoName"));
+                String shoDate = cursor.getString(cursor.getColumnIndex("shoDate"));
+                String shoDesc = cursor.getString(cursor.getColumnIndex("shoDesc"));
+                int shoValue = cursor.getInt(cursor.getColumnIndex("shoValue"));
+
+                shoppingModel = new ShoppingModel(shoID, shoProfID, shoRecID, shoExpID, shoName, shoDate, shoDesc, shoValue);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return shoppingModel;
+    }
+
+    public void updateShopping(int shoID, ShoppingModel shoppingModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SHOPPING_RECEIPT_ID, shoppingModel.getShoRecID());
+        cv.put(COLUMN_SHOPPING_EXPENSE_ID, shoppingModel.getShoExpID());
+        cv.put(COLUMN_SHOPPING_NAME, shoppingModel.getShoName());
+        cv.put(COLUMN_SHOPPING_DATE, shoppingModel.getShoDate());
+        cv.put(COLUMN_SHOPPING_DESCRIPTION, shoppingModel.getShoDesc());
+        cv.put(COLUMN_SHOPPING_VALUE, getValueOfProductsInShoppingList(shoID));
+        db.update(TABLE_SHOPPING, cv, COLUMN_SHOPPING_ID + " = " + shoID, null);
+    }
+
+    public void updateShoppingContentValue(int shoID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SHOPPING_VALUE, getValueOfProductsInShoppingList(shoID));
+        db.update(TABLE_SHOPPING, cv, COLUMN_SHOPPING_ID + " = " + shoID, null);
+    }
+
+    public void deleteShopping(int shoID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_SHOPPING_CONTENT, COLUMN_SHOPPING_CONTENT_SHOPPING_ID + " = " + shoID, null);
+        db.delete(TABLE_SHOPPING, COLUMN_SHOPPING_ID + " = " + shoID, null);
+    }
+
+    public int getNumberOfProductsInShoppingList(int shoID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String getNumberOfProductsInShoppingListStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_CONTENT_SHOPPING_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(getNumberOfProductsInShoppingListStatement, new String[] {String.valueOf(shoID)});
+        cursor.moveToFirst();
+
+        int productsCounter = cursor.getCount();
+
+        cursor.close();
+        return productsCounter;
+    }
+
+    public int getValueOfProductsInShoppingList(int shoID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String getValueOfProductsInShoppingListStatement = "SELECT SUM(" + COLUMN_SHOPPING_CONTENT_VALUE + ") FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_CONTENT_SHOPPING_ID + " = ?";
+
+        Cursor cursor = db.rawQuery(getValueOfProductsInShoppingListStatement, new String[] {String.valueOf(shoID)});
+        cursor.moveToFirst();
+
+        int valueCounter = cursor.getInt(0);
+
+        cursor.close();
+        return valueCounter;
+    }
+
+    public void addShoppingContent(int shoID, ShoppingContentModel shoppingContentModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SHOPPING_CONTENT_SHOPPING_ID, shoID);
+        cv.put(COLUMN_SHOPPING_CONTENT_NAME, shoppingContentModel.getShoContName());
+        cv.put(COLUMN_SHOPPING_CONTENT_AMOUNT, shoppingContentModel.getShoContAmount());
+        cv.put(COLUMN_SHOPPING_CONTENT_UNIT, shoppingContentModel.getShoContUnit());
+        cv.put(COLUMN_SHOPPING_CONTENT_VALUE, shoppingContentModel.getShoContValue());
+        cv.put(COLUMN_SHOPPING_CONTENT_STATUS, false);
+        db.insert(TABLE_SHOPPING_CONTENT, null, cv);
+
+        updateShoppingContentValue(shoID);
+    }
+
+    public List<ShoppingContentModel> getShoppingContentList() {
+        List<ShoppingContentModel> shoppingContentList = new ArrayList<ShoppingContentModel>();
+        String getShoppingContentListStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_PROFILE_ID +  " = " + chosenProfileID;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getShoppingContentListStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int shoContID = cursor.getInt(cursor.getColumnIndex("shoContID"));
+                int shoContShoID = cursor.getInt(cursor.getColumnIndex("shoContShoID"));
+                String shoContName = cursor.getString(cursor.getColumnIndex("shoContName"));
+                String shoContAmount = cursor.getString(cursor.getColumnIndex("shoContAmount"));
+                String shoContUnit = cursor.getString(cursor.getColumnIndex("shoContUnit"));
+                int shoContValue = cursor.getInt(cursor.getColumnIndex("shoContValue"));
+                boolean shoContStatus = cursor.getInt(cursor.getColumnIndex("shoContStatus")) == 1;
+
+                ShoppingContentModel shoppingContentModel = new ShoppingContentModel(shoContID, shoContShoID, shoContName, shoContAmount, shoContUnit, shoContValue, shoContStatus);
+
+                shoppingContentList.add(shoppingContentModel);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return shoppingContentList;
+    }
+
+    public List<ShoppingContentModel> getShoppingContentForShoppingList(int shoID) {
+        List<ShoppingContentModel> shoppingContentList = new ArrayList<ShoppingContentModel>();
+        String getShoppingContentStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_CONTENT_SHOPPING_ID +  " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getShoppingContentStatement, new String[] {Integer.toString(shoID)});
+        if (cursor.moveToFirst()) {
+            do {
+                int shoContID = cursor.getInt(cursor.getColumnIndex("shoContID"));
+                int shoContShoID = cursor.getInt(cursor.getColumnIndex("shoContShoID"));
+                String shoContName = cursor.getString(cursor.getColumnIndex("shoContName"));
+                String shoContAmount = cursor.getString(cursor.getColumnIndex("shoContAmount"));
+                String shoContUnit = cursor.getString(cursor.getColumnIndex("shoContUnit"));
+                int shoContValue = cursor.getInt(cursor.getColumnIndex("shoContValue"));
+                boolean shoContStatus = cursor.getInt(cursor.getColumnIndex("shoContStatus")) == 1;
+
+                ShoppingContentModel shoppingContentModel = new ShoppingContentModel(shoContID, shoContShoID, shoContName, shoContAmount, shoContUnit, shoContValue, shoContStatus);
+
+                shoppingContentList.add(shoppingContentModel);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return shoppingContentList;
+    }
+
+    public ShoppingContentModel getShoppingContent(int shoContID) {
+        ShoppingContentModel shoppingContentModel = new ShoppingContentModel();
+        String getShoppingContentStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_CONTENT_ID +  " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getShoppingContentStatement, new String[] {Integer.toString(shoContID)});
+        if (cursor.moveToFirst()) {
+            do {
+                int shoContShoID = cursor.getInt(cursor.getColumnIndex("shoContShoID"));
+                String shoContName = cursor.getString(cursor.getColumnIndex("shoContName"));
+                String shoContAmount = cursor.getString(cursor.getColumnIndex("shoContAmount"));
+                String shoContUnit = cursor.getString(cursor.getColumnIndex("shoContUnit"));
+                int shoContValue = cursor.getInt(cursor.getColumnIndex("shoContValue"));
+                boolean shoContStatus = cursor.getInt(cursor.getColumnIndex("shoContStatus")) == 1;
+
+                shoppingContentModel = new ShoppingContentModel(shoContID, shoContShoID, shoContName, shoContAmount, shoContUnit, shoContValue, shoContStatus);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return shoppingContentModel;
+    }
+
+    public int getShoppingIDForShoppingContent(int shoContID) {
+        int shoID = 0;
+        String getShoppingIDStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_CONTENT_ID +  " = ?";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(getShoppingIDStatement, new String[] {Integer.toString(shoContID)});
+        if (cursor.moveToFirst()) {
+            do {
+                shoID = cursor.getInt(cursor.getColumnIndex("shoContShoID"));
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return shoID;
+    }
+
+    public void updateShoppingContentStatus(int shoContID, boolean status) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SHOPPING_CONTENT_STATUS, status);
+        db.update(TABLE_SHOPPING_CONTENT, cv, COLUMN_SHOPPING_CONTENT_ID + " = " + shoContID, null);
+    }
+
+    public void updateShoppingContent(int shoContID, ShoppingContentModel shoppingContentModel) {
+        int shoID = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_SHOPPING_CONTENT_NAME, shoppingContentModel.getShoContName());
+        cv.put(COLUMN_SHOPPING_CONTENT_AMOUNT, shoppingContentModel.getShoContAmount());
+        cv.put(COLUMN_SHOPPING_CONTENT_UNIT, shoppingContentModel.getShoContUnit());
+        cv.put(COLUMN_SHOPPING_CONTENT_VALUE, shoppingContentModel.getShoContValue());
+        cv.put(COLUMN_SHOPPING_CONTENT_STATUS, shoppingContentModel.isShoContChecked());
+        db.update(TABLE_SHOPPING_CONTENT, cv, COLUMN_SHOPPING_CONTENT_ID + " = " + shoContID, null);
+
+        shoID = getShoppingIDForShoppingContent(shoContID);
+        updateShoppingContentValue(shoID);
+    }
+
+    public void deleteShoppingContent(int shoContID) {
+        int shoID = 0;
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // need to find shoID before deleting shoCont
+        shoID = getShoppingIDForShoppingContent(shoContID);
+
+        db.delete(TABLE_SHOPPING_CONTENT, COLUMN_SHOPPING_CONTENT_ID + " = " + shoContID, null);
+
+        updateShoppingContentValue(shoID);
+    }
+
+    public boolean checkExistingProductNameInShoppingList(int shoID, int shoContID, String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String checkExistingProductNameInShoppingListStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_CONTENT_SHOPPING_ID + " = ? AND "
+                + COLUMN_SHOPPING_CONTENT_NAME + " = ? AND " + COLUMN_SHOPPING_CONTENT_ID + " <> ?";
+
+        Cursor cursor = db.rawQuery(checkExistingProductNameInShoppingListStatement, new String[] {String.valueOf(shoID), name, String.valueOf(shoContID)});
+        cursor.moveToFirst();
+
+        int productsCounter = cursor.getCount();
+        boolean doesNameExistInDatabase = (productsCounter > 0) ? TRUE : FALSE;
+
+        cursor.close();
+        return doesNameExistInDatabase;
     }
 
 }

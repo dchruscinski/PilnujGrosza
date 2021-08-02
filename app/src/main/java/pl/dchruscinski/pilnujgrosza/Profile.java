@@ -1,11 +1,13 @@
 package pl.dchruscinski.pilnujgrosza;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -51,7 +53,7 @@ public class Profile extends AppCompatActivity {
         profilesList = new ArrayList<>(databaseHelper.getProfileList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        ProfileAdapter adapter = new ProfileAdapter(getApplicationContext(), this, profilesList);
+        ProfileAdapter adapter = new ProfileAdapter(this, this, profilesList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -124,7 +126,7 @@ public class Profile extends AppCompatActivity {
                     name.setError("Podaj nazwę profilu.");
                 } else if (!name.getText().toString().matches("[a-zA-Z]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
-                } else if (databaseHelper.checkExistingProfileName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingProfileName(0, name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
                 } else if (!isInitialBalanceValid) {
                     initialBalance.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");

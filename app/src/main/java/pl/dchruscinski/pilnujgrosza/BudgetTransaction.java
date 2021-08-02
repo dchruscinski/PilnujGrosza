@@ -73,18 +73,9 @@ public class BudgetTransaction extends AppCompatActivity {
         editBudget = (Button) findViewById(R.id.budtrans_button_edit);
         deleteBudget = (Button) findViewById(R.id.budtrans_button_delete);
 
-        budgetStartDate.setText(String.valueOf(databaseHelper.getBudget(budID).getBudStartDate()));
-        budgetEndDate.setText(databaseHelper.getBudget(budID).getBudEndDate());
-
-        budgetsAmount = BigDecimal.valueOf(databaseHelper.getBudget(budID).getBudAmount()).divide(BigDecimal.valueOf(100));
-        budgetsInitialAmount = BigDecimal.valueOf(databaseHelper.getBudget(budID).getBudInitialAmount()).divide(BigDecimal.valueOf(100));
-
-        amount.setText(budgetsAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsAmount) : new DecimalFormat("#.##").format(budgetsAmount));
-        initialAmount.setText(budgetsInitialAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsInitialAmount) : new DecimalFormat("#.##").format(budgetsInitialAmount));
-
-        currency.setText(databaseHelper.getCurrency(chosenProfileID));
-
+        displayBudget();
         displayBudgetTransactionsList();
+
 
         editBudget.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,12 +92,25 @@ public class BudgetTransaction extends AppCompatActivity {
         });
     }
 
+    public void displayBudget() {
+        budgetStartDate.setText(String.valueOf(databaseHelper.getBudget(budID).getBudStartDate()));
+        budgetEndDate.setText(databaseHelper.getBudget(budID).getBudEndDate());
+
+        budgetsAmount = BigDecimal.valueOf(databaseHelper.getBudget(budID).getBudAmount()).divide(BigDecimal.valueOf(100));
+        budgetsInitialAmount = BigDecimal.valueOf(databaseHelper.getBudget(budID).getBudInitialAmount()).divide(BigDecimal.valueOf(100));
+
+        amount.setText(budgetsAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsAmount) : new DecimalFormat("#.##").format(budgetsAmount));
+        initialAmount.setText(budgetsInitialAmount.equals(BigDecimal.valueOf(0)) ? new DecimalFormat("0").format(budgetsInitialAmount) : new DecimalFormat("#.##").format(budgetsInitialAmount));
+
+        currency.setText(databaseHelper.getCurrency(chosenProfileID));
+    }
+
     public void displayBudgetTransactionsList() {
         transactionsList = new ArrayList<>(databaseHelper.getTransactionsListForBudget(budID));
         budgetsList = new ArrayList<>(databaseHelper.getBudgetsList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        TransactionAdapter adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
+        TransactionAdapter adapter = new TransactionAdapter(this, this, transactionsList);
         recyclerView.setAdapter(adapter);
     }
 
@@ -247,6 +251,7 @@ public class BudgetTransaction extends AppCompatActivity {
                             budgetsList.get(position).setBudEndDate(endDateTextView.getText().toString());
 
                             dialog.cancel();
+                            displayBudget();
                             displayBudgetTransactionsList();
                         }
                     } catch (ParseException e) {

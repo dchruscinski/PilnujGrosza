@@ -1,6 +1,7 @@
 package pl.dchruscinski.pilnujgrosza;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -62,6 +63,13 @@ public class MainMenu extends AppCompatActivity {
 
         currency.setText(databaseHelper.getCurrency(chosenProfileID));
 
+        boolean isDarkModeOn = databaseHelper.getTheme(chosenProfileID);
+        if (isDarkModeOn) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
         addIncomeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,15 +111,15 @@ public class MainMenu extends AppCompatActivity {
         addShoppingListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TO DO
-                // showAddShoppingListDialog();
+                Intent intent = new Intent(v.getContext(), ShoppingList.class).putExtra("action","shoppingListButton");
+                startActivity(intent);
             }
         });
 
         shoppingListsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), Shopping.class));
+                startActivity(new Intent(v.getContext(), ShoppingList.class));
             }
         });
 
@@ -125,7 +133,8 @@ public class MainMenu extends AppCompatActivity {
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), Profile.class));
+                //startActivity(new Intent(v.getContext(), Profile.class));
+                finish();
             }
         });
     }

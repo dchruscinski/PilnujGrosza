@@ -322,7 +322,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     name.setError("Podaj nową nazwę profilu.");
                 } else if (!name.getText().toString().matches("[a-zA-Z]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
-                } else if (databaseHelper.checkExistingProfileName(name.getText().toString())) {
+                } else if (databaseHelper.checkExistingProfileName(profilesList.get(position).getProfID(), name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
                 } else {
                     databaseHelper.updateProfileName(name.getText().toString(), profilesList.get(position).getProfID());

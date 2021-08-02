@@ -62,7 +62,7 @@ public class Budget extends AppCompatActivity {
         budgetsList = new ArrayList<>(databaseHelper.getBudgetsList());
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        BudgetAdapter adapter = new BudgetAdapter(getApplicationContext(), this, budgetsList);
+        BudgetAdapter adapter = new BudgetAdapter(this, this, budgetsList);
         recyclerView.setAdapter(adapter);
     }
 
