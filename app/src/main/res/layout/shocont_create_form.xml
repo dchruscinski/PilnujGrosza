@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -46,7 +45,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/shocont_createform_info_create"
             android:layout_marginHorizontal="20dp"
-            android:drawableStart="@drawable/baseline_article_black_24dp"
+            android:drawableStart="@drawable/baseline_article_24"
             android:drawablePadding="10dp"
             android:hint="@string/shocont_createform_text_name"
             android:singleLine="true" >
@@ -86,7 +85,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/shocont_createform_text_unit"
             android:layout_marginHorizontal="20dp"
-            android:drawableStart="@drawable/baseline_paid_black_24dp"
+            android:drawableStart="@drawable/baseline_paid_24"
             android:drawablePadding="10dp"
             android:inputType="numberDecimal"
             android:hint="@string/shocont_createform_text_value"

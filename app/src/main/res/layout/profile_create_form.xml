@@ -4,10 +4,9 @@
     android:layout_height="match_parent"
     android:background="?android:attr/colorBackground" >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -48,7 +47,7 @@
         android:layout_marginHorizontal="20dp"
         android:maxLength="20"
         android:layout_below="@+id/profile_createform_info_login"
-        android:drawableStart="@drawable/baseline_account_box_black_24dp"
+        android:drawableStart="@drawable/baseline_account_box_24"
         android:drawablePadding="10dp"
         android:hint="@string/profile_createform_name"
         android:singleLine="true" >
@@ -65,7 +64,7 @@
         android:layout_marginTop="20dp"
         android:inputType="numberPassword"
         android:maxLength="6"
-        android:drawableStart="@drawable/baseline_pin_black_24dp"
+        android:drawableStart="@drawable/baseline_pin_24"
         android:drawablePadding="10dp"
         android:hint="@string/profile_createform_pin"
         android:singleLine="true" />
@@ -79,7 +78,7 @@
         android:layout_marginHorizontal="20dp"
         android:inputType="numberPassword"
         android:maxLength="6"
-        android:drawableStart="@drawable/baseline_pin_black_24dp"
+        android:drawableStart="@drawable/baseline_pin_24"
         android:drawablePadding="10dp"
         android:hint="@string/profile_createform_text_pin_confirm"
         android:singleLine="true" />
@@ -91,12 +90,24 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/profile_createform_text_pin_confirm"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="30dp"
         android:inputType="numberDecimal"
-        android:drawableStart="@drawable/baseline_account_balance_black_24dp"
+        android:drawableStart="@drawable/baseline_account_balance_24"
         android:drawablePadding="10dp"
         android:hint="@string/profile_createform_initialBalance"
+        android:singleLine="true" />
+
+    <EditText
+        android:id="@+id/profile_createform_text_currency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/profile_createform_text_initialBalance"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/baseline_euro_symbol_24"
+        android:drawablePadding="10dp"
+        android:hint="@string/profile_createform_currency"
         android:singleLine="true" />
 
     <Button
@@ -104,7 +115,7 @@
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_below="@+id/profile_createform_text_initialBalance"
+        android:layout_below="@+id/profile_createform_text_currency"
         android:layout_margin="20dp"
         android:text="@string/profile_createform_button_nextstage" />
 

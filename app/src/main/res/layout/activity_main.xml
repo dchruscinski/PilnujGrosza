@@ -1,220 +1,227 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/tableLayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground"
+    android:fillViewport="true"
+    tools:context="pl.dchruscinski.pilnujgrosza.MainMenu">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:background="?android:attr/colorBackground"
-        tools:context="pl.dchruscinski.pilnujgrosza.MainMenu">
+        android:layout_height="wrap_content">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.25" >
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vert_005"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
 
-            <TextView
-                android:id="@+id/mainmenu_profile_info"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|center_horizontal"
-                android:textSize="20sp"
-                android:text="Saldo dla profilu:"
-                android:singleLine="true" >
-            </TextView>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vert_05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
 
-            <TextView
-                android:id="@+id/mainmenu_profile_text"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="bottom|start"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:singleLine="true" >
-            </TextView>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vert_095"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
 
-        </TableRow>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_005"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:background="@drawable/mainmenu_background"
-            android:layout_weight="1.5" >
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_011"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.11" />
 
-            <TextView
-                android:id="@+id/mainmenu_balance_amount_text"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:textAlignment="center"
-                android:gravity="center"
-                android:textSize="50sp"
-                android:textStyle="bold"
-                android:layout_weight="2"
-                android:singleLine="true" >
-            </TextView>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_027"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.27" />
 
-            <TextView
-                android:id="@+id/mainmenu_balance_currency_text"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_weight="0.75"
-                android:singleLine="true" >
-            </TextView>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_055"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.55" />
 
-        </TableRow>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_095"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
 
-        <!-- Row #3 - budget section -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" >
-
-            <!-- Add income button -->
-            <Button
-                android:id="@+id/mainmenu_addIncome_button"
-                android:backgroundTint="?android:colorAccent"
-                android:textColor="?android:colorBackground"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/mainmenu_addIncome_button"/>
-
-            <!-- Add expense button -->
-            <Button
-                android:id="@+id/mainmenu_addExpense_button"
-                android:backgroundTint="?android:colorAccent"
-                android:textColor="?android:colorBackground"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="5dp"
-                android:text="@string/mainmenu_addExpense_button" />
-        </TableRow>
-
-        <!-- Row #4 - finance management section -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginHorizontal="20dp">
-
-            <!-- finance management button -->
-            <Button
-                android:id="@+id/mainmenu_finMgmt_button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="@string/mainmenu_finMgmt_button" />
-
-            <!-- App icon
-            <ImageView
-                android:id="@+id/menu_logo"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="20dp"
-                android:layout_weight="1"
-                app:srcCompat="@mipmap/pilnuj_grosza_logo"
-                tools:srcCompat="@mipmap/pilnuj_grosza_logo" /> -->
-        </TableRow>
-
-        <!-- Row #5 - receipt section -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_marginTop="20dp" >
-
-            <!-- receipts list button -->
-            <Button
-                android:id="@+id/mainmenu_receiptsList_button"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/mainmenu_receiptsList_button"/>
-
-            <!-- Add receipt button -->
-            <Button
-                android:id="@+id/mainmenu_addReceipt_button"
-                android:backgroundTint="?android:colorAccent"
-                android:textColor="?android:colorBackground"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="0.4"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="20dp"
-                android:text="@string/mainmenu_addReceipt_button"/>
-        </TableRow>
-
-        <!-- Row #6 - shopping lists section -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1" >
-
-            <!-- Add receipt button -->
-            <Button
-                android:id="@+id/mainmenu_shoppingLists_button"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="0.6"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/mainmenu_shoppingLists_button" />
-
-            <!-- receipts list button -->
-            <Button
-                android:id="@+id/mainmenu_addShoppingList_button"
-                android:backgroundTint="?android:colorAccent"
-                android:textColor="?android:colorBackground"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="0.4"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="20dp"
-                android:text="@string/mainmenu_addShoppingList_button" />
-        </TableRow>
-
-        <!-- Row #7 - settings and logout section -->
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
+        <TextView
+            android:id="@+id/mainmenu_profile_info"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp">
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/mainmenu_profile_info"
+            android:textSize="20sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/mainmenu_profile_text"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent" />
 
-            <!-- Settings button -->
-            <Button
-                android:id="@+id/mainmenu_settings_button"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="5dp"
-                android:text="@string/mainmenu_settings_button" />
+        <TextView
+            android:id="@+id/mainmenu_profile_text"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:singleLine="true"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mainmenu_profile_info" />
 
-            <!-- Logout button -->
-            <Button
-                android:id="@+id/mainmenu_logout_button"
-                android:layout_width="0dip"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginEnd="20dp"
-                android:layout_marginStart="5dp"
-                android:text="@string/mainmenu_profiles_button"/>
+        <TextView
+            android:id="@+id/mainmenu_balance_amount_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:singleLine="true"
+            android:textSize="50sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/mainmenu_balance_currency_text"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_hor_011" />
 
-        </TableRow>
+        <TextView
+            android:id="@+id/mainmenu_balance_currency_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textSize="35sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/mainmenu_balance_amount_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/mainmenu_balance_amount_text"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_hor_011"
+            app:layout_constraintVertical_bias="0.8" />
 
-    </TableLayout>
+        <Button
+            android:id="@+id/mainmenu_addIncome_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="?android:colorAccent"
+            android:text="@string/mainmenu_addIncome_button"
+            android:textColor="?android:colorBackground"
+            app:layout_constraintEnd_toStartOf="@+id/mainmenu_addExpense_button"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@+id/guideline_vert_005"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_hor_027" />
+
+        <Button
+            android:id="@+id/mainmenu_addExpense_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:backgroundTint="?android:colorAccent"
+            android:text="@string/mainmenu_addExpense_button"
+            android:textColor="?android:colorBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/mainmenu_addIncome_button"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vert_095"
+            app:layout_constraintStart_toEndOf="@id/mainmenu_addIncome_button"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_hor_027" />
+
+        <Button
+            android:id="@+id/mainmenu_finMgmt_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/mainmenu_finMgmt_button"
+            app:layout_constraintEnd_toEndOf="@+id/mainmenu_addExpense_button"
+            app:layout_constraintStart_toStartOf="@+id/mainmenu_addIncome_button"
+            app:layout_constraintTop_toBottomOf="@id/mainmenu_addIncome_button" />
+
+        <Button
+            android:id="@+id/mainmenu_receiptsList_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/mainmenu_receiptsList_button"
+            app:layout_constraintEnd_toStartOf="@+id/mainmenu_addReceipt_button"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@+id/mainmenu_addIncome_button"
+            app:layout_constraintTop_toBottomOf="@+id/guideline_hor_055" />
+
+        <Button
+            android:id="@+id/mainmenu_addReceipt_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:backgroundTint="?android:colorAccent"
+            android:text="@string/mainmenu_addReceipt_button"
+            android:textColor="?android:colorBackground"
+            app:layout_constraintEnd_toEndOf="@+id/mainmenu_finMgmt_button"
+            app:layout_constraintStart_toEndOf="@id/mainmenu_receiptsList_button"
+            app:layout_constraintTop_toBottomOf="@id/guideline_hor_055" />
+
+        <Button
+            android:id="@+id/mainmenu_shoppingLists_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/mainmenu_shoppingLists_button"
+            app:layout_constraintEnd_toStartOf="@+id/mainmenu_addShoppingList_button"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintTop_toBottomOf="@+id/mainmenu_receiptsList_button" />
+
+        <Button
+            android:id="@+id/mainmenu_addShoppingList_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:backgroundTint="?android:colorAccent"
+            android:text="@string/mainmenu_addShoppingList_button"
+            android:textColor="?android:colorBackground"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toEndOf="@+id/mainmenu_shoppingLists_button"
+            app:layout_constraintTop_toBottomOf="@+id/mainmenu_addReceipt_button" />
+
+        <Button
+            android:id="@+id/mainmenu_settings_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/mainmenu_settings_button"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_hor_095"
+            app:layout_constraintEnd_toStartOf="@+id/mainmenu_logout_button"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintTop_toBottomOf="@+id/mainmenu_shoppingLists_button" />
+
+        <Button
+            android:id="@+id/mainmenu_logout_button"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/mainmenu_profiles_button"
+            app:layout_constraintBottom_toTopOf="@+id/guideline_hor_095"
+            app:layout_constraintEnd_toStartOf="@id/guideline_vert_095"
+            app:layout_constraintStart_toEndOf="@id/mainmenu_settings_button"
+            app:layout_constraintTop_toBottomOf="@+id/mainmenu_addShoppingList_button" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

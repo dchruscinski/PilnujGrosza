@@ -96,22 +96,24 @@ public class MainMenu extends AppCompatActivity {
         addReceiptButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TO DO
-                // showAddReceiptDialog();
+                Intent intent = new Intent(v.getContext(), ReceiptList.class)
+                        .putExtra("source","menu");
+                startActivity(intent);
             }
         });
 
         receiptsListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), Receipt.class));
+                startActivity(new Intent(v.getContext(), ReceiptList.class));
             }
         });
 
         addShoppingListButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ShoppingList.class).putExtra("action","shoppingListButton");
+                Intent intent = new Intent(v.getContext(), ShoppingList.class)
+                        .putExtra("action","shoppingListButton");
                 startActivity(intent);
             }
         });

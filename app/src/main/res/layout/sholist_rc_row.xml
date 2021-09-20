@@ -7,10 +7,13 @@
         android:id="@+id/sholist_rc_icon"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:scaleY="2"
+        android:scaleX="2"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="12dip"
-        android:src="@drawable/outline_format_list_bulleted_black_48" />
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="36dp"
+        android:src="@drawable/outline_format_list_bulleted_24" />
 
     <TextView
         android:id="@+id/sholist_rc_name"

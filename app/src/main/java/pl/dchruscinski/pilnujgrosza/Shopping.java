@@ -176,7 +176,7 @@ public class Shopping extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    public void showEditShoppingDialog(final int budID) {
+    public void showEditShoppingDialog(final int position) {
         final EditText name, description;
         final TextView dateTextView;
         final Calendar calendar = Calendar.getInstance();
@@ -237,7 +237,7 @@ public class Shopping extends AppCompatActivity {
 
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę listy zakupów.");
-                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
+                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,30}")) {
                     name.setError("Nazwa listy powinna składać się z co najmniej dwóch liter.");
                 /*
                 } else if (databaseHelper.checkExistingExpenseCategoryName(name.getText().toString())) {
@@ -366,7 +366,7 @@ public class Shopping extends AppCompatActivity {
 
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę produktu.");
-                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:\\-,.\\d]{2,25}")) {
+                } else if (!name.getText().toString().matches("[\\sa-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:\\-,.\\d]{2,25}")) {
                     name.setError("Nazwa produktu powinna składać się z 2-25 znaków.");
                 } else if (databaseHelper.checkExistingProductNameInShoppingList(shoID, 0, name.getText().toString())) {
                     name.setError("W liście znajduje się już produkt z podaną nazwą.");
@@ -376,7 +376,7 @@ public class Shopping extends AppCompatActivity {
                     amount.setError("Ilość/liczbę powinna składać się wyłącznie z liczb.");
                 } else if (unit.getText().toString().trim().isEmpty()) {
                     unit.setError("Podaj jednostkę produktu.");
-                } else if (!unit.getText().toString().matches("[a-zA-Z;:,.\\-]{1,5}")) {
+                } else if (!unit.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:,.\\-]{1,5}")) {
                     unit.setError("Jednostka produktu powinna składać się wyłącznie z liter.");
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych, maksymalnie 7 znaków.");

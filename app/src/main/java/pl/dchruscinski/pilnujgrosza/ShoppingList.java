@@ -180,7 +180,7 @@ public class ShoppingList extends AppCompatActivity {
 
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę listy zakupów.");
-                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
+                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,30}")) {
                     name.setError("Nazwa listy powinna składać się z co najmniej dwóch liter.");
                 /*
                 } else if (databaseHelper.checkExistingExpenseCategoryName(name.getText().toString())) {

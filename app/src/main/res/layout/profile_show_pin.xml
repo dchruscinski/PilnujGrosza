@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -58,7 +57,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="24dp"
             android:layout_below="@+id/profile_showPIN_info_helperquestion_desc"
-            android:drawableStart="@drawable/baseline_account_box_black_24dp"
+            android:drawableStart="@drawable/baseline_account_box_24"
             android:drawablePadding="10dp"
             android:textSize="20sp" >
         </TextView>
@@ -72,7 +71,7 @@
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:drawableStart="@drawable/baseline_pin_black_24dp"
+            android:drawableStart="@drawable/baseline_pin_24"
             android:drawablePadding="10dp"
             android:singleLine="true"
             android:textIsSelectable="true"

@@ -13,7 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 public class NotificationPublisher extends BroadcastReceiver {
         public void onReceive (Context context, Intent intent) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "notification")
-                    .setSmallIcon(R.drawable.baseline_article_black_18dp)
+                    .setSmallIcon(R.drawable.baseline_article_24)
                     .setContentTitle("Przypomnienie o zaplanowanej płatności")
                     .setContentText("Zapłać teraz!")
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT);

@@ -82,7 +82,7 @@ public class ExpenseCategory extends AppCompatActivity {
 
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę kategorii.");
-                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-]{2,30}")) {
+                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,30}")) {
                     name.setError("Nazwa kategorii powinna składać się z co najmniej dwóch liter.");
                 } else if (databaseHelper.checkExistingExpenseCategoryName(0, name.getText().toString())) {
                     System.out.println("Name: " + name.getText().toString());

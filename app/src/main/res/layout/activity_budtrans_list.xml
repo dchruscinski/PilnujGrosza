@@ -23,11 +23,14 @@
         <ImageView
             android:id="@+id/budtrans_rc_icon"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="match_parent"
+            android:scaleX="2"
+            android:scaleY="2"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="12dip"
-            android:src="@mipmap/pilnuj_grosza_logo_round" />
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="36dp"
+            android:src="@drawable/baseline_savings_24" />
 
         <TextView
             android:id="@+id/budtrans_rc_fromDate"

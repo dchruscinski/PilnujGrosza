@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -61,7 +62,7 @@ public class ShoppingContentAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public class ViewHolderShoppingContent extends RecyclerView.ViewHolder {
         public TextView shoContName, shoContAmount, shoContUnit, shoContValue, shoContCurrency;
         public CheckBox shoContCheckbox;
-        public ImageView editShoCont, deleteShoCont;
+        public ImageView deleteShoCont;
         public View layout;
 
         public ViewHolderShoppingContent(View v) {
@@ -133,14 +134,13 @@ public class ShoppingContentAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             shoppingContentHolder.shoContName.setText(shoppingContent.getShoContName());
             shoppingContentHolder.shoContAmount.setText(String.valueOf(shoppingContent.getShoContAmount()));
             shoppingContentHolder.shoContUnit.setText(shoppingContent.getShoContUnit());
+            shoppingContentHolder.shoContCurrency.setText(databaseHelper.getCurrency(chosenProfileID));
 
-            if (shoppingContentList.get(position).isShoContChecked()) {
-                shoppingContentHolder.shoContCheckbox.setChecked(true);
-                shoppingContentHolder.shoContName.setPaintFlags(shoppingContentHolder.shoContName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                shoppingContentHolder.shoContAmount.setPaintFlags(shoppingContentHolder.shoContAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                shoppingContentHolder.shoContUnit.setPaintFlags(shoppingContentHolder.shoContUnit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                shoppingContentHolder.shoContValue.setPaintFlags(shoppingContentHolder.shoContValue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-                shoppingContentHolder.shoContCurrency.setPaintFlags(shoppingContentHolder.shoContCurrency.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            if (contValue.equals(BigDecimal.valueOf(0))) {
+                shoppingContentHolder.shoContValue.setText("");
+                shoppingContentHolder.shoContCurrency.setText("");
+            } else {
+                shoppingContentHolder.shoContValue.setText(new DecimalFormat("#.##").format(contValue));
             }
 
             /*
@@ -152,28 +152,28 @@ public class ShoppingContentAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             }
             */
 
-            shoppingContentHolder.shoContCurrency.setText(databaseHelper.getCurrency(chosenProfileID));
+            shoppingContentHolder.shoContCheckbox.setOnCheckedChangeListener(null);
+            shoppingContentHolder.shoContCheckbox.setChecked(shoppingContent.isShoContChecked());
 
-            if (contValue.equals(BigDecimal.valueOf(0))) {
-                shoppingContentHolder.shoContValue.setText("");
-                shoppingContentHolder.shoContCurrency.setText("");
+            if (shoppingContent.isShoContChecked()) {
+                shoppingContentHolder.shoContName.setPaintFlags(shoppingContentHolder.shoContName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                shoppingContentHolder.shoContAmount.setPaintFlags(shoppingContentHolder.shoContAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                shoppingContentHolder.shoContUnit.setPaintFlags(shoppingContentHolder.shoContUnit.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                shoppingContentHolder.shoContValue.setPaintFlags(shoppingContentHolder.shoContValue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                shoppingContentHolder.shoContCurrency.setPaintFlags(shoppingContentHolder.shoContCurrency.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             } else {
-                shoppingContentHolder.shoContValue.setText(new DecimalFormat("#.##").format(contValue));
+                shoppingContentHolder.shoContName.setPaintFlags(shoppingContentHolder.shoContName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                shoppingContentHolder.shoContAmount.setPaintFlags(shoppingContentHolder.shoContAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                shoppingContentHolder.shoContUnit.setPaintFlags(shoppingContentHolder.shoContUnit.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                shoppingContentHolder.shoContValue.setPaintFlags(shoppingContentHolder.shoContValue.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                shoppingContentHolder.shoContCurrency.setPaintFlags(shoppingContentHolder.shoContCurrency.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
             }
 
             shoppingContentHolder.shoContCheckbox.setOnClickListener(new View.OnClickListener() {;
                 @Override
                 public void onClick(View v) {
-                    if (shoppingContentList.get(position).isShoContChecked()) {
-                        shoppingContentHolder.shoContCheckbox.setChecked(false);
-                        shoppingContentHolder.shoContName.setPaintFlags(shoppingContentHolder.shoContName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        shoppingContentHolder.shoContAmount.setPaintFlags(shoppingContentHolder.shoContAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        shoppingContentHolder.shoContUnit.setPaintFlags(shoppingContentHolder.shoContUnit.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        shoppingContentHolder.shoContValue.setPaintFlags(shoppingContentHolder.shoContValue.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        shoppingContentHolder.shoContCurrency.setPaintFlags(shoppingContentHolder.shoContCurrency.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
-                        databaseHelper.updateShoppingContentStatus(shoppingContentList.get(position).getShoContID(), false);
-                        shoppingContentList.get(position).setShoContChecked(false);
-                    } else {
+                    boolean isChecked = shoppingContentHolder.shoContCheckbox.isChecked();
+                    if (isChecked) {
                         shoppingContentHolder.shoContCheckbox.setChecked(true);
                         shoppingContentHolder.shoContName.setPaintFlags(shoppingContentHolder.shoContName.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         shoppingContentHolder.shoContAmount.setPaintFlags(shoppingContentHolder.shoContAmount.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
@@ -181,7 +181,16 @@ public class ShoppingContentAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                         shoppingContentHolder.shoContValue.setPaintFlags(shoppingContentHolder.shoContValue.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         shoppingContentHolder.shoContCurrency.setPaintFlags(shoppingContentHolder.shoContCurrency.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
                         databaseHelper.updateShoppingContentStatus(shoppingContentList.get(position).getShoContID(), true);
-                        shoppingContentList.get(position).setShoContChecked(true);
+                        shoppingContent.setShoContChecked(true);
+                    } else {
+                        shoppingContentHolder.shoContCheckbox.setChecked(false);
+                        shoppingContentHolder.shoContName.setPaintFlags(shoppingContentHolder.shoContName.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        shoppingContentHolder.shoContAmount.setPaintFlags(shoppingContentHolder.shoContAmount.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        shoppingContentHolder.shoContUnit.setPaintFlags(shoppingContentHolder.shoContUnit.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        shoppingContentHolder.shoContValue.setPaintFlags(shoppingContentHolder.shoContValue.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        shoppingContentHolder.shoContCurrency.setPaintFlags(shoppingContentHolder.shoContCurrency.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+                        databaseHelper.updateShoppingContentStatus(shoppingContentList.get(position).getShoContID(), false);
+                        shoppingContent.setShoContChecked(false);
                     }
                     notifyDataSetChanged();
                 }
@@ -297,7 +306,7 @@ public class ShoppingContentAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę produktu.");
-                } else if (!name.getText().toString().matches("[\\sa-zA-Z;:\\-,.\\d]{2,25}")) {
+                } else if (!name.getText().toString().matches("[\\sa-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:\\-,.\\d]{2,25}")) {
                     name.setError("Nazwa produktu powinna składać się z 2-25 znaków.");
                 } else if (databaseHelper.checkExistingProductNameInShoppingList(shoppingContentList.get(position).getShoContShoID(), shoppingContentList.get(position).getShoContID(), name.getText().toString())) {
                     name.setError("W liście znajduje się już produkt z podaną nazwą.");
@@ -307,7 +316,7 @@ public class ShoppingContentAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     amount.setError("Ilość/liczbę powinna składać się wyłącznie z liczb.");
                 } else if (unit.getText().toString().trim().isEmpty()) {
                     unit.setError("Podaj jednostkę produktu.");
-                } else if (!unit.getText().toString().matches("[a-zA-Z;:,.\\-]{1,5}")) {
+                } else if (!unit.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:,.\\-]{1,5}")) {
                     unit.setError("Jednostka produktu powinna składać się wyłącznie z liter.");
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych, maksymalnie 7 znaków.");

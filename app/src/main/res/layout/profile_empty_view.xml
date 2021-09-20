@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="?android:attr/colorBackground" >
+    android:background="?android:attr/colorBackground">
 
     <ImageView
         android:id="@+id/profile_empty_logo"
@@ -21,5 +20,5 @@
         android:layout_marginTop="16dp"
         android:text="@string/profile_empty_text"
         android:alpha="0.3"
-        android:textColor="#000000" />
+        android:textColor="?attr/colorOnPrimary" />
 </LinearLayout>

@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -58,7 +57,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginHorizontal="24dp"
             android:layout_below="@+id/profile_loginform_predelete_info"
-            android:drawableStart="@drawable/baseline_account_box_black_24dp"
+            android:drawableStart="@drawable/baseline_account_box_24"
             android:drawablePadding="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -76,7 +75,7 @@
             android:layout_marginBottom="10dp"
             android:inputType="numberPassword"
             android:maxLength="6"
-            android:drawableStart="@drawable/baseline_pin_black_24dp"
+            android:drawableStart="@drawable/baseline_pin_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_createform_pin"
             android:singleLine="true" />

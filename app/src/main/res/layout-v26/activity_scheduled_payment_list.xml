@@ -31,7 +31,7 @@
                 android:backgroundTint="@color/flat_minus_background"
                 app:tint="@null"
                 android:tooltipText="@string/schpay_fab_addScheduledPayment"
-                app:srcCompat="@drawable/baseline_more_time_black_48" />
+                app:srcCompat="@drawable/baseline_more_time_24" />
 
         </RelativeLayout>
 

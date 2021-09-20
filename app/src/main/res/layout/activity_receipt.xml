@@ -1,67 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/tableLayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    android:weightSum="5"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?android:attr/colorBackground"
-    tools:context="pl.dchruscinski.pilnujgrosza.Receipt">
+    tools:context="pl.dchruscinski.pilnujgrosza.Shopping">
 
-    <!-- Row #1 - FAB "Add receipt" and description text view -->
-    <TableRow
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="40dp"
-        android:layout_weight="1"
-        android:weightSum="4">
+        android:layout_height="wrap_content"
+        android:padding="6dp" >
 
-        <!-- FAB - "Dodaj paragon / Add receipt" -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/receipt_fab_addReceipt"
-            android:clickable="true"
+    <RelativeLayout
+        android:id="@+id/receipt_info"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:layout_marginBottom="10dp" >
+
+        <ImageView
+            android:id="@+id/receipt_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:scaleX="2"
+            android:scaleY="2"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="36dp"
+            android:src="@drawable/baseline_receipt_long_24" />
+
+        <TextView
+            android:id="@+id/receipt_text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_column="0"
-            android:layout_weight="1"
-            android:visibility="visible"
-            android:backgroundTint="@color/flat_plus_background"
-            app:tint="@null"
-            app:srcCompat="@mipmap/flat_plus_foreground" />
+            android:layout_above="@id/receipt_text_desc"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_toEndOf="@id/receipt_icon"
+            android:gravity="center_vertical"
+            android:text="@string/receipt_text_name"
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
-        <!-- Text view - FAB description "Dodaj paragon / Add receipt" -->
         <TextView
-            android:id="@+id/receipt_text_addReceipt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="4"
-            android:textAllCaps="true"
-            android:textSize="20dp"
-            android:textAlignment="center"
-            android:gravity="center"
-            android:text="@string/receipt_text_addReceipt" />
-    </TableRow>
+            android:id="@+id/receipt_text_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/receipt_text_desc"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginEnd="12dp"
+            android:gravity="center_vertical"
+            android:text="@string/receipt_text_date"
+            android:textStyle="bold"
+            android:textSize="16sp" />
 
-    <!-- Row #2 - receipt -->
-    <TableRow
+        <TextView
+            android:id="@+id/receipt_text_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="26dp"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentBottom="true"
+            android:layout_toEndOf="@id/receipt_icon"
+            android:gravity="center_vertical"
+            android:text="@string/sholist_rc_desc"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/receipt_img"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/receipt_info"
+        android:layout_margin="20dp"
+        android:background="?colorOnBackground"
+        android:padding="1dp" />
+
+    <Button
+        android:id="@+id/receipt_button_edit"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/receipt_img"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="20dp"
+        android:text="@string/receipt_button_edit"/>
+
+    <Button
+        android:id="@+id/receipt_button_delete"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_below="@id/receipt_img"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:text="@string/receipt_button_delete"/>
+
+    <TextView
+        android:id="@+id/receipt_text_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="4">
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/receipt_button_edit"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textAlignment="center" />
 
-        <!-- TextView as filler -->
-        <TextView
-            android:id="@+id/receipt_text_test"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="@string/receipt_text_test"/>
-    </TableRow>
+    </RelativeLayout>
 
-</TableLayout>
+</ScrollView>

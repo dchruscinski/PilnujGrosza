@@ -11,23 +11,25 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="6dip" >
+        android:padding="6dp" >
 
     <RelativeLayout
         android:id="@+id/shopping_bud_info"
         android:layout_width="match_parent"
         android:layout_height="96dp"
-        android:layout_marginBottom="10dp"
-        android:padding="6dip" >
+        android:layout_marginBottom="10dp" >
 
         <ImageView
             android:id="@+id/shopping_rc_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:scaleX="2"
+            android:scaleY="2"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
-            android:layout_marginEnd="12dip"
-            android:src="@drawable/outline_format_list_bulleted_black_48" />
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="36dp"
+            android:src="@drawable/outline_format_list_bulleted_24" />
 
         <TextView
             android:id="@+id/shopping_rc_name"
@@ -50,7 +52,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_marginEnd="6dip"
+            android:layout_marginEnd="12dp"
             android:gravity="center_vertical"
             android:text="@string/sholist_rc_date"
             android:textStyle="bold"
@@ -110,6 +112,7 @@
             android:layout_alignWithParentIfMissing="true"
             android:layout_toEndOf="@id/shopping_rc_value"
             android:layout_marginStart="5dp"
+            android:layout_marginEnd="24dp"
             android:gravity="center_vertical"
             android:text="@string/sholist_rc_currency"
             android:textSize="16sp"

@@ -10,7 +10,7 @@
         android:id="@+id/schpay_empty_logo"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@mipmap/expcat_empty_logo"
+        android:src="@drawable/baseline_reorder_24"
         android:alpha="0.3" />
 
     <TextView

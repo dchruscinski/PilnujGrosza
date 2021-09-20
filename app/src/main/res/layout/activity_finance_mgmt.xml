@@ -1,111 +1,122 @@
-<?xml version="1.0" encoding="utf-8"?>
-<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tableLayout"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="20dp"
-    android:layout_marginBottom="20dp"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="?android:attr/colorBackground"
+    android:fillViewport="true"
     tools:context="pl.dchruscinski.pilnujgrosza.FinanceManagement">
 
-    <!-- Row #1 - budget menu -->
-    <TableRow
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginBottom="20dp">
+        android:layout_height="match_parent">
 
-        <!-- budget menu button -->
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vert_005"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vert_095"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_005"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_023"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.23" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_053"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.53" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_075"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_hor_095"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.95" />
+
         <Button
             android:id="@+id/finmgmt_budgetmenu_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_budgetmenu_button" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/finmgmt_budgetmenu_button"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintTop_toTopOf="@id/guideline_hor_005" />
 
-    <!-- Row #2 - transactions list button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <!-- transactions list button -->
         <Button
             android:id="@+id/finmgmt_transactionsList_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_transactionsList_button" />
-        </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/finmgmt_transactionsList_button"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintTop_toTopOf="@id/guideline_hor_023" />
 
-    <!-- Row #3 - scheduled payments button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginBottom="20dp" >
-
-        <!-- scheduled payment button -->
         <Button
             android:id="@+id/finmgmt_schpay_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_schpay_button" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/finmgmt_schpay_button"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintTop_toBottomOf="@id/finmgmt_transactionsList_button" />
 
-    <!-- Row #4 - income categories button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <!-- income categories button -->
         <Button
             android:id="@+id/finmgmt_inccat_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_inccat_button" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/finmgmt_inccat_button"
+            app:layout_constraintTop_toTopOf="@id/guideline_hor_053"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005" />
 
-    <!-- Row #5 - expense categories button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_marginBottom="20dp">
-
-        <!-- expense categories button -->
         <Button
             android:id="@+id/finmgmt_expcat_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_expcat_button" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/finmgmt_expcat_button"
+            app:layout_constraintTop_toBottomOf="@id/finmgmt_inccat_button"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintBottom_toTopOf="@id/finmgmt_statistics_button"/>
 
-    <!-- Row #6 - summary button -->
-    <TableRow
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-
-        <!-- summary button -->
         <Button
             android:id="@+id/finmgmt_statistics_button"
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="20dp"
-            android:layout_weight="1"
-            android:text="@string/finmgmt_statistics_button" />
-    </TableRow>
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:text="@string/finmgmt_statistics_button"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toBottomOf="@id/finmgmt_expcat_button"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_vert_095"
+            app:layout_constraintStart_toStartOf="@id/guideline_vert_005"
+            app:layout_constraintBottom_toBottomOf="@id/guideline_hor_095"/>
 
-    </TableLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

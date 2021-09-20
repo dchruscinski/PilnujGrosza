@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -58,7 +57,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="24dp"
             android:layout_below="@+id/profile_remindPIN_info_helperquestion_desc"
-            android:drawableStart="@drawable/baseline_help_black_18dp"
+            android:drawableStart="@drawable/baseline_help_24"
             android:drawablePadding="10dp"
             android:textSize="20sp" >
         </TextView>
@@ -73,7 +72,7 @@
             android:layout_marginTop="40dp"
             android:layout_marginBottom="10dp"
             android:maxLength="128"
-            android:drawableStart="@drawable/baseline_qa_black_18dp"
+            android:drawableStart="@drawable/baseline_question_answer_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_createform_text_helperquestion_answer"
             android:singleLine="true" />

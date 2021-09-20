@@ -6,10 +6,10 @@
     <ImageView
         android:id="@+id/exp_rc_icon"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="6dip"
+        android:layout_marginEnd="12dp"
         android:src="@mipmap/flat_minus" />
 
     <TextView

@@ -7,7 +7,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -46,7 +45,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginHorizontal="24dp"
             android:layout_below="@+id/income_createform_info_create"
-            android:drawableStart="@drawable/baseline_today_black_24dp"
+            android:drawableStart="@drawable/baseline_today_24"
             android:drawablePadding="10dp"
             android:textSize="20sp"
             android:focusable="false"
@@ -62,8 +61,8 @@
             android:layout_below="@+id/income_createform_text_date"
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
-            android:drawableStart="@drawable/baseline_paid_black_36dp"
-            android:drawablePadding="20dp"
+            android:drawableStart="@drawable/baseline_paid_24"
+            android:drawablePadding="10dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:inputType="numberDecimal"
@@ -92,7 +91,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/income_createform_text_value"
             android:layout_marginHorizontal="20dp"
-            android:drawableStart="@drawable/baseline_article_black_24dp"
+            android:drawableStart="@drawable/baseline_article_24"
             android:drawablePadding="10dp"
             android:hint="@string/income_createform_text_desc"
             android:singleLine="true" >

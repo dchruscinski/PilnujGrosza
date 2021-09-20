@@ -7,7 +7,6 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:scrollbars="vertical"
         android:scrollbarAlwaysDrawVerticalTrack="true" >
 
@@ -46,7 +45,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/profile_editform_info_login"
             android:layout_marginHorizontal="20dp"
-            android:drawableStart="@drawable/baseline_account_box_black_24dp"
+            android:drawableStart="@drawable/baseline_account_box_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_editform_name"
             android:singleLine="true" >
@@ -69,7 +68,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:inputType="numberPassword"
-            android:drawableStart="@drawable/baseline_pin_black_24dp"
+            android:drawableStart="@drawable/baseline_pin_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_editform_text_newPIN"
             android:singleLine="true" />
@@ -82,7 +81,7 @@
             android:layout_below="@+id/profile_editform_text_newPIN"
             android:layout_marginHorizontal="20dp"
             android:inputType="numberPassword"
-            android:drawableStart="@drawable/baseline_pin_black_24dp"
+            android:drawableStart="@drawable/baseline_pin_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_editform_text_newPIN_confirm"
             android:singleLine="true" />
@@ -104,7 +103,7 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:maxLength="128"
-            android:drawableStart="@drawable/baseline_help_black_24dp"
+            android:drawableStart="@drawable/baseline_help_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_editform_text_newHelperQuestion"
             android:singleLine="true" />
@@ -118,7 +117,7 @@
             android:layout_marginHorizontal="20dp"
             android:maxLength="128"
             android:inputType="textPassword"
-            android:drawableStart="@drawable/baseline_qa_black_24dp"
+            android:drawableStart="@drawable/baseline_question_answer_24"
             android:drawablePadding="10dp"
             android:hint="@string/profile_editform_text_newHelperAnswer"
             android:singleLine="true" />

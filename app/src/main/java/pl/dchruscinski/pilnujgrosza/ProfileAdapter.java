@@ -320,7 +320,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public void onClick(View v) {
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nową nazwę profilu.");
-                } else if (!name.getText().toString().matches("[a-zA-Z]{2,20}")) {
+                } else if (!name.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
                 } else if (databaseHelper.checkExistingProfileName(profilesList.get(position).getProfID(), name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
@@ -375,7 +375,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     newQuestion.setError("Podaj pytanie pomocnicze.");
                 } else if (newAnswer.getText().toString().trim().isEmpty()) {
                     newAnswer.setError("Podaj odpowiedź na pytanie pomocnicze.");
-                } else if (!newQuestion.getText().toString().matches("[\\sa-zA-Z0-9_.,-]{2,128}[?]")) {
+                } else if (!newQuestion.getText().toString().matches("[\\sa-zA-Z0-9_.,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,128}[?]")) {
                     newQuestion.setError("Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.");
                 } else {
                     databaseHelper.updateHelperQuestionAndAnswer(helperQuestion, helperHashedAnswer, helperHashSalt, profilesList.get(position).getProfID());

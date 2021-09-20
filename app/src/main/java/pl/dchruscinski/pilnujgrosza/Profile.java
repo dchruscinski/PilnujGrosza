@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Profile extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -58,7 +59,7 @@ public class Profile extends AppCompatActivity {
     }
 
     public void showCreateDialog() {
-        final EditText name, PIN, PINConfirm, initialBalance;
+        final EditText name, PIN, PINConfirm, initialBalance, currency;
         Button nextStageButton;
 
         final Dialog dialog = new Dialog(this);
@@ -79,6 +80,7 @@ public class Profile extends AppCompatActivity {
         PIN = (EditText) dialog.findViewById(R.id.profile_createform_text_pin);
         PINConfirm = (EditText) dialog.findViewById(R.id.profile_createform_text_pin_confirm);
         initialBalance = (EditText) dialog.findViewById(R.id.profile_createform_text_initialBalance);
+        currency = (EditText) dialog.findViewById(R.id.profile_createform_text_currency);
         nextStageButton = (Button) dialog.findViewById(R.id.profile_createform_button_nextstage);
 
         nextStageButton.setOnClickListener(new View.OnClickListener() {;
@@ -94,6 +96,9 @@ public class Profile extends AppCompatActivity {
                 String profName = name.getText().toString().trim();
                 int profInitialBalance = 0;
                 int profBalance = 0;
+
+                String profCurrency = currency.getText().toString().trim();
+                if (currency.getText().toString().trim().isEmpty()) profCurrency = "zł";
 
                 if (!initialBalance.getText().toString().trim().isEmpty()) {
                     String stringInitialBalance = initialBalance.getText().toString().trim();
@@ -124,23 +129,27 @@ public class Profile extends AppCompatActivity {
                     PIN.setError("Kod PIN musi składać się z 6 cyfr.");
                 } else if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę profilu.");
-                } else if (!name.getText().toString().matches("[a-zA-Z]{2,20}")) {
+                } else if (!name.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
                 } else if (databaseHelper.checkExistingProfileName(0, name.getText().toString())) {
                     name.setError("Istnieje już profil z podaną nazwą.");
                 } else if (!isInitialBalanceValid) {
                     initialBalance.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
+                } else if (currency.getText().toString().trim().matches("\\d+")) {
+                    currency.setError("Wartość nie może być wyrażona w cyfrach.");
+                } else if (!currency.getText().toString().trim().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{0,4}")) {
+                    currency.setError("Waluta musi składać się maksymalnie z czterech liter.");
                 } else {
                     dialog.cancel();
                     displayProfilesList();
-                    showHelperQuestionAndAnswerDialog(profName, hashedPIN, hashSalt, profInitialBalance, profBalance);
+                    showHelperQuestionAndAnswerDialog(profName, hashedPIN, hashSalt, profInitialBalance, profBalance, profCurrency);
                 }
             }
         });
 
     }
 
-    public void showHelperQuestionAndAnswerDialog(String profName, String hashedPIN, String hashSalt, int profInitialBalance, int profBalance) {
+    public void showHelperQuestionAndAnswerDialog(String profName, String hashedPIN, String hashSalt, int profInitialBalance, int profBalance, String profCurrency) {
         final EditText question, answer;
         Button submitCreate;
         databaseHelper = new DatabaseHelper(this);
@@ -176,7 +185,7 @@ public class Profile extends AppCompatActivity {
                     question.setError("Podaj pytanie pomocnicze.");
                 } else if (answer.getText().toString().trim().isEmpty()) {
                     answer.setError("Podaj odpowiedź na pytanie pomocnicze.");
-                } else if (!question.getText().toString().matches("[\\sa-zA-Z0-9_.,-]{2,128}[?]")) {
+                } else if (!question.getText().toString().trim().matches("[\\sa-zA-Z0-9_.,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,128}[?]")) {
                     question.setError("Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.");
                 } else {
                     profileModel.setProfName(profName);
@@ -187,7 +196,7 @@ public class Profile extends AppCompatActivity {
                     profileModel.setProfHelperQuestion(helperQuestion);
                     profileModel.setProfHelperAnswer(helperHashedAnswer);
                     profileModel.setProfHelperSalt(helperHashSalt);
-                    databaseHelper.addProfile(profileModel);
+                    databaseHelper.addProfile(profileModel, profCurrency);
 
                     dialog.cancel();
                     displayProfilesList();

@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import static java.lang.Math.abs;
+import static java.sql.Types.BLOB;
 import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfileID;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -110,6 +111,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SHOPPING_CONTENT_UNIT = "shoContUnit";
     public static final String COLUMN_SHOPPING_CONTENT_VALUE = "shoContValue";
     public static final String COLUMN_SHOPPING_CONTENT_STATUS = "shoContStatus";
+
+    public static final String TABLE_RECEIPT = "receipt";
+    public static final String COLUMN_RECEIPT_ID = "recID";
+    public static final String COLUMN_RECEIPT_PROFILE_ID = "recProfID";
+    public static final String COLUMN_RECEIPT_EXPENSE_ID = "recExpID";
+    public static final String COLUMN_RECEIPT_IMG = "recImg";
+    public static final String COLUMN_RECEIPT_NAME = "recName";
+    public static final String COLUMN_RECEIPT_DATE = "shoDate";
+    public static final String COLUMN_RECEIPT_DESCRIPTION = "recDesc";
+    public static final String COLUMN_RECEIPT_DATA = "recData";
 
     public static final String TIMEZONE = "Europe/Warsaw";
     static final int callbackId = 42;
@@ -210,6 +221,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         COLUMN_SHOPPING_CONTENT_VALUE + " INTEGER," +
                         COLUMN_SHOPPING_CONTENT_STATUS + " BOOLEAN)";
 
+        String createReceiptTableStatement =
+                "CREATE TABLE " + TABLE_RECEIPT + " (" +
+                        COLUMN_RECEIPT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        COLUMN_RECEIPT_PROFILE_ID + " INTEGER NOT NULL," +
+                        COLUMN_RECEIPT_EXPENSE_ID + " INTEGER," +
+                        COLUMN_RECEIPT_IMG + " TEXT," +
+                        COLUMN_RECEIPT_NAME + " TEXT NOT NULL," +
+                        COLUMN_RECEIPT_DATE + " DATE NOT NULL," +
+                        COLUMN_RECEIPT_DESCRIPTION + " TEXT," +
+                        COLUMN_RECEIPT_DATA + " TEXT)";
+
         db.execSQL(createProfileTableStatement);
         db.execSQL(createExpenseCategoryTableStatement);
         db.execSQL(createIncomeCategoryTableStatement);
@@ -219,6 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(createSettingsTableStatement);
         db.execSQL(createShoppingTableStatement);
         db.execSQL(createShoppingContentTableStatement);
+        db.execSQL(createReceiptTableStatement);
     }
 
     // making changes to existing table
@@ -234,6 +257,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String upgradeSettingsTableStatement = "DROP TABLE IF EXISTS " + TABLE_SETTINGS;
         String upgradeShoppingTableStatement = "DROP TABLE IF EXISTS " + TABLE_SHOPPING;
         String upgradeShoppingContentTableStatement = "DROP TABLE IF EXISTS " + TABLE_SHOPPING_CONTENT;
+        String upgradeReceiptTableStatement = "DROP TABLE IF EXISTS " + TABLE_RECEIPT;
 
         db.execSQL(upgradeProfileTableStatement);
         db.execSQL(upgradeExpenseCategoryTableStatement);
@@ -244,10 +268,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(upgradeSettingsTableStatement);
         db.execSQL(upgradeShoppingTableStatement);
         db.execSQL(upgradeShoppingContentTableStatement);
+        db.execSQL(upgradeReceiptTableStatement);
         onCreate(db);
     }
 
-    public void addProfile(ProfileModel profileModel) {
+    public void addProfile(ProfileModel profileModel, String profCurrency) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
@@ -267,7 +292,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.clear();
 
-        addDefaultSettings(db, profID);
+        addDefaultSettings(db, profID, profCurrency);
         addDefaultExpenseCategory(db, profID);
         addDefaultIncomeCategory(db, profID);
     }
@@ -380,6 +405,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_PROFILE_HELPER_QUESTION, question);
         cv.put(COLUMN_PROFILE_HELPER_ANSWER, answer);
         cv.put(COLUMN_PROFILE_HELPER_SALT, salt);
+        db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
+    }
+
+    public void updateProfileBalance(int profID, int balance) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv =  new ContentValues();
+        cv.put(COLUMN_PROFILE_BALANCE, balance);
+
         db.update(TABLE_PROFILE, cv, COLUMN_PROFILE_ID + " = " + profID, null);
     }
 
@@ -1560,7 +1594,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_BUDGET, COLUMN_BUDGET_ID + " = " + budID, null);
     }
 
-    public void addDefaultSettings(SQLiteDatabase db, long profID) {
+    public void addDefaultSettings(SQLiteDatabase db, long profID, String profCurrency) {
         ContentValues cv = new ContentValues();
 
         cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
@@ -1571,7 +1605,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cv.put(COLUMN_SETTINGS_PROFILE_ID, profID);
         cv.put(COLUMN_SETTINGS_NAME, "currency");
-        cv.put(COLUMN_SETTINGS_VALUE, "zł");
+        cv.put(COLUMN_SETTINGS_VALUE, profCurrency);
         db.insert(TABLE_SETTINGS, null, cv);
         cv.clear();
 
@@ -2501,6 +2535,103 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         cursor.close();
         return doesNameExistInDatabase;
+    }
+
+    public void addReceipt(ReceiptModel receiptModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RECEIPT_PROFILE_ID, chosenProfileID);
+        cv.put(COLUMN_RECEIPT_IMG, receiptModel.getRecImg());
+        cv.put(COLUMN_RECEIPT_NAME, receiptModel.getRecName());
+        cv.put(COLUMN_RECEIPT_DATE, receiptModel.getRecDate());
+        cv.put(COLUMN_RECEIPT_DESCRIPTION, receiptModel.getRecDesc());
+        db.insert(TABLE_RECEIPT, null, cv);
+    }
+
+    public List<ReceiptModel> getReceiptList() {
+        List<ReceiptModel> receiptList = new ArrayList<>();
+        String getReceiptListStatement = "SELECT * FROM " + TABLE_RECEIPT + " WHERE " + COLUMN_RECEIPT_PROFILE_ID +  " = " + chosenProfileID + " ORDER BY " + COLUMN_RECEIPT_DATE + " DESC";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getReceiptListStatement, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int recID = cursor.getInt(cursor.getColumnIndex(COLUMN_RECEIPT_ID));
+                int recProfID = cursor.getInt(cursor.getColumnIndex(COLUMN_RECEIPT_PROFILE_ID));
+                int recExpID = cursor.getInt(cursor.getColumnIndex(COLUMN_RECEIPT_EXPENSE_ID));
+                String recImg = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_IMG));
+                String recName = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_NAME));
+                String recDate = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_DATE));
+                String recDesc = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_DESCRIPTION));
+                String recData = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_DATA));
+
+                ReceiptModel receiptModel = new ReceiptModel(recID, recProfID, recExpID, recImg, recName, recDate, recDesc, recData);
+
+                receiptList.add(receiptModel);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return receiptList;
+    }
+
+    public ReceiptModel getReceipt(int recID) {
+        ReceiptModel receiptModel = new ReceiptModel();
+        String getReceiptStatement = "SELECT * FROM " + TABLE_RECEIPT + " WHERE " + COLUMN_RECEIPT_ID +  " = ?";
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(getReceiptStatement, new String[] {Integer.toString(recID)});
+        if (cursor.moveToFirst()) {
+            do {
+                int recProfID = cursor.getInt(cursor.getColumnIndex(COLUMN_RECEIPT_PROFILE_ID));
+                int recExpID = cursor.getInt(cursor.getColumnIndex(COLUMN_RECEIPT_EXPENSE_ID));
+                String recImg = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_IMG));
+                String recName = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_NAME));
+                String recDate = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_DATE));
+                String recDesc = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_DESCRIPTION));
+                String recData = cursor.getString(cursor.getColumnIndex(COLUMN_RECEIPT_DATA));
+
+                receiptModel = new ReceiptModel(recID, recProfID, recExpID, recImg, recName, recDate, recDesc, recData);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return receiptModel;
+    }
+
+    public void updateReceiptAttributes(int recID, ReceiptModel receiptModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RECEIPT_NAME, receiptModel.getRecName());
+        cv.put(COLUMN_RECEIPT_DATE, receiptModel.getRecDate());
+        cv.put(COLUMN_RECEIPT_DESCRIPTION, receiptModel.getRecDesc());
+        db.update(TABLE_RECEIPT, cv, COLUMN_RECEIPT_ID + " = " + recID, null);
+    }
+
+    public void updateReceiptData(int recID, ReceiptModel receiptModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RECEIPT_DATA, receiptModel.getRecDate());
+        db.update(TABLE_RECEIPT, cv, COLUMN_RECEIPT_ID + " = " + recID, null);
+    }
+
+    public void updateReceiptImage(int recID, ReceiptModel receiptModel) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_RECEIPT_IMG, receiptModel.getRecImg());
+        db.update(TABLE_RECEIPT, cv, COLUMN_RECEIPT_ID + " = " + recID, null);
+    }
+
+    public void deleteReceipt(int recID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_RECEIPT, COLUMN_RECEIPT_ID + " = " + recID, null);
     }
 
 }

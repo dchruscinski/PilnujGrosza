@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip" >
+
+    <ImageView
+        android:id="@+id/receipt_rc_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleY="2"
+        android:scaleX="2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="36dp"
+        android:src="@drawable/baseline_receipt_long_24" />
+
+    <TextView
+        android:id="@+id/receipt_rc_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/receipt_rc_desc"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toEndOf="@id/receipt_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/receipt_rc_name"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/receipt_rc_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/receipt_rc_desc"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_marginEnd="6dip"
+        android:gravity="center_vertical"
+        android:text="@string/receipt_rc_date"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/receipt_rc_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@id/receipt_rc_icon"
+        android:gravity="center_vertical"
+        android:text="@string/receipt_rc_desc"
+        android:singleLine="true"
+        android:textSize="16sp" />
+
+</RelativeLayout>
