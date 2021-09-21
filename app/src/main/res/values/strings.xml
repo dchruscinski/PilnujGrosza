@@ -428,5 +428,9 @@
     <string name="set_edit_balance_info">Resetowanie salda</string>
     <string name="set_edit_balance_edit_balance">Saldo</string>
     <string name="set_edit_balance_submit">Resetuj saldo</string>
+    <string name="receipt_edit_menu_recognizeDataFromReceipt">Odczytaj tekst z paragonu</string>
+    <string name="receipt_editData_form_text_data">Treść paragonu</string>
+    <string name="receipt_editAttributes_info">Edycja treści paragonu</string>
+    <string name="receipt_editData_form_submit">Edytuj treść paragonu</string>
 
 </resources>

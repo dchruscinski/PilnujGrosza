@@ -34,7 +34,6 @@ import com.bumptech.glide.Glide;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -124,7 +123,7 @@ public class Receipt extends AppCompatActivity {
     }
 
     public void showEditMenuDialog(final int position) {
-        Button editAttributes, editData, newImageFromFile, newImageFromCamera;
+        Button editAttributes, editData, recognizeDataFromReceipt, newImageFromFile, newImageFromCamera;
 
         final Dialog dialog = new Dialog(Receipt.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -142,12 +141,14 @@ public class Receipt extends AppCompatActivity {
 
         editAttributes = (Button) dialog.findViewById((R.id.receipt_edit_menu_editAttributes));
         editData = (Button) dialog.findViewById((R.id.receipt_edit_menu_editData));
+        recognizeDataFromReceipt = (Button) dialog.findViewById((R.id.receipt_edit_menu_recognizeDataFromReceipt));
         newImageFromCamera = (Button) dialog.findViewById((R.id.receipt_edit_menu_newImageFromCamera));
         newImageFromFile = (Button) dialog.findViewById((R.id.receipt_edit_menu_newImageFromFile));
 
         editAttributes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dialog.cancel();
                 showEditReceiptAttributesDialog(position);
             }
         });
@@ -155,7 +156,16 @@ public class Receipt extends AppCompatActivity {
         editData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: showEditReceiptDataDialog(position);
+                dialog.cancel();
+                showEditReceiptDataDialog(position);
+            }
+        });
+
+        recognizeDataFromReceipt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+                recognizeDataFromReceipt(String.valueOf(receiptList.get(position).getRecImg()));
             }
         });
 
@@ -251,6 +261,43 @@ public class Receipt extends AppCompatActivity {
                     dialog.cancel();
                     displayReceipt();
                 }
+            }
+        });
+    }
+
+    public void showEditReceiptDataDialog(final int position) {
+        final EditText data;
+        Button submitEdit;
+
+        final Dialog dialog = new Dialog(Receipt.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.receipt_edit_data_form);
+
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.copyFrom(dialog.getWindow().getAttributes());
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.gravity = Gravity.CENTER;
+
+        dialog.getWindow().setAttributes(params);
+        //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+        data = (EditText) dialog.findViewById(R.id.receipt_editData_form_text_data);
+        submitEdit = (Button) dialog.findViewById(R.id.receipt_editData_form_submit);
+
+        data.setText(String.valueOf(receiptList.get(position).getRecData()));
+
+        submitEdit.setOnClickListener(new View.OnClickListener() {;
+            @Override
+            public void onClick(View v) {
+                databaseHelper = new DatabaseHelper(getApplicationContext());
+                databaseHelper.updateReceiptData(receiptList.get(position).getRecID(), data.getText().toString());
+
+                receiptList.get(position).setRecData(data.getText().toString());
+
+                dialog.cancel();
+                displayReceipt();
             }
         });
     }
@@ -403,6 +450,17 @@ public class Receipt extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void recognizeDataFromReceipt(String pathToImage) {
+        ReceiptOCR receiptOCR = new ReceiptOCR(getApplicationContext());
+        databaseHelper = new DatabaseHelper(getApplicationContext());
+        String resultOfOCR = "";
+
+        resultOfOCR = receiptOCR.recognizeReceipt(pathToImage);
+        databaseHelper.updateReceiptData(recID, resultOfOCR);
+
+        displayReceipt();
     }
 
 }

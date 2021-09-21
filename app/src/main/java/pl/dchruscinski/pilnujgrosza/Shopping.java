@@ -366,18 +366,18 @@ public class Shopping extends AppCompatActivity {
 
                 if (name.getText().toString().trim().isEmpty()) {
                     name.setError("Podaj nazwę produktu.");
-                } else if (!name.getText().toString().matches("[\\sa-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:\\-,.\\d]{2,25}")) {
+                } else if (!name.getText().toString().matches("[\\sa-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:%\\-,.\\d]{2,25}")) {
                     name.setError("Nazwa produktu powinna składać się z 2-25 znaków.");
                 } else if (databaseHelper.checkExistingProductNameInShoppingList(shoID, 0, name.getText().toString())) {
                     name.setError("W liście znajduje się już produkt z podaną nazwą.");
                 } else if (amount.getText().toString().trim().isEmpty()) {
                     amount.setError("Podaj ilość/liczbę produktów.");
                 } else if (!amount.getText().toString().matches("[.,0-9]{1,4}")) {
-                    amount.setError("Ilość/liczbę powinna składać się wyłącznie z liczb.");
+                    amount.setError("Ilość/liczba powinna składać się wyłącznie z liczb.");
                 } else if (unit.getText().toString().trim().isEmpty()) {
                     unit.setError("Podaj jednostkę produktu.");
                 } else if (!unit.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:,.\\-]{1,5}")) {
-                    unit.setError("Jednostka produktu powinna składać się wyłącznie z liter.");
+                    unit.setError("Jednostka produktu nie może zawierać cyfr.");
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych, maksymalnie 7 znaków.");
                 } else {

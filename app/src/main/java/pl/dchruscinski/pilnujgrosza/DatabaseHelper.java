@@ -2546,6 +2546,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         cv.put(COLUMN_RECEIPT_NAME, receiptModel.getRecName());
         cv.put(COLUMN_RECEIPT_DATE, receiptModel.getRecDate());
         cv.put(COLUMN_RECEIPT_DESCRIPTION, receiptModel.getRecDesc());
+        cv.put(COLUMN_RECEIPT_DATA, receiptModel.getRecData());
         db.insert(TABLE_RECEIPT, null, cv);
     }
 
@@ -2612,11 +2613,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.update(TABLE_RECEIPT, cv, COLUMN_RECEIPT_ID + " = " + recID, null);
     }
 
-    public void updateReceiptData(int recID, ReceiptModel receiptModel) {
+    public void updateReceiptData(int recID, String resultOfOCR) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-        cv.put(COLUMN_RECEIPT_DATA, receiptModel.getRecDate());
+        cv.put(COLUMN_RECEIPT_DATA, resultOfOCR);
         db.update(TABLE_RECEIPT, cv, COLUMN_RECEIPT_ID + " = " + recID, null);
     }
 

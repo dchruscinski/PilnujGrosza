@@ -62,7 +62,7 @@
             android:layout_marginTop="25dp"
             android:drawableStart="@drawable/baseline_paid_24"
             android:drawablePadding="10dp"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>
@@ -76,7 +76,7 @@
             android:layout_toEndOf="@id/schpay_deleteform_text_value"
             android:layout_marginTop="25dp"
             android:gravity="start"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>
@@ -91,6 +91,7 @@
             android:layout_marginHorizontal="20dp"
             android:drawableStart="@drawable/baseline_article_24"
             android:drawablePadding="10dp"
+            android:textSize="20sp"
             android:singleLine="true" >
         </TextView>
 

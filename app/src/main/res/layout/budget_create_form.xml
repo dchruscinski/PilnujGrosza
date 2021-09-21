@@ -126,7 +126,7 @@
             android:layout_toEndOf="@id/budget_createform_text_initialAmount"
             android:layout_marginTop="20dp"
             android:gravity="start"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>

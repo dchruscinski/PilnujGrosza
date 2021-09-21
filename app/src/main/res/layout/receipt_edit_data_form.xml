@@ -1,0 +1,65 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:scrollbarAlwaysDrawVerticalTrack="true" >
+
+        <ImageView
+            android:id="@+id/receipt_editData_form_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/pilnuj_grosza_logo_foreground"
+            android:scaleType="center"
+            android:scaleX="3"
+            android:scaleY="3">
+        </ImageView>
+
+        <TextView
+            android:id="@+id/receipt_editData_form_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_centerInParent="true"
+            android:textAlignment="center"
+            android:layout_below="@+id/receipt_editData_form_logo"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:text="@string/receipt_editAttributes_info" >
+        </TextView>
+
+        <EditText
+            android:id="@+id/receipt_editData_form_text_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/receipt_editData_form_info"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:hint="@string/receipt_editData_form_text_data"
+            android:inputType="textMultiLine"
+            android:textSize="14sp">
+        </EditText>
+
+        <Button
+            android:id="@+id/receipt_editData_form_submit"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/receipt_editData_form_text_data"
+            android:layout_margin="20dp"
+            android:text="@string/receipt_editData_form_submit" />
+
+
+</RelativeLayout>
+</ScrollView>

@@ -49,4 +49,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
     implementation 'com.github.CanHub:Android-Image-Cropper:3.3.5'
+    implementation 'cz.adaptech:tesseract4android:3.0.0'
+    implementation 'com.google.android.gms:play-services-mlkit-text-recognition:17.0.0'
 }

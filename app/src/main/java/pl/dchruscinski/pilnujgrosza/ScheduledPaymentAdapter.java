@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
@@ -704,10 +705,14 @@ public class ScheduledPaymentAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 Uri deleteUri = null;
                 int eventID = getCalendarEventID(context, eventTitle);
-                deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
+                if (eventID != 0) {
+                    deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventID);
 
-                ContentResolver cr = context.getContentResolver();
-                cr.delete(deleteUri,null, null);
+                    ContentResolver cr = context.getContentResolver();
+                    cr.delete(deleteUri,null, null);
+                } else {
+                    Toast.makeText(context, "Nie udało się usunąć wydarzenia - wydarzenie jeszcze się nie zsynchronizowało lub zostało już usunięte. Spróbuj ponownie lub usuń je samodzielnie.", Toast.LENGTH_LONG).show();
+                }
 
                 // notify list
                 notifyDataSetChanged();

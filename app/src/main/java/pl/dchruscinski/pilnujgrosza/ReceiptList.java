@@ -241,11 +241,10 @@ public class ReceiptList extends AppCompatActivity {
             }
         });
 
-        submitCreate.setOnClickListener(new View.OnClickListener() {
-            ;
-
+        submitCreate.setOnClickListener(new View.OnClickListener() {;
             @Override
             public void onClick(View v) {
+                ReceiptOCR receiptOCR = new ReceiptOCR(getApplicationContext());
                 ReceiptModel receiptModel = new ReceiptModel();
 
                 if (name.getText().toString().trim().isEmpty()) {
@@ -257,6 +256,7 @@ public class ReceiptList extends AppCompatActivity {
                     receiptModel.setRecDate(dateTextView.getText().toString());
                     receiptModel.setRecDesc(description.getText().toString());
                     receiptModel.setRecImg(pathToFile);
+                    receiptModel.setRecData(receiptOCR.recognizeReceipt(pathToFile));
                     databaseHelper.addReceipt(receiptModel);
 
                     dialog.cancel();

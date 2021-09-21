@@ -106,7 +106,7 @@
             android:layout_marginTop="25dp"
             android:drawableStart="@drawable/baseline_paid_24"
             android:drawablePadding="10dp"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>
@@ -120,7 +120,7 @@
             android:layout_toEndOf="@id/budget_delete_cont_text_initialAmount"
             android:layout_marginTop="25dp"
             android:gravity="start"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>

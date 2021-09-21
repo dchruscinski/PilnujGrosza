@@ -79,7 +79,7 @@
             android:layout_toEndOf="@id/schpay_editform_text_value"
             android:layout_marginTop="20dp"
             android:gravity="start"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:singleLine="true" >
         </TextView>
@@ -94,6 +94,7 @@
             android:drawableStart="@drawable/baseline_article_24"
             android:drawablePadding="10dp"
             android:hint="@string/schpay_editform_text_desc"
+            android:textSize="20sp"
             android:singleLine="true" >
         </EditText>
 

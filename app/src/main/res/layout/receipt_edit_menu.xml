@@ -46,12 +46,20 @@
             android:text="@string/receipt_edit_menu_editAttributes" />
 
         <Button
-            android:id="@+id/receipt_edit_menu_editData"
+            android:id="@+id/receipt_edit_menu_recognizeDataFromReceipt"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_below="@+id/receipt_edit_menu_editAttributes"
             android:layout_margin="20dp"
+            android:text="@string/receipt_edit_menu_recognizeDataFromReceipt" />
+
+        <Button
+            android:id="@+id/receipt_edit_menu_editData"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_below="@+id/receipt_edit_menu_recognizeDataFromReceipt"
             android:text="@string/receipt_edit_menu_editData" />
 
         <Button
@@ -60,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_below="@+id/receipt_edit_menu_editData"
+            android:layout_margin="20dp"
             android:text="@string/receipt_edit_menu_newImageFromCamera" />
 
         <Button
@@ -68,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_below="@+id/receipt_edit_menu_newImageFromCamera"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/receipt_edit_menu_newImageFromFile" />
 
 
