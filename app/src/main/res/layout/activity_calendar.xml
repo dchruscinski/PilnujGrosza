@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tableLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:background="@color/whiteBackground"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="pl.dchruscinski.pilnujgrosza.TransactionCalendar">
+
+    <!-- Row #1 - Calendar -->
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:layout_weight="1">
+
+        <!-- TextView as filler -->
+        <TextView
+            android:id="@+id/calendar_text_test"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="@string/calendar_text_test"/>
+    </TableRow>
+</TableLayout>

@@ -266,9 +266,9 @@ public class ScheduledPayment extends AppCompatActivity {
                 try {
                     if (dateFormat.parse(dateTextView.getText().toString()).compareTo(dateFormat.parse(databaseHelper.getNextDayDate())) < 0) {
                         dateTextView.requestFocus();
-                        dateTextView.setError("Płatność musi zostać zaplanowana w dniu późniejszym niż dziś.");
+                        dateTextView.setError(getString(R.string.schpay_createschpay_date_error_badDate));
                     } else if (value.getText().toString().trim().isEmpty()) {
-                        value.setError("Podaj wartość płatności.");
+                        value.setError(getString(R.string.schpay_createschpay_value_error_empty));
                     } else if (!isValueValid) {
                         value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                     } else {

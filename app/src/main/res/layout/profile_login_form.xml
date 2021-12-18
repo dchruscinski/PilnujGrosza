@@ -34,7 +34,7 @@
         android:layout_below="@+id/profile_loginform_logo"
         android:textSize="25sp"
         android:textStyle="bold"
-        android:text="Logowanie"
+        android:text="@string/profile_loginform_info_login"
         android:singleLine="true" >
     </TextView>
 

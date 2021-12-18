@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_PROFILE_HELPER_QUESTION = "profHelperQuestion";
     public static final String COLUMN_PROFILE_HELPER_ANSWER = "profHelperAnswer";
     public static final String COLUMN_PROFILE_HELPER_SALT = "profHelperSalt";
-    public static final int MINUTES_OF_ACCOUNT_LOCK = 1;
+    public static final int MINUTES_OF_ACCOUNT_LOCK = 0;
 
     public static final String TABLE_EXPENSE_CATEGORY = "expensecategory";
     public static final String COLUMN_EXPENSE_CATEGORY_ID = "expcatID";
@@ -2393,7 +2393,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public List<ShoppingContentModel> getShoppingContentList() {
         List<ShoppingContentModel> shoppingContentList = new ArrayList<ShoppingContentModel>();
-        String getShoppingContentListStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " WHERE " + COLUMN_SHOPPING_PROFILE_ID +  " = " + chosenProfileID;
+        String getShoppingContentListStatement = "SELECT * FROM " + TABLE_SHOPPING_CONTENT + " A INNER JOIN " + TABLE_SHOPPING + " B ON " +
+                COLUMN_SHOPPING_CONTENT_SHOPPING_ID + " = " + COLUMN_SHOPPING_ID + " WHERE " + COLUMN_SHOPPING_PROFILE_ID +  " = " + chosenProfileID;
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.rawQuery(getShoppingContentListStatement, null);

@@ -179,9 +179,9 @@ public class ShoppingList extends AppCompatActivity {
                 ShoppingModel shoppingModel = new ShoppingModel();
 
                 if (name.getText().toString().trim().isEmpty()) {
-                    name.setError("Podaj nazwę listy zakupów.");
+                    name.setError(getString(R.string.sholist_createsholist_name_error_empty));
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,30}")) {
-                    name.setError("Nazwa listy powinna składać się z co najmniej dwóch liter.");
+                    name.setError(getString(R.string.sholist_createsholist_name_error_syntax));
                 /*
                 } else if (databaseHelper.checkExistingExpenseCategoryName(name.getText().toString())) {
                     System.out.println("Name: " + name.getText().toString());

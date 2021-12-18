@@ -88,7 +88,7 @@
     <string name="profile_editform_submit_deleteProfile">Usuń profil</string>
     <string name="profile_editform_email">Nowy adres e-mail</string>
     <string name="profile_editform_name">Nowa nazwa profilu</string>
-    <string name="profile_loginform_info_login">Tworzenie profilu</string>
+    <string name="profile_loginform_info_login">Logowanie</string>
     <string name="profile_createform_text_pin_confirm">Powtórz kod PIN</string>
     <string name="profile_editform_info_login">Edycja profilu</string>
     <string name="profile_createform_info_login">Tworzenie profilu</string>
@@ -432,5 +432,37 @@
     <string name="receipt_editData_form_text_data">Treść paragonu</string>
     <string name="receipt_editAttributes_info">Edycja treści paragonu</string>
     <string name="receipt_editData_form_submit">Edytuj treść paragonu</string>
+    <string name="profile_createprofile_name_error_existingName">Istnieje już profil z podaną nazwą.</string>
+    <string name="profile_createprofile_pin_error_empty">Podaj kod PIN.</string>
+    <string name="profile_createprofile_pin_error_insufficientChars">Kod PIN musi składać się z 6 cyfr.</string>
+    <string name="profile_createprofile_name_error_empty">Podaj nazwę profilu.</string>
+    <string name="profile_createprofile_currency_error_tooMuchChars">Waluta musi składać się maksymalnie z czterech liter.</string>
+    <string name="profile_createprofile_question_error_empty">Podaj pytanie pomocnicze.</string>
+    <string name="profile_createprofile_answer_error_empty">Podaj odpowiedź na pytanie pomocnicze.</string>
+    <string name="profile_createprofile_question_error_syntax">Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.</string>
+    <string name="profile_loginform_predelete_info_delete">Wpisz kod PIN, aby potwierdzić \noperację usunięcia profilu.</string>
+    <string name="budget_createbudget_initialAmount_error_empty">Podaj wysokość budżetu.</string>
+    <string name="budget_createbudget_date_error_startDateAfterEndDate">Data rozpoczęcia okresu rozliczeniowego nie może być późniejsza niż jego zakończenie.</string>
+    <string name="budget_createbudget_date_error_startDateBeforeOtherBudgetsEndDate">Okres rozliczeniowy nie może rozpoczynać się przed zakończeniem innego okresu rozliczeniowego.</string>
+    <string name="budget_createbudget_date_error_endDateWhileOtherBudgetIsRunning">Okres rozliczeniowy nie może zakończyć się w trakcie innego okresu rozliczeniowego.</string>
+    <string name="budget_createbudget_date_error_otherBudgetIsExistingBetweenStartAndEndDate">Istnieje już okres rozliczeniowy pomiędzy podaną datą rozpoczęcia i zakończenia okresu rozliczeniowego.</string>
+    <string name="expcat_createexpcat_name_error_empty">Podaj nazwę kategorii.</string>
+    <string name="expcat_createexpcat_name_error_syntax">Nazwa kategorii powinna składać się z co najmniej dwóch liter.</string>
+    <string name="expcat_createexpcat_name_error_existing">Istnieje już kategoria z podaną nazwą.</string>
+    <string name="budget_createschpay_date_error_badDate">Płatność musi zostać zaplanowana w dniu późniejszym niż dziś.</string>
+    <string name="budget_createschpay_value_error_empty">Podaj wartość płatności.</string>
+    <string name="budget_createincome_value_error_empty">Podaj wartość przychodu.</string>
+    <string name="budget_createexpense_value_error_empty">Podaj wartość wydatku.</string>
+    <string name="receipt_createreceipt_name_error_empty">Podaj nazwę paragonu.</string>
+    <string name="receipt_createreceipt_name_error_syntax">Nazwa paragonu powinna składać się z co najmniej dwóch liter.</string>
+    <string name="sholist_createsholist_name_error_syntax">Nazwa listy powinna składać się z co najmniej dwóch liter.</string>
+    <string name="sholist_createsholist_name_error_empty">Podaj nazwę listy zakupów.</string>
+    <string name="shocont_createshocont_name_error_empty">Podaj nazwę produktu.</string>
+    <string name="shocont_createshocont_name_error_syntax">Nazwa produktu powinna składać się z 2-25 znaków.</string>
+    <string name="shocont_createshocont_name_error_existing">W liście znajduje się już produkt z podaną nazwą.</string>
+    <string name="shocont_createshocont_amount_error_empty">Podaj ilość/liczbę produktów.</string>
+    <string name="shocont_createshocont_amount_error_syntax">Ilość/liczba powinna składać się wyłącznie z liczb.</string>
+    <string name="shocont_createshocont_unit_error_empty">Podaj jednostkę produktu.</string>
+    <string name="shocont_createshocont_unit_error_syntax">Jednostka produktu nie może zawierać cyfr.</string>
 
 </resources>

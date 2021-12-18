@@ -116,7 +116,7 @@ public class BudgetTransaction extends AppCompatActivity {
 
     public void showEditDialog(final int budID) {
         final EditText initialAmount, description;
-        final TextView startDateTextView, endDateTextView, currency;
+        final TextView startDateTextView, startDateInfoTextView, endDateTextView, endDateInfoTextView, currency;
         Button submitEdit;
 
         BigDecimal budgetsInitialAmount;
@@ -143,7 +143,9 @@ public class BudgetTransaction extends AppCompatActivity {
         dialog.show();
 
         startDateTextView = (TextView) dialog.findViewById(R.id.budget_editform_text_startDate);
+        startDateInfoTextView = (TextView) dialog.findViewById(R.id.budget_editform_fromDate_info);
         endDateTextView = (TextView) dialog.findViewById(R.id.budget_editform_text_endDate);
+        endDateInfoTextView = (TextView) dialog.findViewById(R.id.budget_editform_toDate_info);
         initialAmount = (EditText) dialog.findViewById(R.id.budget_editform_text_initialAmount);
         currency = (TextView) dialog.findViewById(R.id.budget_editform_text_currency);
         description = (EditText) dialog.findViewById(R.id.budget_editform_text_desc);
@@ -186,7 +188,29 @@ public class BudgetTransaction extends AppCompatActivity {
             }
         });
 
+        startDateInfoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(v.getRootView().getContext(), startDate,
+                        startDateCalendar.get(Calendar.YEAR),
+                        startDateCalendar.get(Calendar.MONTH),
+                        startDateCalendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
+
         endDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(v.getRootView().getContext(), endDate,
+                        endDateCalendar.get(Calendar.YEAR),
+                        endDateCalendar.get(Calendar.MONTH),
+                        endDateCalendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
+
+        endDateInfoTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(v.getRootView().getContext(), endDate,

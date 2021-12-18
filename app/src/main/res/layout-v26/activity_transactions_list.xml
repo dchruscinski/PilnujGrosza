@@ -9,7 +9,7 @@
     tools:context="pl.dchruscinski.pilnujgrosza.Transaction">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/expense_list_rc"
+        android:id="@+id/transaction_list_rc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"/>

@@ -248,9 +248,9 @@ public class ReceiptList extends AppCompatActivity {
                 ReceiptModel receiptModel = new ReceiptModel();
 
                 if (name.getText().toString().trim().isEmpty()) {
-                    name.setError("Podaj nazwę paragonu.");
+                    name.setError(getString(R.string.receipt_createreceipt_name_error_empty));
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,30}")) {
-                    name.setError("Nazwa paragonu powinna składać się z co najmniej dwóch liter.");
+                    name.setError(getString(R.string.receipt_createreceipt_name_error_syntax));
                 } else {
                     receiptModel.setRecName(name.getText().toString());
                     receiptModel.setRecDate(dateTextView.getText().toString());

@@ -122,23 +122,23 @@ public class Profile extends AppCompatActivity {
                 }
 
                 if (!passwordMatches) {
-                    PIN.setError("Podane kody PIN nie są identyczne.");
+                    PIN.setError(getString(R.string.profile_createprofile_pin_error_passwordMismatch));
                 } else if (PIN.getText().toString().isEmpty() || PINConfirm.getText().toString().isEmpty()) {
-                    PIN.setError("Podaj kod PIN.");
+                    PIN.setError(getString(R.string.profile_createprofile_pin_error_empty));
                 } else if (PIN.getText().toString().length() < 6 || PINConfirm.getText().toString().length() < 6) {
-                    PIN.setError("Kod PIN musi składać się z 6 cyfr.");
+                    PIN.setError(getString(R.string.profile_createprofile_pin_error_insufficientChars));
                 } else if (name.getText().toString().trim().isEmpty()) {
-                    name.setError("Podaj nazwę profilu.");
+                    name.setError(getString(R.string.profile_createprofile_name_error_empty));
                 } else if (!name.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,20}")) {
                     name.setError("Nazwa profilu powinna składać się z co najmniej dwóch liter. Niedozwolone są cyfry oraz znaki specjalne.");
                 } else if (databaseHelper.checkExistingProfileName(0, name.getText().toString())) {
-                    name.setError("Istnieje już profil z podaną nazwą.");
+                    name.setError(getString(R.string.profile_createprofile_name_error_existingName));
                 } else if (!isInitialBalanceValid) {
                     initialBalance.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                 } else if (currency.getText().toString().trim().matches("\\d+")) {
                     currency.setError("Wartość nie może być wyrażona w cyfrach.");
                 } else if (!currency.getText().toString().trim().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{0,4}")) {
-                    currency.setError("Waluta musi składać się maksymalnie z czterech liter.");
+                    currency.setError(getString(R.string.profile_createprofile_currency_error_tooMuchChars));
                 } else {
                     dialog.cancel();
                     displayProfilesList();
@@ -182,11 +182,11 @@ public class Profile extends AppCompatActivity {
                 String helperHashedAnswer = BCrypt.hashpw(answer.getText().toString().trim(), helperHashSalt);
 
                 if (question.getText().toString().trim().isEmpty()) {
-                    question.setError("Podaj pytanie pomocnicze.");
+                    question.setError(getString(R.string.profile_createprofile_question_error_empty));
                 } else if (answer.getText().toString().trim().isEmpty()) {
-                    answer.setError("Podaj odpowiedź na pytanie pomocnicze.");
+                    answer.setError(getString(R.string.profile_createprofile_answer_error_empty));
                 } else if (!question.getText().toString().trim().matches("[\\sa-zA-Z0-9_.,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,128}[?]")) {
-                    question.setError("Pytanie pomocnicze powinno składać się z co najmniej dwóch liter. Na końcu musi znajdować się znak zapytania.");
+                    question.setError(getString(R.string.profile_createprofile_question_error_syntax));
                 } else {
                     profileModel.setProfName(profName);
                     profileModel.setProfPIN(hashedPIN);

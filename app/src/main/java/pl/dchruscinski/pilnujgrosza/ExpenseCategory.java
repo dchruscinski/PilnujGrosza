@@ -81,12 +81,12 @@ public class ExpenseCategory extends AppCompatActivity {
                 ExpenseCategoryModel expenseCategoryModel = new ExpenseCategoryModel();
 
                 if (name.getText().toString().trim().isEmpty()) {
-                    name.setError("Podaj nazwę kategorii.");
+                    name.setError(getString(R.string.expcat_createexpcat_name_error_empty));
                 } else if (!name.getText().toString().matches("[\\sa-zA-Z;:,-ąĄćĆęĘłŁńŃóÓśŚźŹżŻ]{2,30}")) {
-                    name.setError("Nazwa kategorii powinna składać się z co najmniej dwóch liter.");
+                    name.setError(getString(R.string.expcat_createexpcat_name_error_syntax));
                 } else if (databaseHelper.checkExistingExpenseCategoryName(0, name.getText().toString())) {
                     System.out.println("Name: " + name.getText().toString());
-                    name.setError("Istnieje już kategoria z podaną nazwą.");
+                    name.setError(getString(R.string.expcat_createexpcat_name_error_existing));
                 } else {
                     expenseCategoryModel.setExpcatName(name.getText().toString());
                     databaseHelper.addExpenseCategory(expenseCategoryModel);

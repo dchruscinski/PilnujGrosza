@@ -38,6 +38,7 @@ import static pl.dchruscinski.pilnujgrosza.ProfileAdapter.chosenProfileID;
 
 
 public class Shopping extends AppCompatActivity {
+    DatabaseHelper databaseHelper;
     public TextView shoListName, shoListDesc, shoListDate, shoListValue, shoListNumOfProd, shoListCurrency;
     Button editShoList, deleteShoList;
     BigDecimal prodValue;
@@ -46,7 +47,6 @@ public class Shopping extends AppCompatActivity {
     FloatingActionButton addShoContFAB;
     private RecyclerView recyclerView;
     private ShoppingContentAdapter adapter;
-    DatabaseHelper databaseHelper;
     private int shoID, position;
 
     @Override
@@ -365,19 +365,19 @@ public class Shopping extends AppCompatActivity {
                 }
 
                 if (name.getText().toString().trim().isEmpty()) {
-                    name.setError("Podaj nazwę produktu.");
+                    name.setError(getString(R.string.shocont_createshocont_name_error_empty));
                 } else if (!name.getText().toString().matches("[\\sa-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:%\\-,.\\d]{2,25}")) {
-                    name.setError("Nazwa produktu powinna składać się z 2-25 znaków.");
+                    name.setError(getString(R.string.shocont_createshocont_name_error_syntax));
                 } else if (databaseHelper.checkExistingProductNameInShoppingList(shoID, 0, name.getText().toString())) {
-                    name.setError("W liście znajduje się już produkt z podaną nazwą.");
+                    name.setError(getString(R.string.shocont_createshocont_name_error_existing));
                 } else if (amount.getText().toString().trim().isEmpty()) {
-                    amount.setError("Podaj ilość/liczbę produktów.");
+                    amount.setError(getString(R.string.shocont_createshocont_amount_error_empty));
                 } else if (!amount.getText().toString().matches("[.,0-9]{1,4}")) {
-                    amount.setError("Ilość/liczba powinna składać się wyłącznie z liczb.");
+                    amount.setError(getString(R.string.shocont_createshocont_amount_error_syntax));
                 } else if (unit.getText().toString().trim().isEmpty()) {
-                    unit.setError("Podaj jednostkę produktu.");
+                    unit.setError(getString(R.string.shocont_createshocont_unit_error_empty));
                 } else if (!unit.getText().toString().matches("[a-zA-ZąĄćĆęĘłŁńŃóÓśŚźŹżŻ;:,.\\-]{1,5}")) {
-                    unit.setError("Jednostka produktu nie może zawierać cyfr.");
+                    unit.setError(getString(R.string.shocont_createshocont_unit_error_syntax));
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych, maksymalnie 7 znaków.");
                 } else {

@@ -68,7 +68,7 @@ public class Budget extends AppCompatActivity {
 
     public void showCreateDialog() {
         final EditText initialAmount, description;
-        final TextView startDateTextView, endDateTextView, currency;
+        final TextView startDateTextView, startDateInfoTextView, endDateTextView, endDateInfoTextView, currency;
         Button submitCreate;
 
         final Calendar startDateCalendar = Calendar.getInstance();
@@ -92,7 +92,9 @@ public class Budget extends AppCompatActivity {
         dialog.show();
 
         startDateTextView = (TextView) dialog.findViewById(R.id.budget_createform_text_startDate);
+        startDateInfoTextView = (TextView) dialog.findViewById(R.id.budget_createform_fromDate_info);
         endDateTextView = (TextView) dialog.findViewById(R.id.budget_createform_text_endDate);
+        endDateInfoTextView = (TextView) dialog.findViewById(R.id.budget_createform_toDate_info);
         initialAmount = (EditText) dialog.findViewById(R.id.budget_createform_text_initialAmount);
         currency = (TextView) dialog.findViewById(R.id.budget_createform_text_currency);
         description = (EditText) dialog.findViewById(R.id.budget_createform_text_desc);
@@ -134,7 +136,29 @@ public class Budget extends AppCompatActivity {
             }
         });
 
+        startDateInfoTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(Budget.this, startDate,
+                        startDateCalendar.get(Calendar.YEAR),
+                        startDateCalendar.get(Calendar.MONTH),
+                        startDateCalendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
+
         endDateTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(Budget.this, endDate,
+                        endDateCalendar.get(Calendar.YEAR),
+                        endDateCalendar.get(Calendar.MONTH),
+                        endDateCalendar.get(Calendar.DAY_OF_MONTH))
+                        .show();
+            }
+        });
+
+        endDateInfoTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new DatePickerDialog(Budget.this, endDate,
@@ -172,20 +196,20 @@ public class Budget extends AppCompatActivity {
                 }
 
                 if (initialAmount.getText().toString().trim().isEmpty()) {
-                    initialAmount.setError("Podaj wysokość budżetu.");
+                    initialAmount.setError(getString(R.string.budget_createbudget_initialAmount_error_empty));
                 } else {
                     try {
                         if (!databaseHelper.checkStartAndEndDateInDialog(startDateTextView.getText().toString(), endDateTextView.getText().toString())) {
                             startDateTextView.requestFocus();
-                            startDateTextView.setError("Data rozpoczęcia okresu rozliczeniowego nie może być późniejsza niż jego zakończenie.");
+                            startDateTextView.setError(getString(R.string.budget_createbudget_date_error_startDateAfterEndDate));
                         } else if (!databaseHelper.checkStartDateInCreateDialog(chosenProfileID, startDateTextView.getText().toString())) {
                             startDateTextView.requestFocus();
-                            startDateTextView.setError("Okres rozliczeniowy nie może rozpoczynać się przed zakończeniem innego okresu rozliczeniowego.");
+                            startDateTextView.setError(getString(R.string.budget_createbudget_date_error_startDateBeforeOtherBudgetsEndDate));
                         } else if (!databaseHelper.checkEndDateInCreateDialog(chosenProfileID, endDateTextView.getText().toString())) {
-                            startDateTextView.requestFocus();
-                            endDateTextView.setError("Okres rozliczeniowy nie może zakończyć się w trakcie innego okresu rozliczeniowego.");
+                            endDateTextView.requestFocus();
+                            endDateTextView.setError(getString(R.string.budget_createbudget_date_error_endDateWhileOtherBudgetIsRunning));
                         } else if (!databaseHelper.checkDatesBetweenStartAndEndDatesInCreateDialog(chosenProfileID, startDateTextView.getText().toString(), endDateTextView.getText().toString())) {
-                            endDateTextView.setError("Istnieje już okres rozliczeniowy pomiędzy podaną datą rozpoczęcia i zakończenia okresu rozliczeniowego.");
+                            endDateTextView.setError(getString(R.string.budget_createbudget_date_error_otherBudgetIsExistingBetweenStartAndEndDate));
                         } else if (!isAmountValid) {
                             initialAmount.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                         } else {
@@ -194,7 +218,6 @@ public class Budget extends AppCompatActivity {
                             budgetModel.setBudStartDate(startDateTextView.getText().toString());
                             budgetModel.setBudEndDate(endDateTextView.getText().toString());
                             databaseHelper.addBudget(budgetModel);
-                            System.out.println("ProfileID: " + chosenProfileID);
 
                             dialog.cancel();
                             displayBudgetsList();

@@ -27,7 +27,6 @@ import android.widget.PopupMenu;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -61,7 +60,7 @@ public class Transaction extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         adapter = new TransactionAdapter(getApplicationContext(), this, transactionsList);
 
-        recyclerView = (RecyclerView) findViewById(R.id.expense_list_rc);
+        recyclerView = (RecyclerView) findViewById(R.id.transaction_list_rc);
         addIncomeFAB = (FloatingActionButton) findViewById(R.id.trans_fab_addIncome);
         addExpenseFAB = (FloatingActionButton) findViewById(R.id.trans_fab_addExpense);
         databaseHelper = new DatabaseHelper(this);
@@ -296,7 +295,7 @@ public class Transaction extends AppCompatActivity {
                 }
 
                 if (value.getText().toString().trim().isEmpty()) {
-                    value.setError("Podaj wartość przychodu.");
+                    value.setError(getString(R.string.income_createincome_value_error_empty));
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                 } else {
@@ -425,7 +424,7 @@ public class Transaction extends AppCompatActivity {
                 }
 
                 if (value.getText().toString().trim().isEmpty()) {
-                    value.setError("Podaj wartość wydatku.");
+                    value.setError(getString(R.string.expense_createexpense_value_error_empty));
                 } else if (!isValueValid) {
                     value.setError("Podaj wartość z dokładnością do dwóch miejsc dziesiętnych.");
                 } else {

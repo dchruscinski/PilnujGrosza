@@ -47,7 +47,7 @@
             android:textAlignment="center"
             android:layout_below="@+id/profile_loginform_predelete_info_delete"
             android:textSize="18sp"
-            android:text="Wpisz kod PIN, aby potwierdzić \noperację usunięcia profilu." >
+            android:text="@string/profile_loginform_predelete_info_delete" >
         </TextView>
 
         <TextView
